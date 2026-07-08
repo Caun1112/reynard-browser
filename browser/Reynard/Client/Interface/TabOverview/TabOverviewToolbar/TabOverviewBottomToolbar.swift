@@ -10,23 +10,26 @@ import UIKit
 final class TabOverviewBottomToolbar: UIView {
     private enum UX {
         static let toolbarContentHorizontalInset: CGFloat = 32
+        static let actionControlsTrailingInset: CGFloat = 16
+        static let actionControlsWidth: CGFloat = 146
+        static let actionButtonSpacing: CGFloat = 10
         static let actionControlsBottomOffset: CGFloat = 54
         static let modeControlToActionControlsSpacing: CGFloat = 18
         static let tabModeControlHeight: CGFloat = 32
     }
-    
+
     var onClearTabs: (() -> Void)?
     var onAddTab: (() -> Void)?
     var onDone: (() -> Void)?
     var onTabModeChange: ((TabOverview.Mode) -> Void)?
-    
+
     private let clearTabsButton = TabOverviewToolbarButton(action: .clear)
     private let addTabButton = TabOverviewToolbarButton(action: .add)
     private let doneButton = TabOverviewToolbarButton(action: .done)
     private lazy var actionButtonStackView = UIStackView(arrangedSubviews: [clearTabsButton, addTabButton, doneButton])
     private lazy var liquidGlassActionToolbar = makeLiquidGlassActionToolbar()
     private let tabModeControl = UISegmentedControl(items: ["Private", "0 Tabs"])
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureAppearance()
@@ -34,15 +37,15 @@ final class TabOverviewBottomToolbar: UIView {
         configureConstraints()
         configureActions()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func setMode(_ mode: TabOverview.Mode) {
         tabModeControl.selectedSegmentIndex = mode.rawValue
     }
-    
+
     func apply(tabCount: Int, hasVisibleTab: Bool) {
         tabModeControl.setTitle("\(tabCount)" + (tabCount == 1 ? " Tab" : " Tabs"), forSegmentAt: TabOverview.Mode.regularTabs.rawValue)
         doneButton.setActionEnabled(hasVisibleTab)
@@ -50,18 +53,19 @@ final class TabOverviewBottomToolbar: UIView {
             liquidGlassActionToolbar.items?.last?.isEnabled = hasVisibleTab
         }
     }
-    
+
     private func configureAppearance() {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
         actionButtonStackView.translatesAutoresizingMaskIntoConstraints = false
         actionButtonStackView.axis = .horizontal
         actionButtonStackView.alignment = .center
-        actionButtonStackView.distribution = .equalSpacing
+        actionButtonStackView.distribution = .fill
+        actionButtonStackView.spacing = UX.actionButtonSpacing
         tabModeControl.translatesAutoresizingMaskIntoConstraints = false
         tabModeControl.selectedSegmentIndex = TabOverview.Mode.regularTabs.rawValue
     }
-    
+
     private func configureHierarchy() {
         if #available(iOS 26.0, *) {
             addSubview(liquidGlassActionToolbar)
@@ -70,7 +74,7 @@ final class TabOverviewBottomToolbar: UIView {
         }
         addSubview(tabModeControl)
     }
-    
+
     private func configureConstraints() {
         let actionControlsView: UIView
         if #available(iOS 26.0, *) {
@@ -79,8 +83,8 @@ final class TabOverviewBottomToolbar: UIView {
             actionControlsView = actionButtonStackView
         }
         NSLayoutConstraint.activate([
-            actionControlsView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.toolbarContentHorizontalInset),
-            actionControlsView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.toolbarContentHorizontalInset),
+            actionControlsView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -UX.actionControlsTrailingInset),
+            actionControlsView.widthAnchor.constraint(equalToConstant: UX.actionControlsWidth),
             actionControlsView.centerYAnchor.constraint(equalTo: bottomAnchor, constant: -UX.actionControlsBottomOffset),
             tabModeControl.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: UX.toolbarContentHorizontalInset),
             tabModeControl.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -UX.toolbarContentHorizontalInset),
@@ -88,14 +92,14 @@ final class TabOverviewBottomToolbar: UIView {
             tabModeControl.bottomAnchor.constraint(equalTo: actionControlsView.topAnchor, constant: -UX.modeControlToActionControlsSpacing),
         ])
     }
-    
+
     private func configureActions() {
         clearTabsButton.addTarget(self, action: #selector(clearTabsButtonTapped), for: .touchUpInside)
         addTabButton.addTarget(self, action: #selector(addTabButtonTapped), for: .touchUpInside)
         doneButton.addTarget(self, action: #selector(doneTapped), for: .touchUpInside)
         tabModeControl.addTarget(self, action: #selector(tabModeControlChanged), for: .valueChanged)
     }
-    
+
     private func makeLiquidGlassActionToolbar() -> UIToolbar {
         let toolbar = UIToolbar()
         toolbar.translatesAutoresizingMaskIntoConstraints = false
@@ -114,7 +118,7 @@ final class TabOverviewBottomToolbar: UIView {
         ]
         return toolbar
     }
-    
+
     @objc private func clearTabsButtonTapped() { onClearTabs?() }
     @objc private func addTabButtonTapped() { onAddTab?() }
     @objc private func doneTapped() { onDone?() }

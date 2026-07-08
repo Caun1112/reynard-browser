@@ -12,66 +12,67 @@ final class BrowsingPreferencesViewController: SettingsTableViewController {
         case links
         case media
         case desktopWebsite
-        
+
         var text: SettingsSectionText {
             switch self {
             case .links:
-                return SettingsSectionText(headerTitle: "Links")
+                return SettingsSectionText(headerTitle: AppText.text("Links"))
             case .media:
-                return SettingsSectionText(headerTitle: "Media")
+                return SettingsSectionText(headerTitle: AppText.text("Media"))
             case .desktopWebsite:
-                return SettingsSectionText(headerTitle: "Request Desktop Website On")
+                return SettingsSectionText(headerTitle: AppText.text("Request Desktop Website On"))
             }
         }
     }
-    
+
     private enum LinksRow: CaseIterable {
         case showLinkPreviews
     }
-    
+
     private enum MediaRow: CaseIterable {
         case autoplay
         case showImagePreviews
     }
-    
+
     private enum DesktopWebsiteRow: CaseIterable {
         case allWebsites
     }
-    
+
     private let showLinkPreviewsSwitch = UISwitch()
     private let showImagePreviewsSwitch = UISwitch()
     private let requestDesktopWebsiteSwitch = UISwitch()
-    
+
     init() {
         super.init(style: .insetGrouped)
-        title = "Browsing"
+        title = AppText.text("Browsing")
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSwitch()
         refreshDisplayedState()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        title = AppText.text("Browsing")
         refreshDisplayedState()
         tableView.reloadData()
     }
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         Section.allCases.count
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard Section.allCases.indices.contains(section) else {
             return 0
         }
-        
+
         switch Section.allCases[section] {
         case .links:
             return LinksRow.allCases.count
@@ -81,19 +82,19 @@ final class BrowsingPreferencesViewController: SettingsTableViewController {
             return DesktopWebsiteRow.allCases.count
         }
     }
-    
+
     override func sectionText(for section: Int) -> SettingsSectionText {
         guard Section.allCases.indices.contains(section) else {
             return SettingsSectionText()
         }
         return Section.allCases[section].text
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard Section.allCases.indices.contains(indexPath.section) else {
             return UITableViewCell()
         }
-        
+
         switch Section.allCases[indexPath.section] {
         case .links:
             guard LinksRow.allCases.indices.contains(indexPath.row) else {
@@ -101,8 +102,8 @@ final class BrowsingPreferencesViewController: SettingsTableViewController {
             }
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.selectionStyle = .none
-            cell.textLabel?.text = "Show Link Previews"
-            cell.detailTextLabel?.text = "When long-pressing links"
+            cell.textLabel?.text = AppText.text("Show Link Previews")
+            cell.detailTextLabel?.text = AppText.text("When long-pressing links")
             cell.detailTextLabel?.textColor = .secondaryLabel
             cell.accessoryView = showLinkPreviewsSwitch
             return cell
@@ -113,7 +114,7 @@ final class BrowsingPreferencesViewController: SettingsTableViewController {
             switch MediaRow.allCases[indexPath.row] {
             case .autoplay:
                 let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
-                cell.textLabel?.text = "Autoplay"
+                cell.textLabel?.text = AppText.text("Autoplay")
                 cell.detailTextLabel?.text = SiteSettingsUtils.actionTitle(
                     for: SiteSettingsUtils.defaultAction(for: .autoplay),
                     permission: .autoplay
@@ -123,8 +124,8 @@ final class BrowsingPreferencesViewController: SettingsTableViewController {
             case .showImagePreviews:
                 let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
                 cell.selectionStyle = .none
-                cell.textLabel?.text = "Show Image Previews"
-                cell.detailTextLabel?.text = "When long-pressing images"
+                cell.textLabel?.text = AppText.text("Show Image Previews")
+                cell.detailTextLabel?.text = AppText.text("When long-pressing images")
                 cell.detailTextLabel?.textColor = .secondaryLabel
                 cell.accessoryView = showImagePreviewsSwitch
                 return cell
@@ -135,18 +136,18 @@ final class BrowsingPreferencesViewController: SettingsTableViewController {
             }
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             cell.selectionStyle = .none
-            cell.textLabel?.text = "All Website"
+            cell.textLabel?.text = AppText.text("All Website")
             cell.accessoryView = requestDesktopWebsiteSwitch
             return cell
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         guard Section.allCases.indices.contains(indexPath.section) else {
             return
         }
-        
+
         switch Section.allCases[indexPath.section] {
         case .links:
             return
@@ -157,7 +158,7 @@ final class BrowsingPreferencesViewController: SettingsTableViewController {
             switch MediaRow.allCases[indexPath.row] {
             case .autoplay:
                 navigationController?.pushViewController(
-                    SitePermissionDetailsViewController(permission: .autoplay, title: "Autoplay"),
+                    SitePermissionDetailsViewController(permission: .autoplay, title: AppText.text("Autoplay")),
                     animated: true
                 )
             case .showImagePreviews:
@@ -167,27 +168,27 @@ final class BrowsingPreferencesViewController: SettingsTableViewController {
             return
         }
     }
-    
+
     private func configureSwitch() {
         showLinkPreviewsSwitch.addTarget(self, action: #selector(showLinkPreviewsSwitchDidChange(_:)), for: .valueChanged)
         showImagePreviewsSwitch.addTarget(self, action: #selector(showImagePreviewsSwitchDidChange(_:)), for: .valueChanged)
         requestDesktopWebsiteSwitch.addTarget(self, action: #selector(requestDesktopWebsiteSwitchDidChange(_:)), for: .valueChanged)
     }
-    
+
     private func refreshDisplayedState() {
         showLinkPreviewsSwitch.isOn = Prefs.BrowsingSettings.showLinkPreviews
         showImagePreviewsSwitch.isOn = Prefs.BrowsingSettings.showImagePreviews
         requestDesktopWebsiteSwitch.isOn = Prefs.BrowsingSettings.requestDesktopWebsite
     }
-    
+
     @objc private func showLinkPreviewsSwitchDidChange(_ sender: UISwitch) {
         Prefs.BrowsingSettings.showLinkPreviews = sender.isOn
     }
-    
+
     @objc private func showImagePreviewsSwitchDidChange(_ sender: UISwitch) {
         Prefs.BrowsingSettings.showImagePreviews = sender.isOn
     }
-    
+
     @objc private func requestDesktopWebsiteSwitchDidChange(_ sender: UISwitch) {
         Prefs.BrowsingSettings.requestDesktopWebsite = sender.isOn
     }
