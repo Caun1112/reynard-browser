@@ -12,15 +12,15 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
         case favorites
         case frequentlyVisited
         case recentlyClosedTabs
-
+        
         var title: String {
             return preference.title
         }
-
+        
         var isEnabled: Bool {
             return preference.isEnabled
         }
-
+        
         var preference: Preference {
             switch self {
             case .favorites:
@@ -32,23 +32,23 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
             }
         }
     }
-
+    
     enum Preference: CaseIterable {
         case favorites
         case frequentlyVisited
         case recentlyClosedTabs
-
+        
         var title: String {
             switch self {
             case .favorites:
-                return AppText.text("Favorites")
+                return "Favorites"
             case .frequentlyVisited:
-                return AppText.text("Frequently Visited")
+                return "Frequently Visited"
             case .recentlyClosedTabs:
-                return AppText.text("Recently Closed Tabs")
+                return "Recently Closed Tabs"
             }
         }
-
+        
         var switchTitle: String {
             switch self {
             case .favorites:
@@ -59,7 +59,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return "Show Recently Closed Tabs"
             }
         }
-
+        
         var countTitle: String {
             switch self {
             case .favorites:
@@ -70,7 +70,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return "Number of Items"
             }
         }
-
+        
         var countValues: [Int] {
             switch self {
             case .favorites:
@@ -81,7 +81,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return Array(3...10)
             }
         }
-
+        
         var isEnabled: Bool {
             switch self {
             case .favorites:
@@ -92,7 +92,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return Prefs.HomepageSettings.showsRecentlyClosedTabs
             }
         }
-
+        
         var isEnabledInPrivateBrowsing: Bool {
             switch self {
             case .favorites:
@@ -103,7 +103,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return false
             }
         }
-
+        
         var selectedCount: Int {
             switch self {
             case .favorites:
@@ -114,7 +114,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return Prefs.HomepageSettings.recentlyClosedTabLimit
             }
         }
-
+        
         func setEnabled(_ isEnabled: Bool) {
             switch self {
             case .favorites:
@@ -125,7 +125,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 Prefs.HomepageSettings.showsRecentlyClosedTabs = isEnabled
             }
         }
-
+        
         func setEnabledInPrivateBrowsing(_ isEnabled: Bool) {
             switch self {
             case .favorites:
@@ -136,7 +136,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return
             }
         }
-
+        
         func setSelectedCount(_ selectedCount: Int) {
             switch self {
             case .favorites:
@@ -148,22 +148,22 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
             }
         }
     }
-
+    
     private enum Section: CaseIterable {
         case main
         case count
     }
-
+    
     private enum Row: CaseIterable {
         case showSection
         case showInPrivateBrowsing
         case count
     }
-
+    
     private let preference: Preference
     private let sectionSwitch = UISwitch()
     private let privateBrowsingSwitch = UISwitch()
-
+    
     private func displayedRows(in section: Section) -> [Row] {
         switch section {
         case .main:
@@ -177,51 +177,51 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
             return [.count]
         }
     }
-
+    
     init(preference: Preference) {
         self.preference = preference
         super.init(style: .insetGrouped)
         title = preference.title
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSwitch()
         refreshDisplayedState()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshDisplayedState()
         tableView.reloadData()
     }
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return Section.allCases.count
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard Section.allCases.indices.contains(section) else {
             return 0
         }
-
+        
         return displayedRows(in: Section.allCases[section]).count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard Section.allCases.indices.contains(indexPath.section) else {
             return UITableViewCell()
         }
-
+        
         let rows = displayedRows(in: Section.allCases[indexPath.section])
         guard rows.indices.contains(indexPath.row) else {
             return UITableViewCell()
         }
-
+        
         switch rows[indexPath.row] {
         case .showSection:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
@@ -243,19 +243,19 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
             return cell
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         guard Section.allCases.indices.contains(indexPath.section) else {
             return
         }
-
+        
         let rows = displayedRows(in: Section.allCases[indexPath.section])
         guard rows.indices.contains(indexPath.row),
               rows[indexPath.row] == .count else {
             return
         }
-
+        
         let viewController = HomepageSectionItemCountPreferencesViewController(
             title: preference.countTitle,
             values: preference.countValues,
@@ -265,21 +265,21 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
         }
         navigationController?.pushViewController(viewController, animated: true)
     }
-
+    
     private func configureSwitch() {
         sectionSwitch.addTarget(self, action: #selector(sectionSwitchDidChange), for: .valueChanged)
         privateBrowsingSwitch.addTarget(self, action: #selector(privateBrowsingSwitchDidChange), for: .valueChanged)
     }
-
+    
     private func refreshDisplayedState() {
         sectionSwitch.isOn = preference.isEnabled
         privateBrowsingSwitch.isOn = preference.isEnabledInPrivateBrowsing
     }
-
+    
     @objc private func sectionSwitchDidChange() {
         preference.setEnabled(sectionSwitch.isOn)
     }
-
+    
     @objc private func privateBrowsingSwitchDidChange() {
         preference.setEnabledInPrivateBrowsing(privateBrowsingSwitch.isOn)
     }

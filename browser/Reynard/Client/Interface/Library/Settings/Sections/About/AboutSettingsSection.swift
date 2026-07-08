@@ -16,42 +16,42 @@ struct AboutSettingsSection {
         case supportProject
         case githubProfile
     }
-
+    
     var rowCount: Int {
         return Row.allCases.count
     }
-
+    
     func cell(at index: Int) -> UITableViewCell {
         guard Row.allCases.indices.contains(index) else {
             return UITableViewCell()
         }
-
+        
         switch Row.allCases[index] {
         case .appVersion:
             let info = Bundle.main.infoDictionary
             let version = info?["CFBundleShortVersionString"] as? String ?? "Unknown"
             let build = info?["CFBundleVersion"] as? String ?? "Unknown"
-            return valueCell(title: AppText.text("Reynard Browser"), value: "\(version) (\(build))")
+            return valueCell(title: "Reynard Browser", value: "\(version) (\(build))")
         case .engineVersion:
-            return valueCell(title: AppText.text("Engine Version"), value: GeckoRuntime.version)
+            return valueCell(title: "Engine Version", value: GeckoRuntime.version)
         case .sourceCode:
-            return linkCell(title: AppText.text("View Source Code"))
+            return linkCell(title: "View Source Code")
         case .supportProject:
-            return linkCell(title: AppText.text("Support The Project"))
+            return linkCell(title: "Support The Project")
         case .githubProfile:
             return linkCell(title: "GitHub - @minh-ton")
         }
     }
-
+    
     func selectRow(at index: Int) {
         guard Row.allCases.indices.contains(index),
               let url = url(for: Row.allCases[index]) else {
             return
         }
-
+        
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
-
+    
     private func url(for row: Row) -> URL? {
         switch row {
         case .sourceCode:
@@ -64,7 +64,7 @@ struct AboutSettingsSection {
             return nil
         }
     }
-
+    
     private func valueCell(title: String, value: String) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
         cell.textLabel?.text = title
@@ -74,7 +74,7 @@ struct AboutSettingsSection {
         cell.accessoryType = .none
         return cell
     }
-
+    
     private func linkCell(title: String) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
         cell.textLabel?.text = title
