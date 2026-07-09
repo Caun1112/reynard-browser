@@ -11,53 +11,54 @@ final class SearchEnginePreferencesViewController: SettingsTableViewController, 
     private enum Section: CaseIterable {
         case engines
         case customTemplate
-        
+
         var text: SettingsSectionText {
             switch self {
             case .engines:
-                return SettingsSectionText(headerTitle: "Search Engine")
+                return SettingsSectionText(headerTitle: AppText.text("Search Engine"))
             case .customTemplate:
                 return SettingsSectionText()
             }
         }
     }
-    
+
     private enum CustomTemplateRow: CaseIterable {
         case template
     }
-    
+
     private var displayedSections: [Section] {
         return Prefs.SearchSettings.searchEngine == .custom ? Section.allCases : [.engines]
     }
-    
+
     init() {
         super.init(style: .insetGrouped)
-        title = "Search Engine"
+        title = AppText.text("Search Engine")
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         registerCells()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        title = AppText.text("Search Engine")
         tableView.reloadData()
     }
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         displayedSections.count
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard displayedSections.indices.contains(section) else {
             return 0
         }
-        
+
         switch displayedSections[section] {
         case .engines:
             return SearchEngine.allCases.count
@@ -65,12 +66,12 @@ final class SearchEnginePreferencesViewController: SettingsTableViewController, 
             return CustomTemplateRow.allCases.count
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard displayedSections.indices.contains(indexPath.section) else {
             return UITableViewCell()
         }
-        
+
         switch displayedSections[indexPath.section] {
         case .customTemplate:
             guard CustomTemplateRow.allCases.indices.contains(indexPath.row) else {
@@ -97,7 +98,7 @@ final class SearchEnginePreferencesViewController: SettingsTableViewController, 
             return cell
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         guard displayedSections.indices.contains(indexPath.section),
@@ -120,12 +121,12 @@ final class SearchEnginePreferencesViewController: SettingsTableViewController, 
             }
         }
     }
-    
+
     override func sectionText(for section: Int) -> SettingsSectionText {
         guard displayedSections.indices.contains(section) else {
             return SettingsSectionText()
         }
-        
+
         let displayedSection = displayedSections[section]
         guard displayedSection == .customTemplate else {
             return displayedSection.text
@@ -137,7 +138,7 @@ final class SearchEnginePreferencesViewController: SettingsTableViewController, 
         }
         return SettingsSectionText(footerTitle: "\(baseText). The current value must be a valid http(s) URL.")
     }
-    
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         Prefs.SearchSettings.customSearchTemplate = textField.text ?? ""
         tableView.reloadData()
@@ -148,12 +149,12 @@ final class SearchEnginePreferencesViewController: SettingsTableViewController, 
             message: "Enter a valid http(s) URL containing %s where the search query should go."
         )
     }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
-    
+
     private func registerCells() {
         tableView.register(CustomSearchTemplateCell.self, forCellReuseIdentifier: "CustomSearchTemplateCell")
     }

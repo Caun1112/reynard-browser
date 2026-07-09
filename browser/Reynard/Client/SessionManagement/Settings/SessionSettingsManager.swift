@@ -11,7 +11,7 @@ import GeckoView
 final class SessionSettingsManager {
     let websiteMode: WebsiteModeSettingManager
     let pageZoom: PageZoomSettingManager
-    
+
     init(
         websiteMode: WebsiteModeSettingManager = WebsiteModeSettingManager(),
         pageZoom: PageZoomSettingManager = PageZoomSettingManager()
@@ -19,18 +19,23 @@ final class SessionSettingsManager {
         self.websiteMode = websiteMode
         self.pageZoom = pageZoom
     }
-    
+
     func settings(for url: String?, tabID: UUID?) -> GeckoSessionSettings {
         guard let url else {
-            return .default
+            return GeckoSessionSettings(
+                websiteMode: .mobile,
+                pageZoom: .default,
+                language: languageSetting
+            )
         }
-        
+
         return GeckoSessionSettings(
             websiteMode: websiteMode.setting(for: url, tabID: tabID),
-            pageZoom: pageZoom.setting(for: url)
+            pageZoom: pageZoom.setting(for: url),
+            language: languageSetting
         )
     }
-    
+
     func needsUpdate(
         for session: GeckoSession,
         currentURL: String?,
@@ -44,5 +49,13 @@ final class SessionSettingsManager {
             return false
         }
         return session.settings != settings(for: requestedURL, tabID: tabID)
+    }
+
+    private var languageSetting: LanguageSetting {
+        let language = Prefs.BrowsingSettings.language
+        return LanguageSetting(
+            requestedLocales: language.requestedLocales,
+            acceptLanguages: language.acceptLanguages
+        )
     }
 }
