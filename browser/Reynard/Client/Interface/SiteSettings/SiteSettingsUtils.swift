@@ -43,13 +43,13 @@ enum SiteSettingsUtils {
         var permissions: [String] = []
         
         if isCameraPermissionDisabled() {
-            permissions.append("Camera")
+            permissions.append(AppText.text("Camera"))
         }
         if isMicrophonePermissionDisabled() {
-            permissions.append("Microphone")
+            permissions.append(AppText.text("Microphone"))
         }
         if isLocationPermissionDisabled() {
-            permissions.append("Location")
+            permissions.append(AppText.text("Location"))
         }
         
         return permissions
@@ -58,6 +58,10 @@ enum SiteSettingsUtils {
     static func disabledPermissionMessage() -> String {
         let names = disabledPermissionNames()
         let permissionList = formattedPermissionList(names)
+
+        if Prefs.BrowsingSettings.language == .chinese {
+            return "Reynard 的\(permissionList)权限当前已关闭。请在系统设置中开启。"
+        }
         
         if names.count == 1 {
             return "\(permissionList) is currently disabled for Reynard. Open the Settings app to enable this permission."
@@ -79,20 +83,20 @@ enum SiteSettingsUtils {
         case .autoplay:
             switch action {
             case .allowed:
-                return "Allow Audio and Video"
+                return AppText.text("Allow Audio and Video")
             case .askToAllow:
-                return "Block Audio only"
+                return AppText.text("Block Audio only")
             case .blocked:
-                return "Block Audio and Video"
+                return AppText.text("Block Audio and Video")
             }
         default:
             switch action {
             case .allowed:
-                return "Allow"
+                return AppText.text("Allow")
             case .askToAllow:
-                return "Ask"
+                return AppText.text("Ask")
             case .blocked:
-                return "Deny"
+                return AppText.text("Deny")
             }
         }
     }
@@ -244,7 +248,7 @@ enum SiteSettingsUtils {
             button = UIBarButtonItem(barButtonSystemItem: .cancel, target: target, action: action)
             button.tintColor = .label
         } else {
-            button = UIBarButtonItem(barButtonSystemItem: .done, target: target, action: action)
+            button = UIBarButtonItem(title: AppText.text("Done"), style: .done, target: target, action: action)
         }
         return button
     }
@@ -259,7 +263,14 @@ enum SiteSettingsUtils {
         }
         
         if names.count == 2 {
+            if Prefs.BrowsingSettings.language == .chinese {
+                return names.joined(separator: "和")
+            }
             return "\(names[0]) and \(names[1])"
+        }
+
+        if Prefs.BrowsingSettings.language == .chinese {
+            return names.joined(separator: "、")
         }
         
         let head = names.dropLast().joined(separator: ", ")

@@ -29,7 +29,7 @@ final class TabOverviewTopToolbar: UIView {
     private let doneButton = TabOverviewToolbarButton(action: .done)
     private lazy var actionButtonStackView = UIStackView(arrangedSubviews: [clearTabsButton, addTabButton, doneButton])
     private lazy var liquidGlassActionToolbar = makeLiquidGlassActionToolbar()
-    private let tabModeControl = UISegmentedControl(items: ["Private", "0 Tabs"])
+    private let tabModeControl = UISegmentedControl(items: [AppText.text("Private"), AppText.tabCount(0)])
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,7 +48,8 @@ final class TabOverviewTopToolbar: UIView {
     }
 
     func apply(tabCount: Int, hasVisibleTab: Bool) {
-        tabModeControl.setTitle("\(tabCount)" + (tabCount == 1 ? " Tab" : " Tabs"), forSegmentAt: TabOverview.Mode.regularTabs.rawValue)
+        tabModeControl.setTitle(AppText.text("Private"), forSegmentAt: TabOverview.Mode.privateTabs.rawValue)
+        tabModeControl.setTitle(AppText.tabCount(tabCount), forSegmentAt: TabOverview.Mode.regularTabs.rawValue)
         doneButton.setActionEnabled(hasVisibleTab)
         if #available(iOS 26.0, *) {
             liquidGlassActionToolbar.items?.last?.isEnabled = hasVisibleTab
@@ -109,7 +110,7 @@ final class TabOverviewTopToolbar: UIView {
         toolbar.translatesAutoresizingMaskIntoConstraints = false
         let clearTabsItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clearTabsButtonTapped))
         let addTabItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTabButtonTapped))
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
+        let doneItem = UIBarButtonItem(title: AppText.text("Done"), style: .done, target: self, action: #selector(doneTapped))
         clearTabsItem.tintColor = .label
         addTabItem.tintColor = .label
         doneItem.tintColor = .label

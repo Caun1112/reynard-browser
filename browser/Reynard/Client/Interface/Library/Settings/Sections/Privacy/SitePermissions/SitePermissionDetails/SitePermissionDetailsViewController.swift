@@ -27,13 +27,13 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
         var text: SettingsSectionText {
             switch self {
             case .defaultBehavior:
-                return SettingsSectionText(headerTitle: "Default Behavior")
+                return SettingsSectionText(headerTitle: AppText.text("Default Behavior"))
             case .allowedSiteEntries:
-                return SettingsSectionText(headerTitle: "Allowed Sites")
+                return SettingsSectionText(headerTitle: AppText.text("Allowed Sites"))
             case .blockedSiteEntries:
-                return SettingsSectionText(headerTitle: "Denied Sites")
+                return SettingsSectionText(headerTitle: AppText.text("Denied Sites"))
             case .customSiteActions:
-                return SettingsSectionText(headerTitle: "Changed Sites")
+                return SettingsSectionText(headerTitle: AppText.text("Changed Sites"))
             }
         }
     }
@@ -46,6 +46,7 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
+        formatter.locale = AppText.locale
         return formatter
     }()
     
@@ -230,7 +231,7 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
     
     private func emptySiteEntryCell() -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-        cell.textLabel?.text = "No Sites Added"
+        cell.textLabel?.text = AppText.text("No Sites Added")
         cell.textLabel?.textColor = .secondaryLabel
         cell.selectionStyle = .none
         return cell
@@ -286,7 +287,7 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
     }
     
     private func clearSiteActionSwipeConfiguration(for host: String) -> UISwipeActionsConfiguration {
-        let clearAction = UIContextualAction(style: .destructive, title: "Clear") { [weak self] _, _, completion in
+        let clearAction = UIContextualAction(style: .destructive, title: AppText.text("Clear")) { [weak self] _, _, completion in
             guard let self else {
                 completion(false)
                 return
@@ -308,11 +309,11 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
         let timestamp = timestampFormatter.string(from: date)
         switch action {
         case .allowed:
-            return "Allowed on \(timestamp)"
+            return AppText.format("Allowed on %@", timestamp)
         case .blocked:
-            return "Denied on \(timestamp)"
+            return AppText.format("Denied on %@", timestamp)
         case .askToAllow:
-            return "Changed on \(timestamp)"
+            return AppText.format("Changed on %@", timestamp)
         }
     }
     

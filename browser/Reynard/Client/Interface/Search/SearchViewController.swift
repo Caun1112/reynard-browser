@@ -70,7 +70,7 @@ final class SearchViewController: UIViewController, UITableViewDataSource, UITab
         return view
     }()
     
-    private lazy var userDataHeaderView = makeSectionHeaderView(title: "Bookmarks, History, and Tabs")
+    private lazy var userDataHeaderView = makeSectionHeaderView(title: AppText.text("Bookmarks, History, and Tabs"))
     
     // MARK: - Lifecycle
     

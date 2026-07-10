@@ -78,7 +78,7 @@ extension FilePicker {
                 }
             })
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: AppText.text("Cancel"), style: .cancel) { [weak self] _ in
             self?.finish(with: nil)
         })
         
@@ -129,11 +129,11 @@ extension FilePicker {
     private func title(for action: PickerAction) -> String {
         switch action {
         case .photoLibrary:
-            return "Photo Library"
+            return AppText.text("Photo Library")
         case .camera:
             return cameraActionTitle
         case .chooseFile:
-            return mode == .folder ? "Choose Folder" : "Choose File"
+            return AppText.text(mode == .folder ? "Choose Folder" : "Choose File")
         }
     }
     
@@ -155,13 +155,13 @@ extension FilePicker {
         
         switch (supportsImages, supportsVideos) {
         case (true, true):
-            return "Take Photo or Video"
+            return AppText.text("Take Photo or Video")
         case (true, false):
-            return "Take Photo"
+            return AppText.text("Take Photo")
         case (false, true):
-            return "Take Video"
+            return AppText.text("Take Video")
         case (false, false):
-            return "Take Photo"
+            return AppText.text("Take Photo")
         }
     }
     

@@ -69,7 +69,7 @@ final class EditBookmarkViewController: UIViewController, UITableViewDataSource,
         textField.clearButtonMode = .whileEditing
         textField.font = .preferredFont(forTextStyle: .body)
         textField.adjustsFontForContentSizeCategory = true
-        textField.placeholder = "Title"
+        textField.placeholder = AppText.text("Title")
         textField.text = bookmark?.title ?? draftTitle
         textField.delegate = self
         textField.addTarget(self, action: #selector(validateSaveButton), for: .editingChanged)
@@ -86,7 +86,7 @@ final class EditBookmarkViewController: UIViewController, UITableViewDataSource,
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
         textField.keyboardType = .URL
-        textField.placeholder = "URL"
+        textField.placeholder = AppText.text("URL")
         textField.text = bookmark?.url.absoluteString ?? draftURL?.absoluteString
         textField.delegate = self
         textField.addTarget(self, action: #selector(validateSaveButton), for: .editingChanged)
@@ -126,22 +126,22 @@ final class EditBookmarkViewController: UIViewController, UITableViewDataSource,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = limitsToFavorites ? "Add to Favorites" : (bookmark == nil ? "Add Bookmark" : "Edit Bookmark")
+        title = AppText.text(limitsToFavorites ? "Add to Favorites" : (bookmark == nil ? "Add Bookmark" : "Edit Bookmark"))
         view.backgroundColor = .systemGroupedBackground
         navigationItem.largeTitleDisplayMode = .never
         
         if #available(iOS 26.0, *) {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(saveBookmark))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: AppText.text("Save"), style: .done, target: self, action: #selector(saveBookmark))
             navigationItem.rightBarButtonItem?.tintColor = .label
             if bookmark != nil {
                 navigationItem.leftBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteBookmark))]
                 navigationItem.leftBarButtonItems?.first?.tintColor = .systemRed
             } else {
-                navigationItem.leftBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))]
+                navigationItem.leftBarButtonItems = [UIBarButtonItem(title: AppText.text("Cancel"), style: .plain, target: self, action: #selector(cancel))]
                 navigationItem.leftBarButtonItems?.first?.tintColor = .label
             }
         } else {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(saveBookmark))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: AppText.text("Save"), style: .done, target: self, action: #selector(saveBookmark))
         }
         
         view.addSubview(tableView)
@@ -206,7 +206,7 @@ final class EditBookmarkViewController: UIViewController, UITableViewDataSource,
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        section == 2 ? "Location" : nil
+        section == 2 ? AppText.text("Location") : nil
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -255,7 +255,7 @@ final class EditBookmarkViewController: UIViewController, UITableViewDataSource,
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             cell.backgroundColor = .secondarySystemGroupedBackground
             cell.tintColor = .systemBlue
-            cell.textLabel?.text = "New Folder"
+            cell.textLabel?.text = AppText.text("New Folder")
             cell.textLabel?.textColor = .systemBlue
             cell.imageView?.image = UIImage(named: "reynard.folder.badge.plus")?.withRenderingMode(.alwaysTemplate)
             return cell

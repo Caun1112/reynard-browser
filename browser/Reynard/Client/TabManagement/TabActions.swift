@@ -118,6 +118,14 @@ extension TabManagerImplementation {
               ) else {
             return false
         }
+
+        for otherTab in regularTabs + privateTabs where otherTab.id != tab.id {
+            guard let otherURL = otherTab.url else {
+                continue
+            }
+            sessionManager.updateSettings(of: otherTab.session, for: otherURL, tabID: otherTab.id)
+            otherTab.session.reload()
+        }
         
         switch navigationAction {
         case .reload:
@@ -130,5 +138,15 @@ extension TabManagerImplementation {
             tab.session.load(overrideURL, flags: GeckoSessionLoadFlags.replaceHistory)
         }
         return true
+    }
+
+    func reloadTabsForWebsiteModeChange() {
+        for tab in regularTabs + privateTabs {
+            guard let url = tab.url else {
+                continue
+            }
+            sessionManager.updateSettings(of: tab.session, for: url, tabID: tab.id)
+            tab.session.reload()
+        }
     }
 }

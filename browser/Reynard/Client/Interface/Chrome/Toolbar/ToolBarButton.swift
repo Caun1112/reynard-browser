@@ -112,7 +112,7 @@ final class ToolbarButton: UIButton {
         downloadProgressTrackView.isHidden = !showsProgress
         downloadProgressFillView.isHidden = !showsProgress
         downloadProgressFillWidthConstraint.constant = UX.downloadProgressTrackWidth * progress
-        accessibilityLabel = "Downloads"
+        accessibilityLabel = AppText.text("Downloads")
     }
     
     // MARK: - View Setup

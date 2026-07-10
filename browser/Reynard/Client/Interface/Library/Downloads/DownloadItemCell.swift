@@ -174,7 +174,7 @@ final class DownloadItemCell: UITableViewCell {
         case .completed:
             representedDownloadID = item.id
             lastStatusUpdateTime = 0
-            statusLabel.text = item.fileExists ? (item.totalBytes.map { Self.formattedByteCount($0) } ?? "Unknown size") : "Deleted"
+            statusLabel.text = item.fileExists ? (item.totalBytes.map { Self.formattedByteCount($0) } ?? AppText.text("Unknown size")) : AppText.text("Deleted")
             progressView.isHidden = true
             progressView.progress = 0
             fileIconView.transform = .identity

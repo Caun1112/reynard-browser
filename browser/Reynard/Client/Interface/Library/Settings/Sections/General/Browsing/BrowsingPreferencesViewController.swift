@@ -191,5 +191,6 @@ final class BrowsingPreferencesViewController: SettingsTableViewController {
 
     @objc private func requestDesktopWebsiteSwitchDidChange(_ sender: UISwitch) {
         Prefs.BrowsingSettings.requestDesktopWebsite = sender.isOn
+        LibrarySharedUtils.resolvedBrowserViewController(from: self)?.tabManager.reloadTabsForWebsiteModeChange()
     }
 }

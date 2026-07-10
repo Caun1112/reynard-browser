@@ -59,7 +59,7 @@ final class UpdateAvailableViewController: UIViewController, HomepageRecommendat
         label.font = UIFontMetrics(forTextStyle: .title2).scaledFont(
             for: .systemFont(ofSize: UX.titleFontSize, weight: .bold)
         )
-        label.text = "Update Available"
+        label.text = AppText.text("Update Available")
         label.textAlignment = .left
         label.textColor = .label
         label.numberOfLines = 0
@@ -70,7 +70,7 @@ final class UpdateAvailableViewController: UIViewController, HomepageRecommendat
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .body)
-        label.text = "A new version of Reynard Browser is available. Open Settings to update."
+        label.text = AppText.text("A new version of Reynard Browser is available. Open Settings to update.")
         label.textAlignment = .left
         label.textColor = .secondaryLabel
         label.numberOfLines = 0
@@ -96,7 +96,7 @@ final class UpdateAvailableViewController: UIViewController, HomepageRecommendat
     
     private lazy var settingsButton: UIButton = {
         return makeActionButton(
-            title: "Open Settings",
+            title: AppText.text("Open Settings"),
             imageName: "reynard.gearshape",
             action: #selector(openSettings)
         )

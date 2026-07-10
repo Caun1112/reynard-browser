@@ -628,6 +628,7 @@ final class BrowserViewController: UIViewController {
         for tab in tabManager.regularTabs + tabManager.privateTabs {
             sessionManager.updateSettings(of: tab.session, for: tab.url, tabID: tab.id)
         }
+        refreshAddressBar()
     }
 
     @objc func addressBarPositionDidChange() {

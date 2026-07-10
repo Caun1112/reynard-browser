@@ -13,21 +13,21 @@ extension ContentPermission {
         let host = Self.permissionHost(from: uri)
         switch permission {
         case .geolocation:
-            return "Allow \(host) to use your location?"
+            return AppText.format("Allow %@ to use your location?", host)
         case .desktopNotification:
-            return "Allow \(host) to send notifications?"
+            return AppText.format("Allow %@ to send notifications?", host)
         case .persistentStorage:
-            return "Allow \(host) to store data in persistent storage?"
+            return AppText.format("Allow %@ to store data in persistent storage?", host)
         case .mediaKeySystemAccess:
-            return "Allow \(host) to play DRM-controlled content?"
+            return AppText.format("Allow %@ to play DRM-controlled content?", host)
         case .storageAccess:
-            return "Allow \(Self.permissionHost(from: thirdPartyOrigin)) to use its cookies on \(host)?"
+            return AppText.format("Allow %@ to use its cookies on %@?", Self.permissionHost(from: thirdPartyOrigin), host)
         case .localDeviceAccess:
-            return "Allow \(host) to access other apps and services on this device?"
+            return AppText.format("Allow %@ to access other apps and services on this device?", host)
         case .localNetworkAccess:
-            return "Allow \(host) to access apps and services on devices connected to your local network?"
+            return AppText.format("Allow %@ to access apps and services on devices connected to your local network?", host)
         case .deviceSensors:
-            return "Allow \(host) to use motion & orientation sensors?"
+            return AppText.format("Allow %@ to use motion & orientation sensors?", host)
         case .camera,
                 .microphone,
                 .webxr,
@@ -41,7 +41,7 @@ extension ContentPermission {
     var alertMessage: String? {
         switch permission {
         case .storageAccess:
-            return "You may want to block access if it’s not clear why \(Self.permissionHost(from: thirdPartyOrigin)) needs this data."
+            return AppText.format("You may want to block access if it’s not clear why %@ needs this data.", Self.permissionHost(from: thirdPartyOrigin))
         case .camera,
                 .microphone,
                 .geolocation,
@@ -63,13 +63,13 @@ extension ContentPermission {
         let host = permissionHost(from: uri)
         switch (videoRequested, audioRequested) {
         case (true, true):
-            return "Allow \(host) to use your camera and microphone?"
+            return AppText.format("Allow %@ to use your camera and microphone?", host)
         case (true, false):
-            return "Allow \(host) to use your camera?"
+            return AppText.format("Allow %@ to use your camera?", host)
         case (false, true):
-            return "Allow \(host) to use your microphone?"
+            return AppText.format("Allow %@ to use your microphone?", host)
         case (false, false):
-            return "Allow \(host) to use your camera and microphone?"
+            return AppText.format("Allow %@ to use your camera and microphone?", host)
         }
     }
 }

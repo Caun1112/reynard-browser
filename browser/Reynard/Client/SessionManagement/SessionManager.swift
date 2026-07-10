@@ -112,7 +112,6 @@ final class SessionManager {
     }
 
     func discard(_ session: GeckoSession, forTab tabID: UUID, keepingHistory: Bool = false) {
-        sessionSettings.websiteMode.clearWebsiteOverrides(for: tabID)
         if !keepingHistory {
             history.removeHistory(for: tabID)
         }

@@ -87,7 +87,7 @@ final class UpdateReleaseNotesCell: UITableViewCell {
         nameLabel.numberOfLines = 1
         
         let versionLabel = UILabel()
-        versionLabel.text = "Version \(updateInfo.version)"
+        versionLabel.text = AppText.format("Version %@", updateInfo.version)
         versionLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         versionLabel.textColor = .secondaryLabel
         
@@ -177,7 +177,7 @@ final class UpdateReleaseNotesCell: UITableViewCell {
               let latestEntry = versions.first,
               let description = latestEntry["localizedDescription"] as? String else {
             return NSAttributedString(
-                string: "No release notes available.",
+                string: AppText.text("No release notes available."),
                 attributes: [.font: UIFont.preferredFont(forTextStyle: .footnote)]
             )
         }

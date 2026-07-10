@@ -66,13 +66,13 @@ final class DownloadsCoordinator {
         isShowingConfirmationAlert = true
         
         AlertPresenter.show(
-            title: "Do you want to download \"\(pendingDownload.fileName)\"?",
+            title: AppText.format("Do you want to download \"%@\"?", pendingDownload.fileName),
             message: nil,
             buttons: [
-                AlertPresenter.Button(title: "Cancel", style: .cancel) { [weak self] in
+                AlertPresenter.Button(title: AppText.text("Cancel"), style: .cancel) { [weak self] in
                     self?.resolveConfirmation(shouldStartDownload: false)
                 },
-                AlertPresenter.Button(title: "Download") { [weak self] in
+                AlertPresenter.Button(title: AppText.text("Download")) { [weak self] in
                     Haptics.success()
                     self?.resolveConfirmation(shouldStartDownload: true)
                 },

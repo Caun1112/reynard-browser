@@ -20,7 +20,7 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
         searchBar.autocapitalizationType = .none
         searchBar.autocorrectionType = .no
         searchBar.searchBarStyle = .minimal
-        searchBar.placeholder = "Search Downloads"
+        searchBar.placeholder = AppText.text("Search Downloads")
         searchBar.delegate = self
         return searchBar
     }()
@@ -70,7 +70,7 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
         return view
     }()
     
-    private let emptyStateView = SidebarEmptyBackgroundView(message: "Files you download appear here")
+    private let emptyStateView = SidebarEmptyBackgroundView(message: AppText.text("Files you download appear here"))
     private var sections: [DownloadSection] = []
     private var storeObserver: NSObjectProtocol?
     private var appActiveObserver: NSObjectProtocol?
@@ -261,10 +261,10 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
     
     fileprivate func makeDownloadsMenu() -> UIMenu {
         UIMenu(title: "", children: [
-            UIAction(title: "Open Downloads Folder", image: UIImage(named: "reynard.folder")) { [weak self] _ in
+            UIAction(title: AppText.text("Open Downloads Folder"), image: UIImage(named: "reynard.folder")) { [weak self] _ in
                 self?.openDownloadsFolder()
             },
-            UIAction(title: "Clear Downloads History", image: UIImage(named: "reynard.arrow.down.circle.badge.xmark")) { [weak self] _ in
+            UIAction(title: AppText.text("Clear Downloads History"), image: UIImage(named: "reynard.arrow.down.circle.badge.xmark")) { [weak self] _ in
                 self?.showClearDownloads()
             },
         ])
@@ -344,7 +344,7 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
     // MARK: - Display State
     
     private func updateEmptyState() {
-        emptyStateView.message = query.isEmpty ? "Files you download appear here" : "No matching downloads"
+        emptyStateView.message = AppText.text(query.isEmpty ? "Files you download appear here" : "No matching downloads")
         tableView.backgroundView = sections.isEmpty ? emptyStateView : nil
         emptyStateView.updateContentInsets(from: tableView)
     }
@@ -446,7 +446,7 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
         
         switch item.state {
         case .downloading:
-            let cancelAction = UIContextualAction(style: .destructive, title: "Cancel") { [weak self] _, _, completion in
+            let cancelAction = UIContextualAction(style: .destructive, title: AppText.text("Cancel")) { [weak self] _, _, completion in
                 self?.confirmCancelDownload(for: item, completion: completion)
             }
             let configuration = UISwipeActionsConfiguration(actions: [cancelAction])
@@ -454,7 +454,7 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
             return configuration
             
         case .completed:
-            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, completion in
+            let deleteAction = UIContextualAction(style: .destructive, title: AppText.text("Delete")) { _, _, completion in
                 DownloadStore.shared.removeDownload(id: item.id)
                 completion(true)
             }
@@ -465,7 +465,7 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
                 return configuration
             }
             
-            let shareAction = UIContextualAction(style: .normal, title: "Share") { [weak self] _, _, completion in
+            let shareAction = UIContextualAction(style: .normal, title: AppText.text("Share")) { [weak self] _, _, completion in
                 guard let self else {
                     completion(false)
                     return
@@ -476,7 +476,7 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
             }
             shareAction.backgroundColor = .systemGreen
             
-            let openAction = UIContextualAction(style: .normal, title: "Open in\nFiles") { [weak self] _, _, completion in
+            let openAction = UIContextualAction(style: .normal, title: AppText.text("Open in\nFiles")) { [weak self] _, _, completion in
                 guard let self else {
                     completion(false)
                     return
@@ -543,13 +543,13 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
         completion: @escaping (Bool) -> Void
     ) {
         AlertPresenter.show(
-            title: "Cancel Download?",
-            message: "Do you want to stop downloading \(item.fileName)?",
+            title: AppText.text("Cancel Download?"),
+            message: AppText.format("Do you want to stop downloading %@?", item.fileName),
             buttons: [
-                AlertPresenter.Button(title: "Keep Downloading", style: .cancel) {
+                AlertPresenter.Button(title: AppText.text("Keep Downloading"), style: .cancel) {
                     completion(false)
                 },
-                AlertPresenter.Button(title: "Cancel Download", style: .destructive) {
+                AlertPresenter.Button(title: AppText.text("Cancel Download"), style: .destructive) {
                     DownloadStore.shared.cancel(id: item.id)
                     completion(true)
                 },

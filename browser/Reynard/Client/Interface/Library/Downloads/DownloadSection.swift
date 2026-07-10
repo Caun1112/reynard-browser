@@ -71,16 +71,16 @@ extension DownloadSection {
         previousThirtyDayItems: [DownloadItemSnapshot]
     ) {
         if !todayItems.isEmpty {
-            sections.append(DownloadSection(title: "Today", items: todayItems))
+            sections.append(DownloadSection(title: AppText.text("Today"), items: todayItems))
         }
         if !yesterdayItems.isEmpty {
-            sections.append(DownloadSection(title: "Yesterday", items: yesterdayItems))
+            sections.append(DownloadSection(title: AppText.text("Yesterday"), items: yesterdayItems))
         }
         if !previousSevenDayItems.isEmpty {
-            sections.append(DownloadSection(title: "Previous 7 Days", items: previousSevenDayItems))
+            sections.append(DownloadSection(title: AppText.text("Previous 7 Days"), items: previousSevenDayItems))
         }
         if !previousThirtyDayItems.isEmpty {
-            sections.append(DownloadSection(title: "Previous 30 Days", items: previousThirtyDayItems))
+            sections.append(DownloadSection(title: AppText.text("Previous 30 Days"), items: previousThirtyDayItems))
         }
     }
     
@@ -116,14 +116,14 @@ extension DownloadSection {
     
     private static let monthTitleFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = .current
+        formatter.locale = AppText.locale
         formatter.setLocalizedDateFormatFromTemplate("MMMM")
         return formatter
     }()
     
     private static let monthYearTitleFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = .current
+        formatter.locale = AppText.locale
         formatter.setLocalizedDateFormatFromTemplate("MMMM yyyy")
         return formatter
     }()

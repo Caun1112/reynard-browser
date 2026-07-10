@@ -52,22 +52,22 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
         var switchTitle: String {
             switch self {
             case .favorites:
-                return "Show Favorites"
+                return AppText.text("Show Favorites")
             case .frequentlyVisited:
-                return "Show Frequently Visited"
+                return AppText.text("Show Frequently Visited")
             case .recentlyClosedTabs:
-                return "Show Recently Closed Tabs"
+                return AppText.text("Show Recently Closed Tabs")
             }
         }
 
         var countTitle: String {
             switch self {
             case .favorites:
-                return "Number of Rows"
+                return AppText.text("Number of Rows")
             case .frequentlyVisited:
-                return "Number of Sites"
+                return AppText.text("Number of Sites")
             case .recentlyClosedTabs:
-                return "Number of Items"
+                return AppText.text("Number of Items")
             }
         }
 
@@ -231,7 +231,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
             return cell
         case .showInPrivateBrowsing:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            cell.textLabel?.text = "Show in Private Browsing"
+            cell.textLabel?.text = AppText.text("Show in Private Browsing")
             cell.selectionStyle = .none
             cell.accessoryView = privateBrowsingSwitch
             return cell

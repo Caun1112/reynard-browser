@@ -63,8 +63,6 @@ final class AddressBar: UIView {
     private enum LeadingButtonState: Equatable {
         case hidden
         case search
-        case menu
-        case loading
     }
     
     private enum TrailingButtonState: Equatable {
@@ -76,10 +74,11 @@ final class AddressBar: UIView {
     private struct RenderModel {
         let content: ContentState
         let leadingButton: LeadingButtonState
+        let showsMenuButton: Bool
         let trailingButton: TrailingButtonState
     }
     
-    static let placeholderText = "Search or enter website name"
+    static var placeholderText: String { AppText.text("Search or enter website name") }
     
     private weak var delegate: AddressBarDelegate?
     private weak var searchDelegate: AddressBarSearchDelegate?
@@ -105,10 +104,12 @@ final class AddressBar: UIView {
     private var textLeadingToButtonConstraint: NSLayoutConstraint!
     private var textLeadingToBackgroundConstraint: NSLayoutConstraint!
     private var textTrailingToButtonConstraint: NSLayoutConstraint!
+    private var textTrailingToMenuButtonConstraint: NSLayoutConstraint!
     private var textTrailingToBackgroundConstraint: NSLayoutConstraint!
     private var labelLeadingToButtonConstraint: NSLayoutConstraint!
     private var labelLeadingToBackgroundConstraint: NSLayoutConstraint!
     private var labelTrailingToButtonConstraint: NSLayoutConstraint!
+    private var labelTrailingToMenuButtonConstraint: NSLayoutConstraint!
     private var labelTrailingToBackgroundConstraint: NSLayoutConstraint!
     
     private let addressBarBackground: UIView = {
@@ -147,6 +148,19 @@ final class AddressBar: UIView {
         let button = AddressBarButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .label
+        button.isHidden = true
+        button.isUserInteractionEnabled = false
+        return button
+    }()
+
+    private let menuButton: AddressBarButton = {
+        let button = AddressBarButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .label
+        button.setImage(UIImage(named: "reynard.list.bullet.below.rectangle"), for: .normal)
+        if #available(iOS 14.0, *) {
+            button.showsMenuAsPrimaryAction = true
+        }
         button.isHidden = true
         button.isUserInteractionEnabled = false
         return button
@@ -431,7 +445,7 @@ final class AddressBar: UIView {
     }
     
     func performAfterMenuDismissal(_ action: @escaping () -> Void) {
-        leadingButton.performAfterMenuDismissal(action)
+        menuButton.performAfterMenuDismissal(action)
     }
     
     // MARK: - Tab Transitions
@@ -468,6 +482,7 @@ final class AddressBar: UIView {
         addSubview(dismissButton)
         addressBarBackground.addSubview(addressBarContent)
         addressBarContent.addSubview(leadingButton)
+        addressBarContent.addSubview(menuButton)
         addressBarContent.addSubview(trailingButton)
         addressBarContent.addSubview(textField)
         addressBarContent.addSubview(autocompleteButton)
@@ -512,6 +527,11 @@ final class AddressBar: UIView {
             trailingButton.centerYAnchor.constraint(equalTo: addressBarContent.centerYAnchor),
             trailingButton.widthAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
             trailingButton.heightAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
+
+            menuButton.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing),
+            menuButton.centerYAnchor.constraint(equalTo: addressBarContent.centerYAnchor),
+            menuButton.widthAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
+            menuButton.heightAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
             
             textField.topAnchor.constraint(equalTo: addressBarContent.topAnchor),
             textField.bottomAnchor.constraint(equalTo: addressBarContent.bottomAnchor),
@@ -538,10 +558,12 @@ final class AddressBar: UIView {
         textLeadingToButtonConstraint = textField.leadingAnchor.constraint(equalTo: leadingButton.trailingAnchor, constant: UX.addressBarButtonToTextSpacing)
         textLeadingToBackgroundConstraint = textField.leadingAnchor.constraint(equalTo: addressBarContent.leadingAnchor, constant: UX.addressBarContentHorizontalInset)
         textTrailingToButtonConstraint = textField.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing)
+        textTrailingToMenuButtonConstraint = textField.trailingAnchor.constraint(equalTo: menuButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing)
         textTrailingToBackgroundConstraint = textField.trailingAnchor.constraint(equalTo: addressBarContent.trailingAnchor, constant: -UX.addressBarContentHorizontalInset)
         labelLeadingToButtonConstraint = addressLabel.leadingAnchor.constraint(equalTo: leadingButton.trailingAnchor, constant: UX.addressBarButtonToTextSpacing)
         labelLeadingToBackgroundConstraint = addressLabel.leadingAnchor.constraint(equalTo: addressBarContent.leadingAnchor, constant: UX.addressBarContentHorizontalInset)
         labelTrailingToButtonConstraint = addressLabel.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing)
+        labelTrailingToMenuButtonConstraint = addressLabel.trailingAnchor.constraint(equalTo: menuButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing)
         labelTrailingToBackgroundConstraint = addressLabel.trailingAnchor.constraint(equalTo: addressBarContent.trailingAnchor, constant: -UX.addressBarContentHorizontalInset)
     }
     
@@ -563,6 +585,17 @@ final class AddressBar: UIView {
             name: .showFullWebsiteAddressDidChange,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(browserLanguageDidChange),
+            name: .browserLanguageDidChange,
+            object: nil
+        )
+    }
+
+    @objc private func browserLanguageDidChange() {
+        textField.placeholder = Self.placeholderText
+        applyState()
     }
     
     // MARK: - State Rendering
@@ -589,6 +622,7 @@ final class AddressBar: UIView {
         return RenderModel(
             content: content,
             leadingButton: resolveLeadingButtonState(for: content),
+            showsMenuButton: editingState == .inactive && canShowBarMenu && isPageContent(content),
             trailingButton: resolveTrailingButtonState(for: content)
         )
     }
@@ -607,15 +641,19 @@ final class AddressBar: UIView {
     
     private func resolveLeadingButtonState(for content: ContentState) -> LeadingButtonState {
         guard editingState == .inactive else { return .hidden }
-        if case .loading = loadingState { return .loading }
         switch content {
         case .placeholder:
             return chromeMode == .phone && position == .bottom ? .search : .hidden
-        case .page:
-            return canShowBarMenu ? .menu : .hidden
-        case .typedText:
+        case .page, .typedText:
             return .hidden
         }
+    }
+
+    private func isPageContent(_ content: ContentState) -> Bool {
+        if case .page = content {
+            return true
+        }
+        return false
     }
     
     private func resolveTrailingButtonState(for content: ContentState) -> TrailingButtonState {
@@ -628,6 +666,7 @@ final class AddressBar: UIView {
     private func applyRenderModel(_ model: RenderModel) {
         applyContentState(model.content)
         applyLeadingButtonState(model.leadingButton)
+        applyMenuButton(visible: model.showsMenuButton)
         applyTrailingButtonState(model.trailingButton)
         
         let showsLeadingButton = model.leadingButton != .hidden
@@ -637,18 +676,20 @@ final class AddressBar: UIView {
             textLeadingToButtonConstraint,
             textLeadingToBackgroundConstraint,
             textTrailingToButtonConstraint,
+            textTrailingToMenuButtonConstraint,
             textTrailingToBackgroundConstraint,
             labelLeadingToButtonConstraint,
             labelLeadingToBackgroundConstraint,
             labelTrailingToButtonConstraint,
+            labelTrailingToMenuButtonConstraint,
             labelTrailingToBackgroundConstraint,
         ])
         
         NSLayoutConstraint.activate([
             showsLeadingButton ? textLeadingToButtonConstraint : textLeadingToBackgroundConstraint,
-            showsTrailingButton ? textTrailingToButtonConstraint : textTrailingToBackgroundConstraint,
+            model.showsMenuButton ? textTrailingToMenuButtonConstraint : (showsTrailingButton ? textTrailingToButtonConstraint : textTrailingToBackgroundConstraint),
             showsLeadingButton ? labelLeadingToButtonConstraint : labelLeadingToBackgroundConstraint,
-            showsTrailingButton ? labelTrailingToButtonConstraint : labelTrailingToBackgroundConstraint,
+            model.showsMenuButton ? labelTrailingToMenuButtonConstraint : (showsTrailingButton ? labelTrailingToButtonConstraint : labelTrailingToBackgroundConstraint),
         ])
     }
     
@@ -675,26 +716,16 @@ final class AddressBar: UIView {
         }
         
         leadingButton.isHidden = false
-        if state == .search {
-            leadingButton.tintColor = .secondaryLabel
-            leadingButton.setImage(UIImage(named: "reynard.magnifyingglass"), for: .normal)
-            leadingButton.setMenuPreservingPresentation(nil)
-            leadingButton.isUserInteractionEnabled = false
-            return
-        }
-        
-        if state == .loading {
-            leadingButton.tintColor = .secondaryLabel
-            leadingButton.setImage(UIImage(named: "reynard.list.bullet.below.rectangle"), for: .normal)
-            leadingButton.setMenuPreservingPresentation(nil)
-            leadingButton.isUserInteractionEnabled = false
-            return
-        }
-        
-        leadingButton.tintColor = .label
-        leadingButton.setImage(UIImage(named: "reynard.list.bullet.below.rectangle"), for: .normal)
-        leadingButton.setMenuPreservingPresentation(addonsMenu)
-        leadingButton.isUserInteractionEnabled = addonsMenu != nil
+        leadingButton.tintColor = .secondaryLabel
+        leadingButton.setImage(UIImage(named: "reynard.magnifyingglass"), for: .normal)
+        leadingButton.setMenuPreservingPresentation(nil)
+        leadingButton.isUserInteractionEnabled = false
+    }
+
+    private func applyMenuButton(visible: Bool) {
+        menuButton.isHidden = !visible
+        menuButton.setMenuPreservingPresentation(visible ? addonsMenu : nil)
+        menuButton.isUserInteractionEnabled = visible && addonsMenu != nil
     }
     
     private func applyTrailingButtonState(_ state: TrailingButtonState) {
@@ -1042,6 +1073,10 @@ extension AddressBar: UITextFieldDelegate {
 extension AddressBar: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         if touch.view?.isDescendant(of: leadingButton) == true {
+            return false
+        }
+
+        if touch.view?.isDescendant(of: menuButton) == true {
             return false
         }
         
