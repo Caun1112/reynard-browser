@@ -84,7 +84,7 @@ final class LibraryActionButton: UIButton {
             return item
         }
         
-        return UIBarButtonItem(title: AppText.text("Done"), style: .done, target: target, action: action)
+        return UIBarButtonItem(barButtonSystemItem: .done, target: target, action: action)
     }
     
     // MARK: - View Setup

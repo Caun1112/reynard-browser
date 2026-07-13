@@ -37,7 +37,7 @@ final class NewBookmarkFolderViewController: UIViewController, UITableViewDataSo
         textField.clearButtonMode = .whileEditing
         textField.font = .preferredFont(forTextStyle: .body)
         textField.adjustsFontForContentSizeCategory = true
-        textField.placeholder = AppText.text("Title")
+        textField.placeholder = NSLocalizedString("Title", comment: "")
         textField.delegate = self
         textField.addTarget(self, action: #selector(validateSaveButton), for: .editingChanged)
         return textField
@@ -59,17 +59,17 @@ final class NewBookmarkFolderViewController: UIViewController, UITableViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = AppText.text("New Folder")
+        title = NSLocalizedString("New Folder", comment: "")
         view.backgroundColor = .systemGroupedBackground
         navigationItem.largeTitleDisplayMode = .never
         
         if #available(iOS 26.0, *) {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: AppText.text("Cancel"), style: .plain, target: self, action: #selector(cancel))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
             navigationItem.leftBarButtonItem?.tintColor = .label
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: AppText.text("Save"), style: .done, target: self, action: #selector(createFolder))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(createFolder))
             navigationItem.rightBarButtonItem?.tintColor = .label
         } else {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: AppText.text("Save"), style: .done, target: self, action: #selector(createFolder))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""), style: .done, target: self, action: #selector(createFolder))
         }
         
         view.addSubview(tableView)
@@ -100,7 +100,7 @@ final class NewBookmarkFolderViewController: UIViewController, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        section == 1 ? AppText.text("Location") : nil
+        section == 1 ? NSLocalizedString("Location", comment: "") : nil
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -1,0 +1,14 @@
+diff --git a/build/moz.configure/toolchain.configure b/build/moz.configure/toolchain.configure
+index 2f97afdb3615..55c41f7aea15 100644
+--- a/build/moz.configure/toolchain.configure
++++ b/build/moz.configure/toolchain.configure
+@@ -1792,5 +1792,8 @@ def select_linker_tmpl(host_or_target):
+             # ensure consistent output.
+             env["LC_ALL"] = "C"
+             retcode, stdout, stderr = get_cmd_output(*cmd, env=env)
+-            if retcode == 1 and "Logging ld64 options" in stderr:
++            if retcode == 1 and (
++                "Logging ld64 options" in stderr
++                or (target.kernel == "Darwin" and "unknown options: --version" in stderr)
++            ):
+                 kind = "ld64"

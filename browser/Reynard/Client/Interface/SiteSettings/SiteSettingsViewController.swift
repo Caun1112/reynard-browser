@@ -15,6 +15,7 @@ final class SiteSettingsViewController: UITableViewController {
         case availability
         case media
         case permissions
+        case resetAction
     }
     
     private enum Row: CaseIterable {
@@ -30,21 +31,21 @@ final class SiteSettingsViewController: UITableViewController {
         var title: String {
             switch self {
             case .camera:
-                return AppText.text("Camera")
+                return NSLocalizedString("Camera", comment: "")
             case .microphone:
-                return AppText.text("Microphone")
+                return NSLocalizedString("Microphone", comment: "")
             case .location:
-                return AppText.text("Location")
+                return NSLocalizedString("Location", comment: "")
             case .persistentStorage:
-                return AppText.text("Persistent Storage")
+                return NSLocalizedString("Persistent Storage", comment: "")
             case .crossOriginStorageAccess:
-                return AppText.text("Cross-site Cookies")
+                return NSLocalizedString("Cross-Site Cookies", comment: "")
             case .localDeviceAccess:
-                return AppText.text("Device Apps and Services")
+                return NSLocalizedString("Device Apps and Services", comment: "")
             case .localNetworkAccess:
-                return AppText.text("Local Network Devices")
+                return NSLocalizedString("Local Network Devices", comment: "")
             case .autoplay:
-                return AppText.text("Autoplay")
+                return NSLocalizedString("Autoplay", comment: "")
             }
         }
         
@@ -82,10 +83,6 @@ final class SiteSettingsViewController: UITableViewController {
         .camera,
         .microphone,
         .location,
-        .persistentStorage,
-        .crossOriginStorageAccess,
-        .localDeviceAccess,
-        .localNetworkAccess,
     ]
     private let host: String
     private let origin: String
@@ -102,6 +99,7 @@ final class SiteSettingsViewController: UITableViewController {
         
         sections.append(.media)
         sections.append(.permissions)
+        sections.append(.resetAction)
         return sections
     }
     
@@ -115,7 +113,7 @@ final class SiteSettingsViewController: UITableViewController {
         self.origin = origin
         self.session = session
         super.init(style: .insetGrouped)
-        title = AppText.format("Settings for %@", host)
+        title = String(format: NSLocalizedString("Settings for %@", comment: "Website host"), host)
     }
     
     required init?(coder: NSCoder) {
@@ -145,7 +143,9 @@ final class SiteSettingsViewController: UITableViewController {
         case .media:
             return loadState == .loaded ? mediaRows.count : 0
         case .permissions:
-            return loadState == .loaded ? permissionRows.count + 1 : 0
+            return loadState == .loaded ? permissionRows.count : 0
+        case .resetAction:
+            return loadState == .loaded ? 1 : 0
         }
     }
     
@@ -158,9 +158,11 @@ final class SiteSettingsViewController: UITableViewController {
         case .availability:
             return nil
         case .media:
-            return AppText.text("Media")
+            return NSLocalizedString("Media", comment: "")
         case .permissions:
-            return AppText.text("Permissions")
+            return NSLocalizedString("Permissions", comment: "")
+        case .resetAction:
+            return nil
         }
     }
     
@@ -178,10 +180,9 @@ final class SiteSettingsViewController: UITableViewController {
         case .media:
             return permissionCell(at: indexPath)
         case .permissions:
-            if indexPath.row == permissionRows.count {
-                return resetSitePermissionsCell()
-            }
             return permissionCell(at: indexPath)
+        case .resetAction:
+            return resetWebsiteSettingsCell()
         }
     }
     
@@ -196,11 +197,9 @@ final class SiteSettingsViewController: UITableViewController {
         case .media:
             handlePermissionSelection(at: indexPath)
         case .permissions:
-            if indexPath.row == permissionRows.count {
-                confirmResetSitePermissions()
-            } else {
-                handlePermissionSelection(at: indexPath)
-            }
+            handlePermissionSelection(at: indexPath)
+        case .resetAction:
+            confirmResetWebsiteSettings()
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -219,7 +218,7 @@ final class SiteSettingsViewController: UITableViewController {
         }
         
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = AppText.text("Open Settings")
+        cell.textLabel?.text = NSLocalizedString("Open Settings", comment: "")
         cell.textLabel?.textColor = view.tintColor
         cell.accessoryType = .none
         return cell
@@ -263,12 +262,11 @@ final class SiteSettingsViewController: UITableViewController {
         return cell
     }
     
-    private func resetSitePermissionsCell() -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-        cell.textLabel?.text = AppText.text("Reset Permissions for this Site")
+    private func resetWebsiteSettingsCell() -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.textLabel?.text = NSLocalizedString("Reset Settings for This Website", comment: "")
         cell.textLabel?.textColor = .systemRed
-        cell.detailTextLabel?.text = nil
-        cell.detailTextLabel?.textColor = .secondaryLabel
+        cell.textLabel?.textAlignment = .center
         cell.accessoryView = nil
         cell.accessoryType = .none
         cell.selectionStyle = .default
@@ -285,7 +283,7 @@ final class SiteSettingsViewController: UITableViewController {
             return mediaRows[safe: indexPath.row]
         case .permissions:
             return permissionRows[safe: indexPath.row]
-        case .availability:
+        case .availability, .resetAction:
             return nil
         }
     }
@@ -306,10 +304,12 @@ final class SiteSettingsViewController: UITableViewController {
             return
         }
         
-        if #available(iOS 17.4, *),
-           let cell = tableView.cellForRow(at: indexPath),
-           let button = cell.accessoryView as? UIButton {
-            button.performPrimaryAction()
+        if #available(iOS 14.0, *) {
+            if #available(iOS 17.4, *),
+               let cell = tableView.cellForRow(at: indexPath),
+               let button = cell.accessoryView as? UIButton {
+                button.performPrimaryAction()
+            }
             return
         }
         
@@ -416,20 +416,20 @@ final class SiteSettingsViewController: UITableViewController {
         )
     }
     
-    private func confirmResetSitePermissions() {
+    private func confirmResetWebsiteSettings() {
         AlertPresenter.show(
             title: nil,
-            message: AppText.text("This action will reset permissions for this site. It cannot be undone."),
+            message: NSLocalizedString("This will reset settings for this website. This action cannot be undone.", comment: ""),
             buttons: [
-                AlertPresenter.Button(title: AppText.text("OK"), style: .destructive) { [weak self] in
-                    self?.performResetSitePermissions()
+                AlertPresenter.Button(title: NSLocalizedString("Reset", comment: "Destructive button"), style: .destructive) { [weak self] in
+                    self?.performResetWebsiteSettings()
                 },
-                AlertPresenter.Button(title: AppText.text("Cancel")),
+                AlertPresenter.Button(title: NSLocalizedString("Cancel", comment: "")),
             ]
         )
     }
     
-    private func performResetSitePermissions() {
+    private func performResetWebsiteSettings() {
         for permission in loadedGeckoPermissions {
             PermissionDelegate.removePermission(permission)
         }

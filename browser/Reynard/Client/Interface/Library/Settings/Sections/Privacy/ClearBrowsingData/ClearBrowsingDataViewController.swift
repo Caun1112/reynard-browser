@@ -18,47 +18,24 @@ final class ClearBrowsingDataViewController: SettingsTableViewController {
         case browsingHistory
         case cookiesAndSiteData
         case cachedImagesAndFiles
-        case downloadsHistory
-        case downloadedFiles
         case sitePermissions
+        case downloadedFiles
         case openedTabs
         
         var title: String {
             switch self {
             case .browsingHistory:
-                return AppText.text("Browsing History")
+                return NSLocalizedString("Browsing History", comment: "")
             case .cookiesAndSiteData:
-                return AppText.text("Cookies and Site Data")
+                return NSLocalizedString("Cookies and Website Data", comment: "")
             case .cachedImagesAndFiles:
-                return AppText.text("Cached Images and Files")
-            case .downloadsHistory:
-                return AppText.text("Downloads History")
+                return NSLocalizedString("Cached Images and Files", comment: "")
             case .downloadedFiles:
-                return AppText.text("Downloaded Files")
+                return NSLocalizedString("Downloads", comment: "")
             case .sitePermissions:
-                return AppText.text("Site Permissions")
+                return NSLocalizedString("Website Permissions", comment: "")
             case .openedTabs:
-                return AppText.text("Opened Tabs")
-            }
-        }
-        
-        var subtitle: String? {
-            switch self {
-            case .browsingHistory:
-                let count = HistoryStore.shared.currentSnapshot().items.count
-                return AppText.addressCount(count)
-            case .cookiesAndSiteData:
-                return AppText.text("You'll be logged out of most sites")
-            case .cachedImagesAndFiles:
-                return AppText.text("Frees up storage space")
-            case .downloadsHistory:
-                return nil
-            case .downloadedFiles:
-                return nil
-            case .sitePermissions:
-                return nil
-            case .openedTabs:
-                return nil
+                return NSLocalizedString("Open Tabs", comment: "")
             }
         }
         
@@ -70,8 +47,6 @@ final class ClearBrowsingDataViewController: SettingsTableViewController {
                 return Prefs.ClearBrowsingData.clearsCookiesAndSiteData
             case .cachedImagesAndFiles:
                 return Prefs.ClearBrowsingData.clearsCachedImagesAndFiles
-            case .downloadsHistory:
-                return Prefs.ClearBrowsingData.clearsDownloadsHistory
             case .downloadedFiles:
                 return Prefs.ClearBrowsingData.clearsDownloadedFiles
             case .sitePermissions:
@@ -89,8 +64,6 @@ final class ClearBrowsingDataViewController: SettingsTableViewController {
                 Prefs.ClearBrowsingData.clearsCookiesAndSiteData = isSelected
             case .cachedImagesAndFiles:
                 Prefs.ClearBrowsingData.clearsCachedImagesAndFiles = isSelected
-            case .downloadsHistory:
-                Prefs.ClearBrowsingData.clearsDownloadsHistory = isSelected
             case .downloadedFiles:
                 Prefs.ClearBrowsingData.clearsDownloadedFiles = isSelected
             case .sitePermissions:
@@ -109,7 +82,7 @@ final class ClearBrowsingDataViewController: SettingsTableViewController {
     
     init() {
         super.init(style: .insetGrouped)
-        title = AppText.text("Clear Browsing Data")
+        title = NSLocalizedString("Clear Browsing Data", comment: "")
     }
     
     required init?(coder: NSCoder) {
@@ -183,11 +156,8 @@ final class ClearBrowsingDataViewController: SettingsTableViewController {
     }
     
     private func categoryCell(for category: BrowsingDataCategory) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         cell.textLabel?.text = category.title
-        cell.detailTextLabel?.text = category.subtitle
-        cell.detailTextLabel?.textColor = .secondaryLabel
-        cell.detailTextLabel?.numberOfLines = 0
         browsingDataCategorySwitches[category]?.isOn = category.isSelected
         cell.accessoryView = browsingDataCategorySwitches[category]
         cell.selectionStyle = .default
@@ -196,8 +166,9 @@ final class ClearBrowsingDataViewController: SettingsTableViewController {
     
     private func clearActionCell() -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = AppText.text("Clear Browsing Data")
+        cell.textLabel?.text = NSLocalizedString("Clear Browsing Data", comment: "")
         cell.textLabel?.textColor = .systemRed
+        cell.textLabel?.textAlignment = .center
         cell.accessoryType = .none
         return cell
     }
@@ -218,12 +189,12 @@ final class ClearBrowsingDataViewController: SettingsTableViewController {
     @objc private func confirmClearBrowsingData() {
         AlertPresenter.show(
             title: nil,
-            message: AppText.text("This action will clear all of your browsing data. It cannot be undone."),
+            message: NSLocalizedString("This will clear selected browsing data. This action cannot be undone.", comment: ""),
             buttons: [
-                AlertPresenter.Button(title: AppText.text("OK"), style: .destructive) { [weak self] in
+                AlertPresenter.Button(title: NSLocalizedString("Clear", comment: "Destructive button"), style: .destructive) { [weak self] in
                     self?.clearSelectedData()
                 },
-                AlertPresenter.Button(title: AppText.text("Cancel")),
+                AlertPresenter.Button(title: NSLocalizedString("Cancel", comment: "")),
             ]
         )
     }
@@ -233,10 +204,6 @@ final class ClearBrowsingDataViewController: SettingsTableViewController {
         
         if selectedCategories.contains(.browsingHistory) {
             HistoryStore.shared.clearVisits(since: nil)
-        }
-        
-        if selectedCategories.contains(.downloadsHistory) {
-            DownloadStore.shared.clearCompletedDownloads(since: nil)
         }
         
         if selectedCategories.contains(.downloadedFiles) {
@@ -272,6 +239,10 @@ final class ClearBrowsingDataViewController: SettingsTableViewController {
     
     private func clearSelectedEngineData(for selectedCategories: Set<BrowsingDataCategory>) async {
         do {
+            if selectedCategories.contains(.browsingHistory) {
+                try await GeckoStorageController.clearHistory(since: nil)
+            }
+            
             if selectedCategories.contains(.cookiesAndSiteData) {
                 try await GeckoStorageController.clearData(
                     flags: GeckoStorageClearFlags.cookies | GeckoStorageClearFlags.authSessions
@@ -284,7 +255,7 @@ final class ClearBrowsingDataViewController: SettingsTableViewController {
                 try await GeckoStorageController.clearData(flags: GeckoStorageClearFlags.allCaches)
             }
         } catch {
-            AlertPresenter.show(title: AppText.text("Failed to clear browsing data"), message: "\(error)")
+            AlertPresenter.show(title: NSLocalizedString("Couldn’t Clear Browsing Data", comment: ""), message: "\(error)")
         }
     }
 }

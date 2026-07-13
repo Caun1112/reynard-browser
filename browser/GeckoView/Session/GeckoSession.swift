@@ -20,7 +20,7 @@ public enum GeckoSessionLoadFlags {
 
 public class GeckoSession {
     // MARK: - State
-
+    
     let dispatcher: GeckoEventDispatcherWrapper = GeckoEventDispatcherWrapper()
     var window: GeckoViewWindow?
     var id: String?
@@ -28,14 +28,15 @@ public class GeckoSession {
     public let isPrivateMode: Bool
     lazy var addonSessionListener = AddonSessionListener(session: self)
     public private(set) var settings: GeckoSessionSettings
-
+    
     // MARK: - Delegates
-
+    
     public func updateSettings(_ settings: GeckoSessionSettings) {
         self.settings = settings
-
+        GeckoRuntime.setLocale(acceptLanguages: settings.language.acceptLanguages)
+        
         guard isOpen() else { return }
-
+        
         dispatcher.dispatch(
             type: "GeckoView:UpdateSettings",
             message: [
@@ -43,13 +44,9 @@ public class GeckoSession {
                 "userAgentMode": settings.websiteMode.userAgentMode,
                 "viewportMode": settings.websiteMode.viewportMode,
                 "pageZoom": settings.pageZoom.scale,
-                "preferredLanguages": [
-                    "requestedLocales": settings.language.requestedLocales,
-                    "acceptLanguages": settings.language.acceptLanguages,
-                ],
             ])
     }
-
+    
     lazy var contentHandler = newContentHandler(self)
     lazy var processHangHandler = newProcessHangHandler(self)
     public var contentDelegate: ContentDelegate? {
@@ -59,25 +56,31 @@ public class GeckoSession {
             processHangHandler.setDelegate(newValue)
         }
     }
-
+    
     lazy var navigationHandler = newNavigationHandler(self)
     public var navigationDelegate: NavigationDelegate? {
         get { navigationHandler.delegate(as: NavigationDelegate.self) }
         set { navigationHandler.setDelegate(newValue) }
     }
-
+    
+    lazy var historyHandler = newHistoryHandler(self)
+    public var historyDelegate: HistoryDelegate? {
+        get { historyHandler.delegate(as: HistoryDelegate.self) }
+        set { historyHandler.setDelegate(newValue) }
+    }
+    
     lazy var permissionHandler = newPermissionHandler(self)
     public var permissionDelegate: PermissionEmbedderDelegate? {
         get { permissionHandler.delegate(as: PermissionEmbedderDelegate.self) }
         set { permissionHandler.setDelegate(newValue) }
     }
-
+    
     lazy var progressHandler = newProgressHandler(self)
     public var progressDelegate: ProgressDelegate? {
         get { progressHandler.delegate(as: ProgressDelegate.self) }
         set { progressHandler.setDelegate(newValue) }
     }
-
+    
     lazy var promptHandler: GeckoSessionHandler = {
         let handler = newPromptHandler(self)
         return handler
@@ -86,35 +89,36 @@ public class GeckoSession {
         get { promptHandler.delegate(as: PromptDelegate.self) }
         set { promptHandler.setDelegate(newValue) }
     }
-
+    
     lazy var selectionActionHandler = newSelectionActionHandler(self)
     public var selectionActionDelegate: SelectionActionDelegate? {
         get { selectionActionHandler.delegate(as: SelectionActionDelegate.self) }
         set { selectionActionHandler.setDelegate(newValue) }
     }
-
+    
     lazy var mediaSessionHandler = newMediaSessionHandler(self)
     public var mediaSessionDelegate: MediaSessionDelegate? {
         get { mediaSessionHandler.delegate(as: MediaSessionDelegate.self) }
         set { mediaSessionHandler.setDelegate(newValue) }
     }
     public lazy var mediaSession = MediaSession(session: self)
-
+    
     // MARK: - Session Handlers
-
+    
     lazy var sessionHandlers: [GeckoSessionHandlerCommon] = [
         contentHandler,
         processHangHandler,
         navigationHandler,
+        historyHandler,
         permissionHandler,
         progressHandler,
         promptHandler,
         selectionActionHandler,
         mediaSessionHandler,
     ]
-
+    
     // MARK: - Lifecycle
-
+    
     public init(
         settings: GeckoSessionSettings = .default,
         isPrivateMode: Bool = false,
@@ -123,24 +127,26 @@ public class GeckoSession {
         self.settings = settings
         self.isPrivateMode = isPrivateMode
         self.isAddonPopup = isAddonPopup
-
+        
         for sessionHandler in sessionHandlers {
             for type in sessionHandler.events {
                 dispatcher.addListener(type: type, listener: sessionHandler)
             }
         }
-
+        
         AddonRuntime.shared.register(sessionListener: addonSessionListener)
     }
-
+    
     public func open(windowId: String? = nil) {
         if isOpen() {
             fatalError("cannot open a GeckoSession twice")
         }
-
+        
         id = windowId ?? UUID().uuidString.replacingOccurrences(of: "-", with: "")
-
+        
         let sessionSettings = settings
+        GeckoRuntime.setLocale(acceptLanguages: sessionSettings.language.acceptLanguages)
+        
         let settings: [String: Any?] = [
             "chromeUri": nil,
             "screenId": 0,
@@ -149,10 +155,6 @@ public class GeckoSession {
             "userAgentOverride": sessionSettings.websiteMode.userAgentOverride,
             "viewportMode": sessionSettings.websiteMode.viewportMode,
             "pageZoom": sessionSettings.pageZoom.scale,
-            "preferredLanguages": [
-                "requestedLocales": sessionSettings.language.requestedLocales,
-                "acceptLanguages": sessionSettings.language.acceptLanguages,
-            ],
             "displayMode": 0,
             "suspendMediaWhenInactive": false,
             "allowJavascript": true,
@@ -161,11 +163,11 @@ public class GeckoSession {
             "sessionContextId": nil,
             "unsafeSessionContextId": nil,
         ]
-
+        
         let modules = Dictionary(uniqueKeysWithValues: sessionHandlers.map {
             ($0.moduleName, $0.enabled)
         })
-
+        
         window = GeckoViewOpenWindow(
             id,
             dispatcher,
@@ -176,34 +178,35 @@ public class GeckoSession {
             isPrivateMode
         )
     }
-
+    
     public func isOpen() -> Bool { window != nil }
-
+    
     public var engineView: UIView? {
         return window?.view()
     }
-
+    
     public func close() {
         contentDelegate = nil
         navigationDelegate = nil
+        historyDelegate = nil
         permissionDelegate = nil
         progressDelegate = nil
         promptDelegate = nil
         selectionActionDelegate = nil
         mediaSessionDelegate?.onDeactivated(session: self)
         mediaSessionDelegate = nil
-
+        
         guard let window else {
             return
         }
-
+        
         window.close()
         self.window = nil
         id = nil
     }
-
+    
     // MARK: - Navigation
-
+    
     public func load(_ url: String, flags: Int = GeckoSessionLoadFlags.none) {
         dispatcher.dispatch(
             type: "GeckoView:LoadUri",
@@ -213,7 +216,7 @@ public class GeckoSession {
                 "headerFilter": 1,
             ])
     }
-
+    
     public func reload() {
         dispatcher.dispatch(
             type: "GeckoView:Reload",
@@ -221,11 +224,11 @@ public class GeckoSession {
                 "flags": 0
             ])
     }
-
+    
     public func stop() {
         dispatcher.dispatch(type: "GeckoView:Stop")
     }
-
+    
     public func goBack(userInteraction: Bool = true) {
         dispatcher.dispatch(
             type: "GeckoView:GoBack",
@@ -233,7 +236,7 @@ public class GeckoSession {
                 "userInteraction": userInteraction
             ])
     }
-
+    
     public func goForward(userInteraction: Bool = true) {
         dispatcher.dispatch(
             type: "GeckoView:GoForward",
@@ -241,29 +244,29 @@ public class GeckoSession {
                 "userInteraction": userInteraction
             ])
     }
-
+    
     // MARK: - State Updates
-
+    
     public func setActive(_ active: Bool) {
         dispatcher.dispatch(type: "GeckoView:SetActive", message: ["active": active])
     }
-
+    
     public func setFocused(_ focused: Bool) {
         dispatcher.dispatch(type: "GeckoView:SetFocused", message: ["focused": focused])
     }
-
+    
     public func focusedInputBottomRatio() async -> CGFloat? {
         let response = try? await dispatcher.query(type: "GeckoView:GetFocusedInputMetrics")
         guard let values = response as? [AnyHashable: Any],
               let bottomRatioValue = values["bottomRatio"] else {
             return nil
         }
-
+        
         return PayloadValue.cgFloat(bottomRatioValue)
     }
-
+    
     // MARK: - Selection Actions
-
+    
     public func executeSelectionAction(actionId: String, commandId: String) {
         dispatcher.dispatch(
             type: "GeckoView:ExecuteSelectionAction",

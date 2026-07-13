@@ -81,7 +81,7 @@ final class PromptPresenter: PromptPresenting {
                 message: request.message.isEmpty ? nil : request.message,
                 preferredStyle: .alert
             )
-            alert.addAction(UIAlertAction(title: AppText.text("OK"), style: .default) { _ in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { _ in
                 continuation.resume()
             })
             presenter.present(alert, animated: true)
@@ -116,7 +116,7 @@ final class PromptPresenter: PromptPresenting {
             }
             
             if alert.actions.isEmpty {
-                alert.addAction(UIAlertAction(title: AppText.text("OK"), style: .default) { _ in
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { _ in
                     continuation.resume(returning: .button(0))
                 })
             }
@@ -139,10 +139,10 @@ final class PromptPresenter: PromptPresenting {
             alert.addTextField { textField in
                 textField.text = request.value
             }
-            alert.addAction(UIAlertAction(title: AppText.text("Cancel"), style: .cancel) { _ in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in
                 continuation.resume(returning: nil)
             })
-            alert.addAction(UIAlertAction(title: AppText.text("OK"), style: .default) { _ in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { _ in
                 continuation.resume(returning: .text(alert.textFields?.first?.text ?? ""))
             })
             presenter.present(alert, animated: true)
@@ -155,19 +155,19 @@ final class PromptPresenter: PromptPresenting {
         }
         
         let message = request.directoryName.isEmpty
-        ? AppText.text("Are you sure you want to upload all files? Only do this if you trust the site.")
-        : AppText.format("Are you sure you want to upload all files from \"%@\"? Only do this if you trust the site.", request.directoryName)
+        ? NSLocalizedString("Are you sure you want to upload all files? Only do this if you trust the site.", comment: "")
+        : NSLocalizedString("Are you sure you want to upload all files from \"\(request.directoryName)\"? Only do this if you trust the site.", comment: "")
         
         return await withCheckedContinuation { continuation in
             let alert = UIAlertController(
-                title: AppText.text("Confirm Upload"),
+                title: NSLocalizedString("Confirm Upload", comment: ""),
                 message: message,
                 preferredStyle: .alert
             )
-            alert.addAction(UIAlertAction(title: AppText.text("Cancel"), style: .cancel) { _ in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in
                 continuation.resume(returning: .folderUpload(allowed: false))
             })
-            alert.addAction(UIAlertAction(title: AppText.text("Upload"), style: .default) { _ in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Upload", comment: ""), style: .default) { _ in
                 continuation.resume(returning: .folderUpload(allowed: true))
             })
             presenter.present(alert, animated: true)
@@ -292,15 +292,15 @@ final class PromptPresenter: PromptPresenting {
         
         switch label {
         case "ok":
-            return AppText.text("OK")
+            return NSLocalizedString("OK", comment: "")
         case "cancel":
-            return AppText.text("Cancel")
+            return NSLocalizedString("Cancel", comment: "")
         case "yes":
-            return AppText.text("Yes")
+            return NSLocalizedString("Yes", comment: "")
         case "no":
-            return AppText.text("No")
+            return NSLocalizedString("No", comment: "")
         case "custom":
-            return customLabel.isEmpty ? AppText.text("OK") : customLabel
+            return customLabel.isEmpty ? NSLocalizedString("OK", comment: "") : customLabel
         default:
             return ""
         }

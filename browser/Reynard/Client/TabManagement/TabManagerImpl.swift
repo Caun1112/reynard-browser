@@ -179,6 +179,7 @@ final class TabManagerImplementation: NSObject, TabManager {
         return SessionDelegates(
             content: self,
             navigation: self,
+            history: self,
             permission: permissionCoordinator,
             progress: self,
             prompt: promptCoordinator,
@@ -822,6 +823,18 @@ final class TabManagerImplementation: NSObject, TabManager {
         notifyUpdate(at: index, mode: mode, reason: .thumbnail)
     }
     
+    func updateHistoryThumbnail(_ image: UIImage?, for tab: Tab, url: String) {
+        sessionManager.updateCurrentHistoryThumbnail(image, for: tab.id, matching: url)
+    }
+    
+    func navigationPreviewImages(for tab: Tab) -> NavigationPreviewImages {
+        return sessionManager.navigationPreviewImages(for: tab.id)
+    }
+    
+    func invalidateNavigationThumbnails() {
+        sessionManager.invalidateNavigationThumbnails()
+    }
+    
     // MARK: - Session Factory
     
     private func createSession(
@@ -977,9 +990,21 @@ extension TabManagerImplementation: NavigationDelegate {
             permissionCoordinator.restorePermissions(for: session, at: url)
         }
         
-        tab.url = url
         if let url {
+            if let currentURL = tab.url,
+               currentURL != url {
+                delegate?.tabManager(
+                    self,
+                    captureHistoryThumbnailForTabAt: location.index,
+                    mode: location.mode,
+                    url: currentURL
+                )
+            }
+            
+            tab.url = url
             recordNavigation(url, for: tab)
+        } else {
+            tab.url = url
         }
         tab.state.displayState = .committed
         tab.favicon = nil
@@ -987,12 +1012,6 @@ extension TabManagerImplementation: NavigationDelegate {
         scheduleFaviconUpdate(forTabAt: location.index, mode: location.mode)
         persistState()
         
-        guard !tab.isPrivate,
-              let url = remoteURL(from: tab.url) else {
-            return
-        }
-        
-        historyStore.recordVisit(url: url, title: tab.title)
     }
     
     func onCanGoBack(session: GeckoSession, canGoBack: Bool) {
@@ -1085,6 +1104,26 @@ extension TabManagerImplementation: NavigationDelegate {
             self?.selectTab(at: index, mode: mode)
         }
         return newSession
+    }
+}
+
+extension TabManagerImplementation: HistoryDelegate {
+    func onVisited(session: GeckoSession, url: String, lastVisitedURL: String?, flags: Int) async -> Bool {
+        guard !session.isPrivateMode,
+              let pageURL = remoteURL(from: url) else {
+            return false
+        }
+        
+        let title = tabLocation(for: session).map { tabs(for: $0.mode)[$0.index].title } ?? ""
+        return await historyStore.recordVisitImmediately(url: pageURL, title: title)
+    }
+    
+    func getVisited(session: GeckoSession, urls: [String]) async -> [Bool]? {
+        guard !session.isPrivateMode else {
+            return Array(repeating: false, count: urls.count)
+        }
+        
+        return await historyStore.visitedStatuses(for: urls)
     }
 }
 

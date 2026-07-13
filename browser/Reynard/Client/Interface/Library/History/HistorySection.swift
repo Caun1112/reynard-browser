@@ -36,11 +36,11 @@ extension HistorySection {
     
     private static func title(for date: Date, calendar: Calendar) -> String {
         if calendar.isDateInToday(date) {
-            return AppText.text("Today")
+            return NSLocalizedString("Today", comment: "")
         }
         
         if calendar.isDateInYesterday(date) {
-            return AppText.text("Yesterday")
+            return NSLocalizedString("Yesterday", comment: "")
         }
         
         return dateTitleFormatter.string(from: date)
@@ -48,7 +48,7 @@ extension HistorySection {
     
     private static let dateTitleFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = AppText.locale
+        formatter.locale = .current
         formatter.setLocalizedDateFormatFromTemplate("EEEE, d MMMM")
         return formatter
     }()

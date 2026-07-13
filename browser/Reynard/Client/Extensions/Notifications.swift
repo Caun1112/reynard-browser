@@ -11,7 +11,6 @@ extension Notification.Name {
     static let addressBarPositionDidChange = Notification.Name("Chrome.AddressBarPositionDidChange")
     static let landscapeTabBarDidChange = Notification.Name("Chrome.LandscapeTabBarDidChange")
     static let showFullWebsiteAddressDidChange = Notification.Name("Chrome.ShowFullWebsiteAddressDidChange")
-    static let browserLanguageDidChange = Notification.Name("Browsing.LanguageDidChange")
     static let newTabDisplayOptionDidChange = Notification.Name("Browsing.NewTabDisplayOptionDidChange")
     static let homepageSettingsDidChange = Notification.Name("Homepage.SettingsDidChange")
     static let appUpdateAvailable = Notification.Name("Settings.AppUpdateAvailable")

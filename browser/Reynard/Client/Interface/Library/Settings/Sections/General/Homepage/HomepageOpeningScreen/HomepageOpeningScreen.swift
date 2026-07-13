@@ -8,13 +8,13 @@
 enum HomepageOpeningScreen: String, CaseIterable {
     case homepage
     case lastTab
-
+    
     var title: String {
         switch self {
         case .homepage:
-            return AppText.text("Homepage")
+            return NSLocalizedString("Homepage", comment: "")
         case .lastTab:
-            return AppText.text("Last Tab")
+            return NSLocalizedString("Last Tab", comment: "")
         }
     }
 }

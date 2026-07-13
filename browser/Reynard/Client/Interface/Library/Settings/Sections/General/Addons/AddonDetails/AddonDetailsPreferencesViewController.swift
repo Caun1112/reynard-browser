@@ -92,14 +92,14 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
         let metaData = addon.metaData
         if metaData.isBlocklisted {
             return StatusMessage(
-                text: AppText.text("This extension is blocked for violating Mozilla's policies and has been disabled."),
+                text: NSLocalizedString("This add-on was blocked for violating Mozilla’s policies and has been disabled.", comment: ""),
                 color: .systemRed
             )
         }
         
         if metaData.isUnsupported {
             return StatusMessage(
-                text: AppText.text("This extension isn't supported by this version of Reynard and has been disabled."),
+                text: NSLocalizedString("This add-on isn’t supported by this version of Reynard and has been disabled.", comment: ""),
                 color: .systemOrange
             )
         }
@@ -107,7 +107,7 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
         if metaData.isUnsigned {
             let addonName = metaData.name ?? addon.id
             return StatusMessage(
-                text: "\(addonName) could not be verified as secure and has been disabled.",
+                text: String(format: NSLocalizedString("%@ couldn’t be verified and has been disabled.", comment: "Add-on name"), addonName),
                 color: .systemRed
             )
         }
@@ -115,7 +115,7 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
         if metaData.isIncompatible {
             let addonName = metaData.name ?? addon.id
             return StatusMessage(
-                text: "\(addonName) is not compatible with this version of Reynard.",
+                text: String(format: NSLocalizedString("%@ isn’t compatible with this version of Reynard.", comment: "Add-on name"), addonName),
                 color: .systemOrange
             )
         }
@@ -123,8 +123,8 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
         if metaData.isSoftBlocked {
             return StatusMessage(
                 text: metaData.enabled
-                ? "This extension is restricted. Using it may be risky."
-                : "This extension is restricted and has been disabled. You can enable it, but this may be risky.",
+                ? NSLocalizedString("This add-on is restricted. Using it may be risky.", comment: "")
+                : NSLocalizedString("This add-on is restricted and has been disabled. You can enable it, but this may be risky.", comment: ""),
                 color: .systemOrange
             )
         }
@@ -134,10 +134,10 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
     
     // MARK: - Lifecycle
     
-    init(addonID: String) {
+    init(addonID: String, addonName: String) {
         self.addonID = addonID
         super.init(style: .insetGrouped)
-        title = AppText.text("Add-on")
+        title = addonName
     }
     
     required init?(coder: NSCoder) {
@@ -282,7 +282,7 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
                 await MainActor.run {
                     self.isUpdatingAddon = false
                     self.display(addon: addon)
-                    AlertPresenter.show(title: AppText.text("Failed to update private browsing access"), message: "\(error)")
+                    AlertPresenter.show(title: NSLocalizedString("Couldn’t Update Private Browsing Access", comment: ""), message: "\(error)")
                 }
             }
         }
@@ -317,10 +317,7 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
                 await MainActor.run {
                     self.isUpdatingAddon = false
                     self.display(addon: addon)
-                    let title = Prefs.BrowsingSettings.language == .chinese
-                    ? (desiredState ? "启用扩展失败" : "停用扩展失败")
-                    : "Failed to \(desiredState ? "enable" : "disable") add-on"
-                    AlertPresenter.show(title: title, message: "\(error)")
+                    AlertPresenter.show(title: desiredState ? NSLocalizedString("Couldn’t Enable Add-on", comment: "") : NSLocalizedString("Couldn’t Disable Add-on", comment: ""), message: "\(error)")
                 }
             }
         }
@@ -350,14 +347,13 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
             }
         } catch {
             await MainActor.run {
-                AlertPresenter.show(title: AppText.text("Failed to reload add-on"), message: "\(error)")
+                AlertPresenter.show(title: NSLocalizedString("Couldn’t Reload Add-on", comment: ""), message: "\(error)")
             }
         }
     }
     
     private func display(addon: Addon) {
         self.addon = addon
-        title = addon.metaData.name ?? addon.id
         enableSwitch.isOn = addon.metaData.enabled
         enableSwitch.isEnabled = addon.metaData.canBeEnabled && !isUpdatingAddon
         privateBrowsingSwitch.isOn = addon.metaData.allowedInPrivateBrowsing
@@ -390,18 +386,18 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
         
         switch displayedActionRows[indexPath.row] {
         case .enabled:
-            cell.textLabel?.text = AppText.text("Enabled")
+            cell.textLabel?.text = NSLocalizedString("Enable Add-on", comment: "")
             cell.selectionStyle = .none
             cell.accessoryView = enableSwitch
         case .privateBrowsing:
             cell.textLabel?.text = addon?.metaData.incognito == .notAllowed
-            ? "Not Allowed in Private Browsing"
-            : "Allow in Private Browsing"
+            ? NSLocalizedString("Not Allowed in Private Browsing", comment: "")
+            : NSLocalizedString("Allow in Private Browsing", comment: "")
             cell.textLabel?.textColor = addon?.metaData.incognito == .notAllowed ? .secondaryLabel : .label
             cell.selectionStyle = .none
             cell.accessoryView = privateBrowsingSwitch
         case .remove:
-            cell.textLabel?.text = AppText.text("Remove")
+            cell.textLabel?.text = NSLocalizedString("Remove Add-on", comment: "")
             cell.textLabel?.textColor = addon == nil || isUpdatingAddon ? .secondaryLabel : .systemRed
         case .settings, .details, .permissions:
             break
@@ -426,13 +422,13 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
         
         switch displayedNavigationRows[indexPath.row] {
         case .settings:
-            cell.textLabel?.text = AppText.text("Settings")
+            cell.textLabel?.text = NSLocalizedString("Settings", comment: "")
         case .details:
-            cell.textLabel?.text = AppText.text("Details")
+            cell.textLabel?.text = NSLocalizedString("Details", comment: "")
         case .permissions:
-            cell.textLabel?.text = AppText.text("Permissions")
+            cell.textLabel?.text = NSLocalizedString("Permissions", comment: "")
         case .remove:
-            cell.textLabel?.text = AppText.text("Remove")
+            cell.textLabel?.text = NSLocalizedString("Remove Add-on", comment: "")
             cell.textLabel?.textColor = addon == nil || isUpdatingAddon ? .secondaryLabel : .systemRed
             cell.accessoryType = .none
         case .enabled, .privateBrowsing:
@@ -451,11 +447,11 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
     private func confirmRemoval() {
         let addonName = addon?.metaData.name ?? addonID
         AlertPresenter.show(
-            title: AppText.format("Do you want to remove %@?", addonName),
+            title: String(format: NSLocalizedString("Remove %@?", comment: "Add-on name"), addonName),
             message: nil,
             buttons: [
-                AlertPresenter.Button(title: AppText.text("Cancel"), style: .cancel),
-                AlertPresenter.Button(title: AppText.text("Remove"), style: .destructive) { [weak self] in
+                AlertPresenter.Button(title: NSLocalizedString("Cancel", comment: ""), style: .cancel),
+                AlertPresenter.Button(title: NSLocalizedString("Remove", comment: ""), style: .destructive) { [weak self] in
                     self?.uninstallAddon()
                 },
             ]
@@ -482,7 +478,7 @@ final class AddonDetailsPreferencesViewController: SettingsTableViewController {
                 await MainActor.run {
                     self.isUpdatingAddon = false
                     self.display(addon: addon)
-                    AlertPresenter.show(title: AppText.text("Failed to remove add-on"), message: "\(error)")
+                    AlertPresenter.show(title: NSLocalizedString("Couldn’t Remove Add-on", comment: ""), message: "\(error)")
                 }
             }
         }

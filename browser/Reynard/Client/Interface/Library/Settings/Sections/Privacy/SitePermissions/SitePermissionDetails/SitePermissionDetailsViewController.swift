@@ -27,13 +27,13 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
         var text: SettingsSectionText {
             switch self {
             case .defaultBehavior:
-                return SettingsSectionText(headerTitle: AppText.text("Default Behavior"))
+                return SettingsSectionText(headerTitle: NSLocalizedString("Default Setting", comment: ""))
             case .allowedSiteEntries:
-                return SettingsSectionText(headerTitle: AppText.text("Allowed Sites"))
+                return SettingsSectionText(headerTitle: NSLocalizedString("Allowed Websites", comment: ""))
             case .blockedSiteEntries:
-                return SettingsSectionText(headerTitle: AppText.text("Denied Sites"))
+                return SettingsSectionText(headerTitle: NSLocalizedString("Denied Websites", comment: ""))
             case .customSiteActions:
-                return SettingsSectionText(headerTitle: AppText.text("Changed Sites"))
+                return SettingsSectionText(headerTitle: NSLocalizedString("Websites With Custom Settings", comment: ""))
             }
         }
     }
@@ -46,7 +46,6 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
-        formatter.locale = AppText.locale
         return formatter
     }()
     
@@ -79,11 +78,11 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
         case .defaultBehavior:
             return defaultActionOptions.count
         case .allowedSiteEntries:
-            return max(allowedSiteEntries.count, 1)
+            return allowedSiteEntries.count
         case .blockedSiteEntries:
-            return max(blockedSiteEntries.count, 1)
+            return blockedSiteEntries.count
         case .customSiteActions:
-            return max(customSiteActions.count, 1)
+            return customSiteActions.count
         }
     }
     
@@ -156,17 +155,21 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
     
     private var displayedSections: [Section] {
         if permission == .autoplay {
-            return [
-                .defaultBehavior,
-                .customSiteActions,
-            ]
+            var sections: [Section] = [.defaultBehavior]
+            if !customSiteActions.isEmpty {
+                sections.append(.customSiteActions)
+            }
+            return sections
         }
         
-        return [
-            .defaultBehavior,
-            .allowedSiteEntries,
-            .blockedSiteEntries,
-        ]
+        var sections: [Section] = [.defaultBehavior]
+        if !allowedSiteEntries.isEmpty {
+            sections.append(.allowedSiteEntries)
+        }
+        if !blockedSiteEntries.isEmpty {
+            sections.append(.blockedSiteEntries)
+        }
+        return sections
     }
     
     private var defaultActionOptions: [ActionOption] {
@@ -191,9 +194,6 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
     }
     
     private func allowedSiteEntryCell(for indexPath: IndexPath) -> UITableViewCell {
-        guard !allowedSiteEntries.isEmpty else {
-            return emptySiteEntryCell()
-        }
         guard allowedSiteEntries.indices.contains(indexPath.row) else {
             return UITableViewCell(style: .subtitle, reuseIdentifier: nil)
         }
@@ -203,9 +203,6 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
     }
     
     private func blockedSiteEntryCell(for indexPath: IndexPath) -> UITableViewCell {
-        guard !blockedSiteEntries.isEmpty else {
-            return emptySiteEntryCell()
-        }
         guard blockedSiteEntries.indices.contains(indexPath.row) else {
             return UITableViewCell(style: .subtitle, reuseIdentifier: nil)
         }
@@ -215,9 +212,6 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
     }
     
     private func customSiteActionCell(for indexPath: IndexPath) -> UITableViewCell {
-        guard !customSiteActions.isEmpty else {
-            return emptySiteEntryCell()
-        }
         guard customSiteActions.indices.contains(indexPath.row) else {
             return UITableViewCell(style: .subtitle, reuseIdentifier: nil)
         }
@@ -227,14 +221,6 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
             host: site.host,
             subtitle: SiteSettingsUtils.actionTitle(for: site.action, permission: permission)
         )
-    }
-    
-    private func emptySiteEntryCell() -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-        cell.textLabel?.text = AppText.text("No Sites Added")
-        cell.textLabel?.textColor = .secondaryLabel
-        cell.selectionStyle = .none
-        return cell
     }
     
     private func siteEntryCell(host: String, subtitle: String) -> UITableViewCell {
@@ -287,7 +273,7 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
     }
     
     private func clearSiteActionSwipeConfiguration(for host: String) -> UISwipeActionsConfiguration {
-        let clearAction = UIContextualAction(style: .destructive, title: AppText.text("Clear")) { [weak self] _, _, completion in
+        let clearAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Clear", comment: "Swipe action")) { [weak self] _, _, completion in
             guard let self else {
                 completion(false)
                 return
@@ -309,11 +295,11 @@ final class SitePermissionDetailsViewController: SettingsTableViewController {
         let timestamp = timestampFormatter.string(from: date)
         switch action {
         case .allowed:
-            return AppText.format("Allowed on %@", timestamp)
+            return String(format: NSLocalizedString("Allowed %@", comment: "Timestamp placeholder"), timestamp)
         case .blocked:
-            return AppText.format("Denied on %@", timestamp)
+            return String(format: NSLocalizedString("Denied %@", comment: "Timestamp placeholder"), timestamp)
         case .askToAllow:
-            return AppText.format("Changed on %@", timestamp)
+            return String(format: NSLocalizedString("Changed %@", comment: "Timestamp placeholder"), timestamp)
         }
     }
     

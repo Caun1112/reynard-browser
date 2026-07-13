@@ -10,82 +10,85 @@ import UIKit
 final class CompatibilityPreferencesViewController: SettingsTableViewController {
     private enum Section: CaseIterable {
         case userAgent
-
+        
         var text: SettingsSectionText {
             return SettingsSectionText()
         }
     }
-
+    
     private enum Row: CaseIterable {
         case useAndroidUserAgent
         case userAgentOverrides
     }
-
+    
     private let androidUserAgentSwitch = UISwitch()
-
+    
     private var displayedRows: [Row] {
         return Prefs.CompatibilitySettings.useAndroidUserAgent ? [.useAndroidUserAgent] : Row.allCases
     }
-
+    
+    private var compatibilityUserAgentName: String {
+        return Prefs.BrowsingSettings.requestDesktopWebsite ? NSLocalizedString("Desktop Firefox", comment: "") : NSLocalizedString("Firefox for Android", comment: "")
+    }
+    
     init() {
         super.init(style: .insetGrouped)
-        title = AppText.text("Compatibility")
+        title = NSLocalizedString("Compatibility", comment: "")
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSwitch()
         refreshDisplayedState()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        title = AppText.text("Compatibility")
         refreshDisplayedState()
         tableView.reloadData()
     }
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         Section.allCases.count
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard Section.allCases.indices.contains(section) else {
             return 0
         }
-
+        
         switch Section.allCases[section] {
         case .userAgent:
             return displayedRows.count
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard Section.allCases.indices.contains(indexPath.section),
               displayedRows.indices.contains(indexPath.row) else {
             return UITableViewCell()
         }
-
+        
         let row = displayedRows[indexPath.row]
         switch row {
         case .useAndroidUserAgent:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            cell.textLabel?.text = AppText.text("Use Android User Agent")
+            cell.textLabel?.text = NSLocalizedString("Use Compatibility User Agent", comment: "")
             cell.selectionStyle = .none
             cell.accessoryView = androidUserAgentSwitch
             return cell
         case .userAgentOverrides:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            cell.textLabel?.text = AppText.text("User Agent Overrides")
+            cell.textLabel?.text = NSLocalizedString("User Agent Overrides", comment: "")
             cell.accessoryType = .disclosureIndicator
             return cell
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         guard Section.allCases.indices.contains(indexPath.section),
@@ -96,38 +99,36 @@ final class CompatibilityPreferencesViewController: SettingsTableViewController 
             navigationController?.pushViewController(UserAgentOverridesPreferencesViewController(), animated: true)
         }
     }
-
+    
     override func sectionText(for section: Int) -> SettingsSectionText {
         guard Section.allCases.indices.contains(section) else {
             return SettingsSectionText()
         }
-
+        
         let headerTitle = Section.allCases[section].text.headerTitle
         if Prefs.CompatibilitySettings.useAndroidUserAgent {
-            let footerTitle = Prefs.BrowsingSettings.requestDesktopWebsite
-            ? AppText.text("The browser will use a desktop Firefox user agent for navigating the web.")
-            : AppText.text("To maximize compatibility, the browser will use the Firefox for Android user agent for navigating the web. As a result, websites may identify your device as an Android device.")
+            let footerTitle = String(format: NSLocalizedString("Use the %@ user agent for all websites to improve compatibility.", comment: "User agent name placeholder"), compatibilityUserAgentName)
             return SettingsSectionText(headerTitle: headerTitle, footerTitle: footerTitle)
         }
-
+        
         return SettingsSectionText(
             headerTitle: headerTitle,
-            footerTitle: AppText.text("If you encounter issues such as sign-in failures, human verification challenges, or other incorrect site behavior, adding the site's URL to this user agent override list may help resolve the problem.")
+            footerTitle: String(format: NSLocalizedString("Add websites with sign-in failures, human verification challenges, or other issues to use the %@ user agent.", comment: "User agent name placeholder"), compatibilityUserAgentName)
         )
     }
-
+    
     private func refreshDisplayedState() {
         androidUserAgentSwitch.isOn = Prefs.CompatibilitySettings.useAndroidUserAgent
     }
-
+    
     private func configureSwitch() {
         androidUserAgentSwitch.addTarget(self, action: #selector(applyAndroidUserAgentPreference), for: .valueChanged)
     }
-
+    
     @objc private func applyAndroidUserAgentPreference() {
         let nowOn = androidUserAgentSwitch.isOn
         Prefs.CompatibilitySettings.useAndroidUserAgent = nowOn
-
+        
         guard let overrideRow = Row.allCases.firstIndex(of: .userAgentOverrides),
               let section = Section.allCases.firstIndex(of: .userAgent) else {
             return
@@ -142,7 +143,7 @@ final class CompatibilityPreferencesViewController: SettingsTableViewController 
             }
             tableView.endUpdates()
         }
-
+        
         if let footer = tableView.footerView(forSection: section) {
             footer.textLabel?.text = sectionText(for: section).footerTitle
             footer.sizeToFit()

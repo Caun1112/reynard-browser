@@ -16,9 +16,9 @@ final class PageZoomPreferencesViewController: SettingsTableViewController {
         var text: SettingsSectionText {
             switch self {
             case .default:
-                return SettingsSectionText(headerTitle: AppText.text("Default"))
+                return SettingsSectionText(headerTitle: NSLocalizedString("Default Setting", comment: ""))
             case .siteSettings:
-                return SettingsSectionText(headerTitle: AppText.text("Specific Site Settings"))
+                return SettingsSectionText(headerTitle: NSLocalizedString("Page Zoom on", comment: ""))
             case .reset:
                 return SettingsSectionText()
             }
@@ -48,7 +48,7 @@ final class PageZoomPreferencesViewController: SettingsTableViewController {
     
     init() {
         super.init(style: .insetGrouped)
-        title = AppText.text("Page Zoom")
+        title = NSLocalizedString("Page Zoom", comment: "")
     }
     
     required init?(coder: NSCoder) {
@@ -95,20 +95,21 @@ final class PageZoomPreferencesViewController: SettingsTableViewController {
         switch row {
         case .defaultZoom:
             let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
-            cell.textLabel?.text = AppText.text("Zoom Level")
-            cell.detailTextLabel?.text = PageZoomLevels.displayText(for: Prefs.AppearanceSettings.defaultPageZoomLevel)
-            cell.accessoryType = .disclosureIndicator
+            cell.textLabel?.text = NSLocalizedString("Zoom Level", comment: "")
+            configureZoomPickerCell(cell, mode: .defaultZoom)
             return cell
         case .site(let setting):
             let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
             cell.textLabel?.text = setting.host
-            cell.detailTextLabel?.text = pageZoomText(for: setting)
-            cell.accessoryType = .disclosureIndicator
+            if let pageZoom = setting.pageZoom {
+                configureZoomPickerCell(cell, mode: .site(host: setting.host, pageZoom: pageZoom))
+            }
             return cell
         case .reset:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            cell.textLabel?.text = AppText.text("Reset Page Zoom Settings")
+            cell.textLabel?.text = NSLocalizedString("Reset Page Zoom Settings", comment: "")
             cell.textLabel?.textColor = .systemRed
+            cell.textLabel?.textAlignment = .center
             return cell
         }
     }
@@ -121,18 +122,12 @@ final class PageZoomPreferencesViewController: SettingsTableViewController {
         
         switch row {
         case .defaultZoom:
-            navigationController?.pushViewController(
-                PageZoomLevelPreferencesViewController(mode: .defaultZoom),
-                animated: true
-            )
+            handlePageZoomSelection(at: indexPath, mode: .defaultZoom)
         case .site(let setting):
             guard let pageZoom = setting.pageZoom else {
                 return
             }
-            navigationController?.pushViewController(
-                PageZoomLevelPreferencesViewController(mode: .site(host: setting.host, pageZoom: pageZoom)),
-                animated: true
-            )
+            handlePageZoomSelection(at: indexPath, mode: .site(host: setting.host, pageZoom: pageZoom))
         case .reset:
             Prefs.AppearanceSettings.defaultPageZoomLevel = PageZoomLevels.defaultLevel
             _ = SiteSettingsStore.shared.clearAllPageZoomSettings()
@@ -147,7 +142,7 @@ final class PageZoomPreferencesViewController: SettingsTableViewController {
             return nil
         }
         
-        let deleteAction = UIContextualAction(style: .destructive, title: AppText.text("Delete")) { [weak self] _, _, completion in
+        let deleteAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Delete", comment: "")) { [weak self] _, _, completion in
             _ = SiteSettingsStore.shared.clearPageZoom(forHost: setting.host)
             self?.reloadPageZoomSettings()
             self?.tableView.reloadData()
@@ -161,6 +156,45 @@ final class PageZoomPreferencesViewController: SettingsTableViewController {
     
     private func reloadPageZoomSettings() {
         pageZoomSettings = SiteSettingsStore.shared.settingsWithPageZoom()
+    }
+    
+    private func configureZoomPickerCell(_ cell: UITableViewCell, mode: PageZoomLevelPreferencesViewController.Mode) {
+        if #available(iOS 14.0, *) {
+            cell.detailTextLabel?.text = nil
+            cell.accessoryView = pageZoomMenuButton(for: mode)
+            cell.accessoryType = .none
+        } else {
+            cell.detailTextLabel?.text = PageZoomLevels.displayText(for: selectedPageZoomLevel(for: mode))
+            cell.accessoryView = nil
+            cell.accessoryType = .disclosureIndicator
+        }
+    }
+    
+    private func handlePageZoomSelection(at indexPath: IndexPath, mode: PageZoomLevelPreferencesViewController.Mode) {
+        if #available(iOS 14.0, *) {
+            if #available(iOS 17.4, *),
+               let cell = tableView.cellForRow(at: indexPath),
+               let button = cell.accessoryView as? UIButton {
+                button.performPrimaryAction()
+            }
+            return
+        }
+        
+        navigationController?.pushViewController(
+            PageZoomLevelPreferencesViewController(mode: mode),
+            animated: true
+        )
+    }
+    
+    private func applyPageZoomLevel(_ level: Int, mode: PageZoomLevelPreferencesViewController.Mode) {
+        switch mode {
+        case .defaultZoom:
+            Prefs.AppearanceSettings.defaultPageZoomLevel = level
+        case .site(let host, _):
+            _ = SiteSettingsStore.shared.setPageZoom(level, forHost: host)
+        }
+        reloadPageZoomSettings()
+        tableView.reloadData()
     }
     
     private func row(at indexPath: IndexPath) -> Row? {
@@ -187,10 +221,43 @@ final class PageZoomPreferencesViewController: SettingsTableViewController {
         }
     }
     
-    private func pageZoomText(for setting: SiteSettingsRecord) -> String? {
-        guard let pageZoom = setting.pageZoom else {
-            return nil
+    @available(iOS 14.0, *)
+    private func pageZoomMenuButton(for mode: PageZoomLevelPreferencesViewController.Mode) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle(PageZoomLevels.displayText(for: selectedPageZoomLevel(for: mode)), for: .normal)
+        button.setImage(UIImage(named: "reynard.chevron.up.chevron.down"), for: .normal)
+        button.semanticContentAttribute = .forceRightToLeft
+        button.contentHorizontalAlignment = .trailing
+        button.showsMenuAsPrimaryAction = true
+        if #available(iOS 15.0, *) {
+            button.changesSelectionAsPrimaryAction = true
         }
-        return PageZoomLevels.displayText(for: pageZoom)
+        button.menu = pageZoomMenu(for: mode)
+        button.sizeToFit()
+        return button
+    }
+    
+    @available(iOS 14.0, *)
+    private func pageZoomMenu(for mode: PageZoomLevelPreferencesViewController.Mode) -> UIMenu {
+        let selectedLevel = selectedPageZoomLevel(for: mode)
+        let actions = PageZoomLevels.all.map { level in
+            UIAction(title: PageZoomLevels.displayText(for: level), state: level == selectedLevel ? .on : .off) { [weak self] _ in
+                self?.applyPageZoomLevel(level, mode: mode)
+            }
+        }
+        
+        if #available(iOS 15.0, *) {
+            return UIMenu(title: "", options: .singleSelection, children: actions)
+        }
+        return UIMenu(title: "", children: actions)
+    }
+    
+    private func selectedPageZoomLevel(for mode: PageZoomLevelPreferencesViewController.Mode) -> Int {
+        switch mode {
+        case .defaultZoom:
+            return Prefs.AppearanceSettings.defaultPageZoomLevel
+        case .site(_, let pageZoom):
+            return pageZoom
+        }
     }
 }

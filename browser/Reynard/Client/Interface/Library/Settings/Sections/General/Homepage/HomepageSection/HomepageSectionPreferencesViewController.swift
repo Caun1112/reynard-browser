@@ -12,15 +12,15 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
         case favorites
         case frequentlyVisited
         case recentlyClosedTabs
-
+        
         var title: String {
             return preference.title
         }
-
+        
         var isEnabled: Bool {
             return preference.isEnabled
         }
-
+        
         var preference: Preference {
             switch self {
             case .favorites:
@@ -32,45 +32,45 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
             }
         }
     }
-
+    
     enum Preference: CaseIterable {
         case favorites
         case frequentlyVisited
         case recentlyClosedTabs
-
+        
         var title: String {
             switch self {
             case .favorites:
-                return AppText.text("Favorites")
+                return NSLocalizedString("Favorites", comment: "")
             case .frequentlyVisited:
-                return AppText.text("Frequently Visited")
+                return NSLocalizedString("Frequently Visited", comment: "")
             case .recentlyClosedTabs:
-                return AppText.text("Recently Closed Tabs")
+                return NSLocalizedString("Recently Closed Tabs", comment: "")
             }
         }
-
+        
         var switchTitle: String {
             switch self {
             case .favorites:
-                return AppText.text("Show Favorites")
+                return NSLocalizedString("Show Favorites", comment: "")
             case .frequentlyVisited:
-                return AppText.text("Show Frequently Visited")
+                return NSLocalizedString("Show Frequently Visited", comment: "")
             case .recentlyClosedTabs:
-                return AppText.text("Show Recently Closed Tabs")
+                return NSLocalizedString("Show Recently Closed Tabs", comment: "")
             }
         }
-
+        
         var countTitle: String {
             switch self {
             case .favorites:
-                return AppText.text("Number of Rows")
+                return NSLocalizedString("Number of Rows", comment: "")
             case .frequentlyVisited:
-                return AppText.text("Number of Sites")
+                return NSLocalizedString("Number of Websites", comment: "")
             case .recentlyClosedTabs:
-                return AppText.text("Number of Items")
+                return NSLocalizedString("Number of Tabs", comment: "")
             }
         }
-
+        
         var countValues: [Int] {
             switch self {
             case .favorites:
@@ -81,7 +81,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return Array(3...10)
             }
         }
-
+        
         var isEnabled: Bool {
             switch self {
             case .favorites:
@@ -92,7 +92,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return Prefs.HomepageSettings.showsRecentlyClosedTabs
             }
         }
-
+        
         var isEnabledInPrivateBrowsing: Bool {
             switch self {
             case .favorites:
@@ -103,7 +103,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return false
             }
         }
-
+        
         var selectedCount: Int {
             switch self {
             case .favorites:
@@ -114,7 +114,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return Prefs.HomepageSettings.recentlyClosedTabLimit
             }
         }
-
+        
         func setEnabled(_ isEnabled: Bool) {
             switch self {
             case .favorites:
@@ -125,7 +125,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 Prefs.HomepageSettings.showsRecentlyClosedTabs = isEnabled
             }
         }
-
+        
         func setEnabledInPrivateBrowsing(_ isEnabled: Bool) {
             switch self {
             case .favorites:
@@ -136,7 +136,7 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
                 return
             }
         }
-
+        
         func setSelectedCount(_ selectedCount: Int) {
             switch self {
             case .favorites:
@@ -148,22 +148,22 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
             }
         }
     }
-
+    
     private enum Section: CaseIterable {
         case main
         case count
     }
-
+    
     private enum Row: CaseIterable {
         case showSection
         case showInPrivateBrowsing
         case count
     }
-
+    
     private let preference: Preference
     private let sectionSwitch = UISwitch()
     private let privateBrowsingSwitch = UISwitch()
-
+    
     private func displayedRows(in section: Section) -> [Row] {
         switch section {
         case .main:
@@ -177,51 +177,51 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
             return [.count]
         }
     }
-
+    
     init(preference: Preference) {
         self.preference = preference
         super.init(style: .insetGrouped)
         title = preference.title
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSwitch()
         refreshDisplayedState()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshDisplayedState()
         tableView.reloadData()
     }
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return Section.allCases.count
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard Section.allCases.indices.contains(section) else {
             return 0
         }
-
+        
         return displayedRows(in: Section.allCases[section]).count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard Section.allCases.indices.contains(indexPath.section) else {
             return UITableViewCell()
         }
-
+        
         let rows = displayedRows(in: Section.allCases[indexPath.section])
         guard rows.indices.contains(indexPath.row) else {
             return UITableViewCell()
         }
-
+        
         switch rows[indexPath.row] {
         case .showSection:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
@@ -231,31 +231,55 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
             return cell
         case .showInPrivateBrowsing:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            cell.textLabel?.text = AppText.text("Show in Private Browsing")
+            cell.textLabel?.text = NSLocalizedString("Show in Private Browsing", comment: "")
             cell.selectionStyle = .none
             cell.accessoryView = privateBrowsingSwitch
             return cell
         case .count:
             let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
             cell.textLabel?.text = preference.countTitle
-            cell.detailTextLabel?.text = "\(preference.selectedCount)"
-            cell.accessoryType = .disclosureIndicator
+            configureCountPickerCell(cell)
             return cell
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         guard Section.allCases.indices.contains(indexPath.section) else {
             return
         }
-
+        
         let rows = displayedRows(in: Section.allCases[indexPath.section])
         guard rows.indices.contains(indexPath.row),
               rows[indexPath.row] == .count else {
             return
         }
-
+        
+        handleCountSelection(at: indexPath)
+    }
+    
+    private func configureCountPickerCell(_ cell: UITableViewCell) {
+        if #available(iOS 14.0, *) {
+            cell.detailTextLabel?.text = nil
+            cell.accessoryView = countMenuButton()
+            cell.accessoryType = .none
+        } else {
+            cell.detailTextLabel?.text = "\(preference.selectedCount)"
+            cell.accessoryView = nil
+            cell.accessoryType = .disclosureIndicator
+        }
+    }
+    
+    private func handleCountSelection(at indexPath: IndexPath) {
+        if #available(iOS 14.0, *) {
+            if #available(iOS 17.4, *),
+               let cell = tableView.cellForRow(at: indexPath),
+               let button = cell.accessoryView as? UIButton {
+                button.performPrimaryAction()
+            }
+            return
+        }
+        
         let viewController = HomepageSectionItemCountPreferencesViewController(
             title: preference.countTitle,
             values: preference.countValues,
@@ -265,22 +289,57 @@ final class HomepageSectionPreferencesViewController: SettingsTableViewControlle
         }
         navigationController?.pushViewController(viewController, animated: true)
     }
-
+    
+    private func applyCount(_ count: Int) {
+        preference.setSelectedCount(count)
+        tableView.reloadData()
+    }
+    
     private func configureSwitch() {
         sectionSwitch.addTarget(self, action: #selector(sectionSwitchDidChange), for: .valueChanged)
         privateBrowsingSwitch.addTarget(self, action: #selector(privateBrowsingSwitchDidChange), for: .valueChanged)
     }
-
+    
     private func refreshDisplayedState() {
         sectionSwitch.isOn = preference.isEnabled
         privateBrowsingSwitch.isOn = preference.isEnabledInPrivateBrowsing
     }
-
+    
     @objc private func sectionSwitchDidChange() {
         preference.setEnabled(sectionSwitch.isOn)
     }
-
+    
     @objc private func privateBrowsingSwitchDidChange() {
         preference.setEnabledInPrivateBrowsing(privateBrowsingSwitch.isOn)
+    }
+    
+    @available(iOS 14.0, *)
+    private func countMenuButton() -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle("\(preference.selectedCount)", for: .normal)
+        button.setImage(UIImage(named: "reynard.chevron.up.chevron.down"), for: .normal)
+        button.semanticContentAttribute = .forceRightToLeft
+        button.contentHorizontalAlignment = .trailing
+        button.showsMenuAsPrimaryAction = true
+        if #available(iOS 15.0, *) {
+            button.changesSelectionAsPrimaryAction = true
+        }
+        button.menu = countMenu()
+        button.sizeToFit()
+        return button
+    }
+    
+    @available(iOS 14.0, *)
+    private func countMenu() -> UIMenu {
+        let actions = preference.countValues.map { count in
+            UIAction(title: "\(count)", state: count == preference.selectedCount ? .on : .off) { [weak self] _ in
+                self?.applyCount(count)
+            }
+        }
+        
+        if #available(iOS 15.0, *) {
+            return UIMenu(title: "", options: .singleSelection, children: actions)
+        }
+        return UIMenu(title: "", children: actions)
     }
 }

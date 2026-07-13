@@ -35,7 +35,6 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
         installSections()
         installCloseButtonIfNeeded()
         observeAppUpdateBadge()
-        observeBrowserLanguage()
         updateNavigationTitle()
     }
     
@@ -91,25 +90,6 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
         )
         if BrowserUpdates.shared.hasUpdate {
             markSettingsUpdateAvailable()
-        }
-    }
-
-    private func observeBrowserLanguage() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(browserLanguageDidChange),
-            name: .browserLanguageDidChange,
-            object: nil
-        )
-    }
-
-    @objc private func browserLanguageDidChange() {
-        for (index, section) in visibleSections.enumerated() {
-            viewControllers?[safe: index]?.tabBarItem.title = section.title
-        }
-        updateNavigationTitle()
-        if onClose != nil {
-            navigationController?.topViewController?.navigationItem.rightBarButtonItem = makeCloseButton()
         }
     }
     
@@ -178,8 +158,7 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
         }
         
         return UIBarButtonItem(
-            title: AppText.text("Done"),
-            style: .done,
+            barButtonSystemItem: .done,
             target: self,
             action: #selector(closeLibrary)
         )

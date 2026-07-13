@@ -141,7 +141,7 @@ final class AddonUpdateCoordinator {
         
         for addon in addons {
             await MainActor.run {
-                status(addon.id, "Updating...")
+                status(addon.id, NSLocalizedString("Updating…", comment: ""))
             }
             
             do {
@@ -150,20 +150,20 @@ final class AddonUpdateCoordinator {
                     noUpdateCount += 1
                     clearPendingApproval(addon.id)
                     await MainActor.run {
-                        status(addon.id, "No update available")
+                        status(addon.id, NSLocalizedString("No Update Available", comment: ""))
                     }
                 } else {
                     updatedCount += 1
                     clearPendingApproval(addon.id)
                     await MainActor.run {
-                        status(addon.id, "Successfully updated")
+                        status(addon.id, NSLocalizedString("Updated", comment: ""))
                     }
                 }
             } catch {
                 if AddonErrorPresenter.updateRequiresPermissions(error) {
                     markNeedsApproval(addon.id)
                     await MainActor.run {
-                        status(addon.id, "Needs permission to update")
+                        status(addon.id, NSLocalizedString("Needs Permission to Update", comment: ""))
                     }
                     continue
                 }

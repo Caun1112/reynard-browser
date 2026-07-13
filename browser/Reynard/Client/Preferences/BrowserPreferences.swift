@@ -6,76 +6,36 @@
 //
 
 import Foundation
-import GeckoView
 import UIKit
 
 typealias Prefs = BrowserPreferences
 
-enum BrowserLanguage: String, CaseIterable {
-    case chinese = "zh-CN"
-    case english = "en-US"
-
-    var title: String {
-        switch self {
-        case .chinese:
-            return "中文"
-        case .english:
-            return "English"
-        }
-    }
-
-    var requestedLocales: [String] {
-        switch self {
-        case .chinese:
-            return ["zh-CN", "en-US"]
-        case .english:
-            return ["en-US"]
-        }
-    }
-
-    var acceptLanguages: String {
-        switch self {
-        case .chinese:
-            return "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7"
-        case .english:
-            return "en-US,en;q=0.9"
-        }
-    }
-
-    func applyToGeckoRuntime() {
-        GeckoRuntime.setLocale(
-            requestedLocales: requestedLocales,
-            acceptLanguages: acceptLanguages
-        )
-    }
-}
-
 final class BrowserPreferences {
     static var shared = BrowserPreferences()
-
+    
     let profile: String
-
+    
     init(profile: String = "default") {
         self.profile = profile
         registerDefaults()
     }
-
+    
     // Possible future work
     static func useProfile(_ name: String) {
         shared = BrowserPreferences(profile: name)
     }
-
+    
     func key(_ setting: String, _ name: String) -> String {
         "\(profile).\(setting).\(name)"
     }
-
+    
     func registerDefaults() {
         let donationRecommendationShowTimeKey = key("HomepageSettings", "donationRecommendationShowTime")
         if UserDefaults.standard.object(forKey: donationRecommendationShowTimeKey) == nil {
             let delay = TimeInterval.random(in: (3 * 86_400)...(5 * 86_400))
             UserDefaults.standard.set(Date().addingTimeInterval(delay).timeIntervalSince1970, forKey: donationRecommendationShowTimeKey)
         }
-
+        
         UserDefaults.standard.register(defaults: [
             // Search
             key("SearchSettings", "searchEngine"): SearchEngine.google.rawValue,
@@ -86,24 +46,23 @@ final class BrowserPreferences {
             key("SearchSettings", "searchBrowsingHistory"): true,
             key("SearchSettings", "searchBookmarks"): true,
             key("SearchSettings", "searchOpenedTabs"): true,
-
+            
             // JIT
             key("JITSettings", "isJITEnabled"): false,
-
+            
             // Compatibility
             key("CompatibilitySettings", "androidUserAgentDomains"): [],
             key("CompatibilitySettings", "useAndroidUserAgent"): true,
-
+            
             // Browsing
-            key("BrowsingSettings", "language"): BrowserLanguage.chinese.rawValue,
             key("BrowsingSettings", "requestDesktopWebsite"): UIDevice.current.userInterfaceIdiom == .pad,
             key("BrowsingSettings", "showLinkPreviews"): true,
             key("BrowsingSettings", "showImagePreviews"): true,
-
+            
             // New Tab
             key("NewTabSettings", "newTabDisplayOption"): NewTabDisplayOption.homepage.rawValue,
             key("NewTabSettings", "customNewTabURL"): "",
-
+            
             // Homepage
             key("HomepageSettings", "openingScreen"): HomepageOpeningScreen.homepage.rawValue,
             key("HomepageSettings", "showsFavorites"): true,
@@ -115,22 +74,25 @@ final class BrowserPreferences {
             key("HomepageSettings", "showsRecentlyClosedTabs"): true,
             key("HomepageSettings", "recentlyClosedTabLimit"): 10,
             key("HomepageSettings", "donationRecommendationMultiplier"): 1,
-
+            
             // Appearance
             key("AppearanceSettings", "appAppearance"): AppAppearance.system.rawValue,
             key("AppearanceSettings", "addressBarPosition"): BrowserChromePosition.bottom.rawValue,
             key("AppearanceSettings", "showsFullWebsiteAddress"): false,
             key("AppearanceSettings", "showsLandscapeTabBar"): true,
             key("AppearanceSettings", "defaultPageZoomLevel"): PageZoomLevels.defaultLevel,
-
+            
+            // Languages
+            key("LanguageSettings", "websiteLanguages"): (try? JSONEncoder().encode(WebsiteLanguageCatalog.defaultLanguageCodes())) ?? Data(),
+            
             // Bookmarks
             key("BookmarkSettings", "placeFoldersOnTop"): true,
             key("BookmarkSettings", "sortOrders"): BookmarkSortOrder.none.rawValue,
-
+            
             // Add-ons
             key("AddonSettings", "lastGlobalCheckAt"): "",
             key("AddonSettings", "pendingApprovalAddonIDs"): Data(),
-
+            
             // Site Permissions
             key("SitePermissionSettings", "defaultAutoplayPermission"): SitePermissionAction.askToAllow.rawValue,
             key("SitePermissionSettings", "defaultCameraPermission"): SitePermissionAction.askToAllow.rawValue,
@@ -140,58 +102,57 @@ final class BrowserPreferences {
             key("SitePermissionSettings", "defaultCrossOriginStorageAccessPermission"): SitePermissionAction.askToAllow.rawValue,
             key("SitePermissionSettings", "defaultLocalDeviceAccessPermission"): SitePermissionAction.askToAllow.rawValue,
             key("SitePermissionSettings", "defaultLocalNetworkAccessPermission"): SitePermissionAction.askToAllow.rawValue,
-
+            
             // Clear Browsing Data
             key("ClearBrowsingData", "clearsBrowsingHistory"): true,
             key("ClearBrowsingData", "clearsCookiesAndSiteData"): true,
             key("ClearBrowsingData", "clearsCachedImagesAndFiles"): true,
-            key("ClearBrowsingData", "clearsDownloadsHistory"): false,
             key("ClearBrowsingData", "clearsDownloadedFiles"): false,
             key("ClearBrowsingData", "clearsSitePermissions"): true,
             key("ClearBrowsingData", "clearsOpenedTabs"): true,
         ])
     }
-
+    
     func bool(forSetting setting: String, key name: String) -> Bool {
         UserDefaults.standard.bool(forKey: key(setting, name))
     }
-
+    
     func string(forSetting setting: String, key name: String) -> String? {
         UserDefaults.standard.string(forKey: key(setting, name))
     }
-
+    
     func data(forSetting setting: String, key name: String) -> Data? {
         UserDefaults.standard.data(forKey: key(setting, name))
     }
-
+    
     func double(forSetting setting: String, key name: String) -> Double {
         UserDefaults.standard.double(forKey: key(setting, name))
     }
-
+    
     func integer(forSetting setting: String, key name: String) -> Int {
         UserDefaults.standard.integer(forKey: key(setting, name))
     }
-
+    
     func set(_ value: Bool, forSetting setting: String, key name: String) {
         UserDefaults.standard.set(value, forKey: key(setting, name))
     }
-
+    
     func set(_ value: String?, forSetting setting: String, key name: String) {
         UserDefaults.standard.set(value, forKey: key(setting, name))
     }
-
+    
     func set(_ value: Data?, forSetting setting: String, key name: String) {
         UserDefaults.standard.set(value, forKey: key(setting, name))
     }
-
+    
     func set(_ value: Double, forSetting setting: String, key name: String) {
         UserDefaults.standard.set(value, forKey: key(setting, name))
     }
-
+    
     func set(_ value: Int, forSetting setting: String, key name: String) {
         UserDefaults.standard.set(value, forKey: key(setting, name))
     }
-
+    
     // MARK: - Search
     struct SearchSettings {
         static var searchEngine: SearchEngine {
@@ -203,7 +164,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "SearchSettings", key: "searchEngine")
             }
         }
-
+        
         static var customSearchTemplate: String {
             get {
                 return prefs.string(forSetting: "SearchSettings", key: "customSearchTemplate") ?? ""
@@ -212,7 +173,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.trimmingCharacters(in: .whitespacesAndNewlines), forSetting: "SearchSettings", key: "customSearchTemplate")
             }
         }
-
+        
         static var searchSuggestionProvider: SearchCompletion.Provider {
             get {
                 let rawValue = prefs.string(forSetting: "SearchSettings", key: "searchSuggestionProvider") ?? SearchCompletion.Provider.google.rawValue
@@ -222,7 +183,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "SearchSettings", key: "searchSuggestionProvider")
             }
         }
-
+        
         static var showSearchSuggestions: Bool {
             get {
                 return prefs.bool(forSetting: "SearchSettings", key: "showSearchSuggestions")
@@ -231,7 +192,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "SearchSettings", key: "showSearchSuggestions")
             }
         }
-
+        
         static var showSearchSuggestionsInPrivateBrowsing: Bool {
             get {
                 return prefs.bool(forSetting: "SearchSettings", key: "showSearchSuggestionsInPrivateBrowsing")
@@ -240,7 +201,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "SearchSettings", key: "showSearchSuggestionsInPrivateBrowsing")
             }
         }
-
+        
         static var searchBrowsingHistory: Bool {
             get {
                 return prefs.bool(forSetting: "SearchSettings", key: "searchBrowsingHistory")
@@ -249,7 +210,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "SearchSettings", key: "searchBrowsingHistory")
             }
         }
-
+        
         static var searchBookmarks: Bool {
             get {
                 return prefs.bool(forSetting: "SearchSettings", key: "searchBookmarks")
@@ -258,7 +219,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "SearchSettings", key: "searchBookmarks")
             }
         }
-
+        
         static var searchOpenedTabs: Bool {
             get {
                 return prefs.bool(forSetting: "SearchSettings", key: "searchOpenedTabs")
@@ -268,21 +229,9 @@ final class BrowserPreferences {
             }
         }
     }
-
+    
     // MARK: - Browsing
     struct BrowsingSettings {
-        static var language: BrowserLanguage {
-            get {
-                let rawValue = prefs.string(forSetting: "BrowsingSettings", key: "language") ?? BrowserLanguage.chinese.rawValue
-                return BrowserLanguage(rawValue: rawValue) ?? .chinese
-            }
-            set {
-                prefs.set(newValue.rawValue, forSetting: "BrowsingSettings", key: "language")
-                newValue.applyToGeckoRuntime()
-                NotificationCenter.default.post(name: .browserLanguageDidChange, object: nil)
-            }
-        }
-
         static var requestDesktopWebsite: Bool {
             get {
                 return prefs.bool(forSetting: "BrowsingSettings", key: "requestDesktopWebsite")
@@ -291,7 +240,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "BrowsingSettings", key: "requestDesktopWebsite")
             }
         }
-
+        
         static var showLinkPreviews: Bool {
             get {
                 return prefs.bool(forSetting: "BrowsingSettings", key: "showLinkPreviews")
@@ -300,7 +249,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "BrowsingSettings", key: "showLinkPreviews")
             }
         }
-
+        
         static var showImagePreviews: Bool {
             get {
                 return prefs.bool(forSetting: "BrowsingSettings", key: "showImagePreviews")
@@ -310,7 +259,7 @@ final class BrowserPreferences {
             }
         }
     }
-
+    
     // MARK: - Clear Browsing Data
     struct ClearBrowsingData {
         static var clearsBrowsingHistory: Bool {
@@ -321,7 +270,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "ClearBrowsingData", key: "clearsBrowsingHistory")
             }
         }
-
+        
         static var clearsCookiesAndSiteData: Bool {
             get {
                 return prefs.bool(forSetting: "ClearBrowsingData", key: "clearsCookiesAndSiteData")
@@ -330,7 +279,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "ClearBrowsingData", key: "clearsCookiesAndSiteData")
             }
         }
-
+        
         static var clearsCachedImagesAndFiles: Bool {
             get {
                 return prefs.bool(forSetting: "ClearBrowsingData", key: "clearsCachedImagesAndFiles")
@@ -339,16 +288,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "ClearBrowsingData", key: "clearsCachedImagesAndFiles")
             }
         }
-
-        static var clearsDownloadsHistory: Bool {
-            get {
-                return prefs.bool(forSetting: "ClearBrowsingData", key: "clearsDownloadsHistory")
-            }
-            set {
-                prefs.set(newValue, forSetting: "ClearBrowsingData", key: "clearsDownloadsHistory")
-            }
-        }
-
+        
         static var clearsDownloadedFiles: Bool {
             get {
                 return prefs.bool(forSetting: "ClearBrowsingData", key: "clearsDownloadedFiles")
@@ -357,7 +297,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "ClearBrowsingData", key: "clearsDownloadedFiles")
             }
         }
-
+        
         static var clearsSitePermissions: Bool {
             get {
                 return prefs.bool(forSetting: "ClearBrowsingData", key: "clearsSitePermissions")
@@ -366,7 +306,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "ClearBrowsingData", key: "clearsSitePermissions")
             }
         }
-
+        
         static var clearsOpenedTabs: Bool {
             get {
                 return prefs.bool(forSetting: "ClearBrowsingData", key: "clearsOpenedTabs")
@@ -376,7 +316,7 @@ final class BrowserPreferences {
             }
         }
     }
-
+    
     // MARK: - New Tab
     struct NewTabSettings {
         static var newTabDisplayOption: NewTabDisplayOption {
@@ -389,7 +329,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .newTabDisplayOptionDidChange, object: nil)
             }
         }
-
+        
         static var customNewTabURL: String {
             get {
                 return prefs.string(forSetting: "NewTabSettings", key: "customNewTabURL") ?? ""
@@ -399,7 +339,7 @@ final class BrowserPreferences {
             }
         }
     }
-
+    
     // MARK: - Homepage
     struct HomepageSettings {
         static var openingScreen: HomepageOpeningScreen {
@@ -411,7 +351,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "HomepageSettings", key: "openingScreen")
             }
         }
-
+        
         static var showsFavorites: Bool {
             get {
                 return prefs.bool(forSetting: "HomepageSettings", key: "showsFavorites")
@@ -421,7 +361,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .homepageSettingsDidChange, object: nil)
             }
         }
-
+        
         static var favoriteRowCount: Int {
             get {
                 return prefs.integer(forSetting: "HomepageSettings", key: "favoriteRowCount")
@@ -431,7 +371,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .homepageSettingsDidChange, object: nil)
             }
         }
-
+        
         static var showsFavoritesInPrivateBrowsing: Bool {
             get {
                 return prefs.bool(forSetting: "HomepageSettings", key: "showsFavoritesInPrivateBrowsing")
@@ -441,7 +381,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .homepageSettingsDidChange, object: nil)
             }
         }
-
+        
         static var showsFrequentlyVisited: Bool {
             get {
                 return prefs.bool(forSetting: "HomepageSettings", key: "showsFrequentlyVisited")
@@ -451,7 +391,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .homepageSettingsDidChange, object: nil)
             }
         }
-
+        
         static var showsFrequentlyVisitedInPrivateBrowsing: Bool {
             get {
                 return prefs.bool(forSetting: "HomepageSettings", key: "showsFrequentlyVisitedInPrivateBrowsing")
@@ -461,7 +401,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .homepageSettingsDidChange, object: nil)
             }
         }
-
+        
         static var frequentlyVisitedSiteCount: Int {
             get {
                 return prefs.integer(forSetting: "HomepageSettings", key: "frequentlyVisitedSiteCount")
@@ -471,7 +411,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .homepageSettingsDidChange, object: nil)
             }
         }
-
+        
         static var showsRecentlyClosedTabs: Bool {
             get {
                 return prefs.bool(forSetting: "HomepageSettings", key: "showsRecentlyClosedTabs")
@@ -481,7 +421,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .homepageSettingsDidChange, object: nil)
             }
         }
-
+        
         static var recentlyClosedTabLimit: Int {
             get {
                 return prefs.integer(forSetting: "HomepageSettings", key: "recentlyClosedTabLimit")
@@ -491,7 +431,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .homepageSettingsDidChange, object: nil)
             }
         }
-
+        
         static var donationRecommendationShowTime: Date {
             get {
                 return Date(timeIntervalSince1970: prefs.double(forSetting: "HomepageSettings", key: "donationRecommendationShowTime"))
@@ -500,7 +440,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.timeIntervalSince1970, forSetting: "HomepageSettings", key: "donationRecommendationShowTime")
             }
         }
-
+        
         static var donationRecommendationMultiplier: Int {
             get {
                 return prefs.integer(forSetting: "HomepageSettings", key: "donationRecommendationMultiplier")
@@ -510,7 +450,7 @@ final class BrowserPreferences {
             }
         }
     }
-
+    
     // MARK: - Site Permissions
     struct SitePermissionSettings {
         static var defaultAutoplayPermission: SitePermissionAction {
@@ -526,7 +466,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "SitePermissionSettings", key: "defaultAutoplayPermission")
             }
         }
-
+        
         static var defaultCameraPermission: SitePermissionAction {
             get {
                 let rawValue = prefs.string(forSetting: "SitePermissionSettings", key: "defaultCameraPermission")
@@ -540,7 +480,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "SitePermissionSettings", key: "defaultCameraPermission")
             }
         }
-
+        
         static var defaultMicrophonePermission: SitePermissionAction {
             get {
                 let rawValue = prefs.string(forSetting: "SitePermissionSettings", key: "defaultMicrophonePermission")
@@ -554,7 +494,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "SitePermissionSettings", key: "defaultMicrophonePermission")
             }
         }
-
+        
         static var defaultLocationPermission: SitePermissionAction {
             get {
                 let rawValue = prefs.string(forSetting: "SitePermissionSettings", key: "defaultLocationPermission")
@@ -568,7 +508,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "SitePermissionSettings", key: "defaultLocationPermission")
             }
         }
-
+        
         static var defaultPersistentStoragePermission: SitePermissionAction {
             get {
                 let rawValue = prefs.string(forSetting: "SitePermissionSettings", key: "defaultPersistentStoragePermission")
@@ -582,7 +522,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "SitePermissionSettings", key: "defaultPersistentStoragePermission")
             }
         }
-
+        
         static var defaultCrossOriginStorageAccessPermission: SitePermissionAction {
             get {
                 let rawValue = prefs.string(forSetting: "SitePermissionSettings", key: "defaultCrossOriginStorageAccessPermission")
@@ -596,7 +536,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "SitePermissionSettings", key: "defaultCrossOriginStorageAccessPermission")
             }
         }
-
+        
         static var defaultLocalDeviceAccessPermission: SitePermissionAction {
             get {
                 let rawValue = prefs.string(forSetting: "SitePermissionSettings", key: "defaultLocalDeviceAccessPermission")
@@ -610,7 +550,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "SitePermissionSettings", key: "defaultLocalDeviceAccessPermission")
             }
         }
-
+        
         static var defaultLocalNetworkAccessPermission: SitePermissionAction {
             get {
                 let rawValue = prefs.string(forSetting: "SitePermissionSettings", key: "defaultLocalNetworkAccessPermission")
@@ -625,7 +565,7 @@ final class BrowserPreferences {
             }
         }
     }
-
+    
     // MARK: - Compatibility
     struct CompatibilitySettings {
         static var androidUserAgentDomains: [String] {
@@ -641,7 +581,7 @@ final class BrowserPreferences {
                 prefs.set(data, forSetting: "CompatibilitySettings", key: "androidUserAgentDomains")
             }
         }
-
+        
         static var useAndroidUserAgent: Bool {
             get {
                 prefs.bool(forSetting: "CompatibilitySettings", key: "useAndroidUserAgent")
@@ -651,7 +591,7 @@ final class BrowserPreferences {
             }
         }
     }
-
+    
     // MARK: - Appearance
     struct AppearanceSettings {
         static var appAppearance: AppAppearance {
@@ -663,7 +603,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.rawValue, forSetting: "AppearanceSettings", key: "appAppearance")
             }
         }
-
+        
         static var addressBarPosition: BrowserChromePosition {
             get {
                 let rawValue = prefs.string(forSetting: "AppearanceSettings", key: "addressBarPosition") ?? BrowserChromePosition.bottom.rawValue
@@ -674,7 +614,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .addressBarPositionDidChange, object: nil)
             }
         }
-
+        
         static var showsLandscapeTabBar: Bool {
             get {
                 prefs.bool(forSetting: "AppearanceSettings", key: "showsLandscapeTabBar")
@@ -684,7 +624,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .landscapeTabBarDidChange, object: nil)
             }
         }
-
+        
         static var showsFullWebsiteAddress: Bool {
             get {
                 prefs.bool(forSetting: "AppearanceSettings", key: "showsFullWebsiteAddress")
@@ -694,7 +634,7 @@ final class BrowserPreferences {
                 NotificationCenter.default.post(name: .showFullWebsiteAddressDidChange, object: nil)
             }
         }
-
+        
         static var defaultPageZoomLevel: Int {
             get {
                 let level = prefs.integer(forSetting: "AppearanceSettings", key: "defaultPageZoomLevel")
@@ -708,14 +648,14 @@ final class BrowserPreferences {
             }
         }
     }
-
+    
     // MARK: - JIT
     struct JITSettings {
         static var hasPairingFile: Bool {
             FileManager.default.fileExists(atPath: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                 .appendingPathComponent("pairingFile.plist", isDirectory: false).path)
         }
-
+        
         static var isJITEnabled: Bool {
             get {
                 guard hasPairingFile else {
@@ -728,7 +668,7 @@ final class BrowserPreferences {
             }
         }
     }
-
+    
     // MARK: - Bookmarks
     struct BookmarkSettings {
         static var placeFoldersOnTop: Bool {
@@ -739,7 +679,7 @@ final class BrowserPreferences {
                 prefs.set(newValue, forSetting: "BookmarkSettings", key: "placeFoldersOnTop")
             }
         }
-
+        
         static var sortOrders: BookmarkSortOrder {
             get {
                 let rawValue = prefs.string(forSetting: "BookmarkSettings", key: "sortOrders") ?? BookmarkSortOrder.none.rawValue
@@ -750,7 +690,25 @@ final class BrowserPreferences {
             }
         }
     }
-
+    
+    // MARK: - Languages
+    struct LanguageSettings {
+        static var websiteLanguages: [String] {
+            get {
+                guard let data = prefs.data(forSetting: "LanguageSettings", key: "websiteLanguages"),
+                      let values = try? JSONDecoder().decode([String].self, from: data) else {
+                    return WebsiteLanguageCatalog.defaultLanguageCodes()
+                }
+                return WebsiteLanguageCatalog.sanitizedLanguageCodes(values)
+            }
+            set {
+                let values = WebsiteLanguageCatalog.sanitizedLanguageCodes(newValue)
+                let data = try? JSONEncoder().encode(values)
+                prefs.set(data, forSetting: "LanguageSettings", key: "websiteLanguages")
+            }
+        }
+    }
+    
     // MARK: - Add-ons
     struct AddonSettings {
         static var lastGlobalCheckAt: Date? {
@@ -765,7 +723,7 @@ final class BrowserPreferences {
                 prefs.set(newValue.map { ISO8601DateFormatter().string(from: $0) }, forSetting: "AddonSettings", key: "lastGlobalCheckAt")
             }
         }
-
+        
         static var pendingApprovalAddonIDs: [String] {
             get {
                 guard let data = prefs.data(forSetting: "AddonSettings", key: "pendingApprovalAddonIDs"),

@@ -25,6 +25,11 @@ extension BrowserViewController: TabBarDataSource, TabOverviewDataSource, TabOve
     func selectTab(at index: Int, mode: TabMode) {
         if mode == tabManager.selectedTabMode,
            index != tabManager.selectedTabIndex {
+            if tabOverview.isPresented || tabOverview.isTransitionRunning {
+                tabManager.selectTab(at: index, mode: mode)
+                return
+            }
+            
             captureThumbnail(forTabAt: tabManager.selectedTabIndex, mode: tabManager.selectedTabMode) { [weak self] _ in
                 self?.tabManager.selectTab(at: index, mode: mode)
             }
@@ -34,7 +39,7 @@ extension BrowserViewController: TabBarDataSource, TabOverviewDataSource, TabOve
     }
     
     func closeTab(at index: Int, mode: TabMode) {
-        if tabOverview.isPresented,
+        if (tabOverview.isPresented || tabOverview.isTransitionRunning),
            tabOverview.mode == .regularTabs,
            mode == .regular,
            tabManager.regularTabs.count == 1 {
@@ -108,6 +113,12 @@ extension BrowserViewController: TabBarDataSource, TabOverviewDataSource, TabOve
     
     func setTabOverviewVisible(_ visible: Bool, animated: Bool) {
         if visible {
+            if browserChrome.performAfterTransition({ [weak self] in
+                self?.setTabOverviewVisible(true, animated: animated)
+            }) {
+                return
+            }
+            
             dismissAddressBarEditingAndOverlays()
             contentView.resetFocusedInputRelocation()
             homepageOverlayCoordinator.tabOverviewWillPresent()
@@ -135,6 +146,7 @@ extension BrowserViewController: TabBarDataSource, TabOverviewDataSource, TabOve
                }) {
                 tabManager.selectTab(at: tabIndex, mode: mode)
             }
+            tabOverview.prepareDismissSelectionForCurrentTab()
         }
         setTabOverviewVisible(false, animated: true)
     }

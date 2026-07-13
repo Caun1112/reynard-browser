@@ -71,16 +71,16 @@ extension DownloadSection {
         previousThirtyDayItems: [DownloadItemSnapshot]
     ) {
         if !todayItems.isEmpty {
-            sections.append(DownloadSection(title: AppText.text("Today"), items: todayItems))
+            sections.append(DownloadSection(title: NSLocalizedString("Today", comment: ""), items: todayItems))
         }
         if !yesterdayItems.isEmpty {
-            sections.append(DownloadSection(title: AppText.text("Yesterday"), items: yesterdayItems))
+            sections.append(DownloadSection(title: NSLocalizedString("Yesterday", comment: ""), items: yesterdayItems))
         }
         if !previousSevenDayItems.isEmpty {
-            sections.append(DownloadSection(title: AppText.text("Previous 7 Days"), items: previousSevenDayItems))
+            sections.append(DownloadSection(title: NSLocalizedString("Previous 7 Days", comment: ""), items: previousSevenDayItems))
         }
         if !previousThirtyDayItems.isEmpty {
-            sections.append(DownloadSection(title: AppText.text("Previous 30 Days"), items: previousThirtyDayItems))
+            sections.append(DownloadSection(title: NSLocalizedString("Previous 30 Days", comment: ""), items: previousThirtyDayItems))
         }
     }
     
@@ -116,14 +116,14 @@ extension DownloadSection {
     
     private static let monthTitleFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = AppText.locale
+        formatter.locale = .current
         formatter.setLocalizedDateFormatFromTemplate("MMMM")
         return formatter
     }()
     
     private static let monthYearTitleFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = AppText.locale
+        formatter.locale = .current
         formatter.setLocalizedDateFormatFromTemplate("MMMM yyyy")
         return formatter
     }()
