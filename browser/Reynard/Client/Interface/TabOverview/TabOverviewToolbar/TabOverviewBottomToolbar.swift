@@ -10,6 +10,7 @@ import UIKit
 final class TabOverviewBottomToolbar: UIView {
     private enum UX {
         static let toolbarContentHorizontalInset: CGFloat = 32
+        static let actionButtonSpacing: CGFloat = 12
         static let actionControlsBottomOffset: CGFloat = 54
         static let modeControlToActionControlsSpacing: CGFloat = 18
         static let tabModeControlHeight: CGFloat = 32
@@ -60,7 +61,8 @@ final class TabOverviewBottomToolbar: UIView {
         actionButtonStackView.translatesAutoresizingMaskIntoConstraints = false
         actionButtonStackView.axis = .horizontal
         actionButtonStackView.alignment = .center
-        actionButtonStackView.distribution = .equalSpacing
+        actionButtonStackView.distribution = .fill
+        actionButtonStackView.spacing = UX.actionButtonSpacing
         tabModeControl.translatesAutoresizingMaskIntoConstraints = false
         tabModeControl.selectedSegmentIndex = TabOverview.Mode.regularTabs.rawValue
     }
@@ -81,10 +83,20 @@ final class TabOverviewBottomToolbar: UIView {
         } else {
             actionControlsView = actionButtonStackView
         }
-        NSLayoutConstraint.activate([
-            actionControlsView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.toolbarContentHorizontalInset),
-            actionControlsView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.toolbarContentHorizontalInset),
+        var actionControlConstraints = [
+            actionControlsView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -UX.toolbarContentHorizontalInset),
             actionControlsView.centerYAnchor.constraint(equalTo: bottomAnchor, constant: -UX.actionControlsBottomOffset),
+        ]
+        if #available(iOS 26.0, *) {
+            actionControlConstraints.append(
+                actionControlsView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: UX.toolbarContentHorizontalInset)
+            )
+        } else {
+            actionControlConstraints.append(
+                actionControlsView.leadingAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor, constant: UX.toolbarContentHorizontalInset)
+            )
+        }
+        NSLayoutConstraint.activate(actionControlConstraints + [
             tabModeControl.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: UX.toolbarContentHorizontalInset),
             tabModeControl.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -UX.toolbarContentHorizontalInset),
             tabModeControl.heightAnchor.constraint(equalToConstant: UX.tabModeControlHeight),
@@ -108,11 +120,16 @@ final class TabOverviewBottomToolbar: UIView {
         clearTabsItem.tintColor = .label
         addTabItem.tintColor = .label
         doneItem.tintColor = .label
+        let firstSpacingItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        firstSpacingItem.width = UX.actionButtonSpacing
+        let secondSpacingItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        secondSpacingItem.width = UX.actionButtonSpacing
         toolbar.items = [
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             clearTabsItem,
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            firstSpacingItem,
             addTabItem,
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            secondSpacingItem,
             doneItem,
         ]
         return toolbar

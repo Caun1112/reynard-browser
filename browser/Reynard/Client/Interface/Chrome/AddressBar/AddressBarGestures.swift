@@ -39,6 +39,7 @@ final class AddressBarGestures: NSObject {
         static let addressBarPreviewShadowOffset = CGSize(width: 0, height: 2)
         static let addressBarPreviewHorizontalInset: CGFloat = 12
         static let addressBarPreviewButtonSpacing: CGFloat = 8
+        static let addressBarPreviewButtonGroupSpacing: CGFloat = 20
         static let addressBarPreviewButtonSize: CGFloat = 18
         static let addressBarPreviewFontSize: CGFloat = 17
         static let addressBarEdgeSwipeTranslationDamping: CGFloat = 0.18
@@ -252,21 +253,29 @@ final class AddressBarGestures: NSObject {
         container.layer.shadowOffset = UX.addressBarPreviewShadowOffset
         container.clipsToBounds = false
         
+        let hasPage = tab.url != nil
+        let isLoading = tab.state.loadingState.isLoading
+
         let leadingButton = AddressBarButton(type: .system)
         leadingButton.translatesAutoresizingMaskIntoConstraints = false
-        leadingButton.tintColor = tab.url != nil ? .label : .secondaryLabel
-        if #available(iOS 14.0, *) {
-            leadingButton.showsMenuAsPrimaryAction = true
-        }
+        leadingButton.tintColor = .secondaryLabel
         leadingButton.isUserInteractionEnabled = false
-        leadingButton.setImage(UIImage(named: tab.url != nil ? "reynard.list.bullet.below.rectangle" : "reynard.magnifyingglass"), for: .normal)
+        leadingButton.setImage(UIImage(named: "reynard.magnifyingglass"), for: .normal)
+        leadingButton.isHidden = hasPage
+
+        let menuButton = AddressBarButton(type: .system)
+        menuButton.translatesAutoresizingMaskIntoConstraints = false
+        menuButton.tintColor = .label
+        menuButton.isUserInteractionEnabled = false
+        menuButton.setImage(UIImage(named: "reynard.list.bullet.below.rectangle"), for: .normal)
+        menuButton.isHidden = !hasPage || isLoading
         
         let trailingButton = AddressBarButton(type: .system)
         trailingButton.translatesAutoresizingMaskIntoConstraints = false
         trailingButton.tintColor = .label
         trailingButton.isUserInteractionEnabled = false
-        trailingButton.setImage(UIImage(named: tab.state.loadingState.isLoading ? "reynard.xmark" : "reynard.arrow.clockwise"), for: .normal)
-        trailingButton.isHidden = !tab.state.loadingState.isLoading && tab.url == nil
+        trailingButton.setImage(UIImage(named: isLoading ? "reynard.xmark" : "reynard.arrow.clockwise"), for: .normal)
+        trailingButton.isHidden = !isLoading && !hasPage
         
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -279,7 +288,15 @@ final class AddressBarGestures: NSObject {
         
         container.addSubview(leadingButton)
         container.addSubview(label)
+        container.addSubview(menuButton)
         container.addSubview(trailingButton)
+
+        let labelLeadingConstraint = hasPage
+        ? label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: UX.addressBarPreviewHorizontalInset)
+        : label.leadingAnchor.constraint(equalTo: leadingButton.trailingAnchor, constant: UX.addressBarPreviewButtonSpacing)
+        let labelTrailingConstraint = menuButton.isHidden
+        ? label.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarPreviewButtonSpacing)
+        : label.trailingAnchor.constraint(equalTo: menuButton.leadingAnchor, constant: -UX.addressBarPreviewButtonSpacing)
         
         NSLayoutConstraint.activate([
             leadingButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: UX.addressBarPreviewHorizontalInset),
@@ -291,9 +308,14 @@ final class AddressBarGestures: NSObject {
             trailingButton.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             trailingButton.widthAnchor.constraint(equalToConstant: UX.addressBarPreviewButtonSize),
             trailingButton.heightAnchor.constraint(equalToConstant: UX.addressBarPreviewButtonSize),
+
+            menuButton.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarPreviewButtonGroupSpacing),
+            menuButton.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            menuButton.widthAnchor.constraint(equalToConstant: UX.addressBarPreviewButtonSize),
+            menuButton.heightAnchor.constraint(equalToConstant: UX.addressBarPreviewButtonSize),
             
-            label.leadingAnchor.constraint(equalTo: leadingButton.trailingAnchor, constant: UX.addressBarPreviewButtonSpacing),
-            label.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarPreviewButtonSpacing),
+            labelLeadingConstraint,
+            labelTrailingConstraint,
             label.centerYAnchor.constraint(equalTo: container.centerYAnchor),
         ])
         
