@@ -15,10 +15,10 @@ final class BottomToolbar: UIView {
         static let bottomToolbarButtonStackHeight: CGFloat = 30
         static let addressBarHorizontalInset: CGFloat = 12
         static let addressBarTopInset: CGFloat = 8
-        static let bottomToolbarButtonStackTrailingInset: CGFloat = 16
-        static let bottomToolbarButtonStackWidth: CGFloat = 236
+        static let bottomToolbarButtonStackTrailingInset: CGFloat = 24
         static let bottomToolbarButtonStackTopSpacing: CGFloat = 7
         static let bottomToolbarButtonSpacing: CGFloat = 8
+        static let bottomToolbarButtonWidth: CGFloat = 44
     }
 
     enum LayoutState {
@@ -51,10 +51,10 @@ final class BottomToolbar: UIView {
     private lazy var tabOverviewButton = ToolbarButton(buttonType: .tabOverview, target: self, action: #selector(tabOverviewTapped))
 
     private lazy var buttons: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [backButton, forwardButton, shareButton, libraryButton, downloadButton, tabOverviewButton])
+        let stack = UIStackView(arrangedSubviews: [shareButton, forwardButton, backButton, downloadButton, tabOverviewButton, libraryButton])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
-        stack.distribution = .fillEqually
+        stack.distribution = .fill
         stack.alignment = .center
         stack.spacing = UX.bottomToolbarButtonSpacing
         return stack
@@ -203,10 +203,14 @@ final class BottomToolbar: UIView {
             contentView.topAnchor.constraint(equalTo: topAnchor),
             contentHeightConstraint,
 
-            buttons.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -UX.bottomToolbarButtonStackTrailingInset),
-            buttons.widthAnchor.constraint(equalToConstant: UX.bottomToolbarButtonStackWidth),
+            buttons.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: UX.bottomToolbarButtonStackTrailingInset),
+            buttons.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.bottomToolbarButtonStackTrailingInset),
             buttonsHeightConstraint,
         ])
+
+        for button in [shareButton, forwardButton, backButton, tabOverviewButton, libraryButton] {
+            button.widthAnchor.constraint(equalToConstant: UX.bottomToolbarButtonWidth).isActive = true
+        }
     }
 
     private func configureInitialState() {
