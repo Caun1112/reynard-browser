@@ -29,6 +29,10 @@ extension BrowserViewController: TabManagerDelegate {
         tabBar.updateLayout()
     }
     
+    func tabManager(_ tabManager: TabManager, didFinishLoading session: GeckoSession) {
+        contentView.didFinishLoading(session: session)
+    }
+    
     func tabManager(_ tabManager: TabManager, didSelectTabAt index: Int, previousIndex: Int?) {
         tabBar.setPendingExpansion(at: nil)
         
@@ -186,8 +190,37 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
     
-    func tabManager(_ tabManager: TabManager, shouldHandleExternalResponse response: ExternalResponseInfo, for session: GeckoSession) -> Bool {
-        return addonCoordinator.handleExternalResponse(response)
+    func tabManager(_ tabManager: TabManager, shouldStartExternalResponse response: ExternalResponseInfo, for session: GeckoSession) async -> Bool {
+        if addonCoordinator.handleExternalResponse(response) {
+            return true
+        }
+        guard let download = DownloadStore.shared.pendingDownload(from: response) else {
+            return false
+        }
+        return await downloadsCoordinator.confirm(download)
+    }
+    
+    func tabManager(_ tabManager: TabManager, shouldContinueExternalResponseAt localFilePath: String, bytesReceived: Int64) -> Bool {
+        if addonCoordinator.shouldContinueExternalResponse(localFilePath: localFilePath) {
+            return true
+        }
+        return DownloadStore.shared.updateCapturedDownload(
+            localFilePath: localFilePath,
+            bytesReceived: bytesReceived
+        )
+    }
+    
+    func tabManager(_ tabManager: TabManager, didCompleteExternalResponseAt localFilePath: String, succeeded: Bool) {
+        if addonCoordinator.completeExternalResponse(
+            localFilePath: localFilePath,
+            succeeded: succeeded
+        ) {
+            return
+        }
+        DownloadStore.shared.completeCapturedDownload(
+            localFilePath: localFilePath,
+            succeeded: succeeded
+        )
     }
 }
 

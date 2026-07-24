@@ -63,6 +63,9 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
         view.delegate = self
         view.rowHeight = UITableView.automaticDimension
         view.estimatedRowHeight = UX.estimatedRowHeight
+        if #available(iOS 14.0, *) {
+            view.selectionFollowsFocus = false
+        }
         if #available(iOS 15.0, *) {
             view.sectionHeaderTopPadding = UX.sectionHeaderTopPadding
         }
@@ -261,10 +264,10 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
     
     fileprivate func makeDownloadsMenu() -> UIMenu {
         UIMenu(title: "", children: [
-            UIAction(title: "Open in Files", image: UIImage(named: "reynard.folder")) { [weak self] _ in
+            UIAction(title: NSLocalizedString("Open in Files", comment: ""), image: UIImage(named: "reynard.folder")) { [weak self] _ in
                 self?.openDownloadsFolder()
             },
-            UIAction(title: "Clear Downloads", image: UIImage(named: "reynard.arrow.down.circle.badge.xmark")) { [weak self] _ in
+            UIAction(title: NSLocalizedString("Clear Downloads", comment: ""), image: UIImage(named: "reynard.arrow.down.circle.badge.xmark")) { [weak self] _ in
                 self?.showClearDownloads()
             },
         ])

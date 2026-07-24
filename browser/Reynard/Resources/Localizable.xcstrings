@@ -10,6 +10,12 @@
             "value" : " of %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sur %@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25,6 +31,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ · Opened Tab"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ • Onglet Ouvert"
           }
         },
         "zh-Hans" : {
@@ -44,6 +56,12 @@
             "value" : "%1$@ · Visited %2$@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · A visité %2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -59,6 +77,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ and %2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ et %2$@"
           }
         },
         "zh-Hans" : {
@@ -78,27 +102,16 @@
             "value" : "%@ are disabled for Reynard. Open Settings to allow access."
           }
         },
-        "zh-Hans" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reynard 对“%@”的访问权限已关闭。请打开“设置”以允许访问。"
-          }
-        }
-      }
-    },
-    "%@ couldn’t be verified and has been disabled." : {
-      "comment" : "Add-on name",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ couldn’t be verified and has been disabled."
+            "value" : "%@ sont désactivés pour Reynard. Ouvrez les paramètres pour autoriser l'accès."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法验证“%@”，已将其停用。"
+            "value" : "Reynard 对“%@”的访问权限已关闭。请打开“设置”以允许访问。"
           }
         }
       }
@@ -110,6 +123,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ has been updated. Approve the additional permissions before the updated version is installed. Dismissing this prompt keeps your current add-on version."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ a reçu une mise à jour. Confirmez les permissions supplémentaires avant que la nouvelle version soit installée. Fermez ce message pour conserver la version actuelle. "
           }
         },
         "zh-Hans" : {
@@ -129,27 +148,16 @@
             "value" : "%@ is disabled for Reynard. Open Settings to allow access."
           }
         },
-        "zh-Hans" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reynard 对“%@”的访问权限已关闭。请打开“设置”以允许访问。"
-          }
-        }
-      }
-    },
-    "%@ isn’t compatible with this version of Reynard." : {
-      "comment" : "Add-on name",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ isn’t compatible with this version of Reynard."
+            "value" : "%@ est désactivé pour Reynard. Ouvrez les paramètres pour donner accès."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“%@”与当前版本的 Reynard 不兼容。"
+            "value" : "Reynard 对“%@”的访问权限已关闭。请打开“设置”以允许访问。"
           }
         }
       }
@@ -161,6 +169,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ out of 5"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ sur 5"
           }
         },
         "zh-Hans" : {
@@ -185,17 +199,41 @@
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "new",
+                  "state" : "translated",
                   "value" : "%1$@ out of 5 • %2$d Reviews"
                 }
               }
             }
           }
         },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$@ sur 5 • %2$d Avis"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$@ sur 5 • %2$d Avis"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 分（满分 5 分）• %d 条评价"
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@ 分（满分 5 分）• %d 条评价"
+                }
+              }
+            }
           }
         }
       }
@@ -207,6 +245,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ requests additional data collection."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ demande une collection de données supplémentaires."
           }
         },
         "zh-Hans" : {
@@ -226,6 +270,12 @@
             "value" : "%@ requests additional permissions."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ demande des permissions supplémentaires."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -241,6 +291,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ Suggestions"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggestions pour %@"
           }
         },
         "zh-Hans" : {
@@ -260,6 +316,12 @@
             "value" : "%1$@, and %2$@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, et %2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -272,6 +334,12 @@
       "comment" : "Download speed",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@/sec"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@/sec"
@@ -306,10 +374,34 @@
             }
           }
         },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d extension n'a pas pu être mise à jour."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d extensions n'ont pas pu être mises à jour."
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d 个扩展无法更新。"
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d 个扩展无法更新。"
+                }
+              }
+            }
           }
         }
       }
@@ -335,10 +427,34 @@
             }
           }
         },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d extension à besoin de votre autorisation pour être mise à jour."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d extensions ont besoin de votre autorisation pour être mises à jour."
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d 个扩展需要获得权限才能更新。"
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d 个扩展需要获得权限才能更新。"
+                }
+              }
+            }
           }
         }
       }
@@ -364,10 +480,34 @@
             }
           }
         },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d extension mise à jour."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d extensions mises à jour."
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已更新 %d 个扩展。"
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "已更新 %d 个扩展。"
+                }
+              }
+            }
           }
         }
       }
@@ -393,10 +533,34 @@
             }
           }
         },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d domaine"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d domaines"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d 个域名"
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d 个域名"
+                }
+              }
+            }
           }
         }
       }
@@ -415,17 +579,64 @@
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "new",
+                  "state" : "translated",
                   "value" : "%d Tabs"
                 }
               }
             }
           }
         },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d Onglet"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d Onglets"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d 个标签页"
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d 个标签页"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%d Trackers Blocked" : {
+      "comment" : "Blocked tracker count",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d Tracker Blocked"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d Trackers Blocked"
+                }
+              }
+            }
           }
         }
       }
@@ -436,6 +647,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "▲ JIT-Less Mode is Currently Active"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "▲ Le mode JITless est actuellement activé"
           }
         },
         "zh-Hans" : {
@@ -454,6 +671,12 @@
             "value" : "0 Tabs"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0 onglets"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -468,6 +691,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A Developer Disk Image download is already in progress."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le téléchargement d'une Image Disque de développeur est déjà en cours. "
           }
         },
         "zh-Hans" : {
@@ -486,6 +715,12 @@
             "value" : "A new version of Reynard Browser is available. Open Settings to update."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une nouvelle version du navigateur Reynard est disponible. Ouvrez les paramètres effectuer la mise à jour."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -502,6 +737,12 @@
             "value" : "About"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À propos"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -516,6 +757,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Access"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accès"
           }
         },
         "zh-Hans" : {
@@ -535,6 +782,12 @@
             "value" : "Access your data on websites in %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accéder à vos données sur les sites Web sur %@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -551,6 +804,12 @@
             "value" : "Activate JIT-Less Mode"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer le mode JITless"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -565,6 +824,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter"
           }
         },
         "zh-Hans" : {
@@ -584,6 +849,12 @@
             "value" : "Add %@?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter %@?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -598,6 +869,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Add-on"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une extension "
           }
         },
         "zh-Hans" : {
@@ -616,6 +893,12 @@
             "value" : "Add Bookmark"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter aux marque-pages"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -630,6 +913,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Language"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une langue"
           }
         },
         "zh-Hans" : {
@@ -648,6 +937,12 @@
             "value" : "Add Language…"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une langue..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -662,6 +957,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add to Favorites"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter aux favoris"
           }
         },
         "zh-Hans" : {
@@ -680,6 +981,12 @@
             "value" : "Add Website"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un site web"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -694,6 +1001,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Website…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un site web…"
           }
         },
         "zh-Hans" : {
@@ -713,6 +1026,12 @@
             "value" : "Add websites with sign-in failures, human verification challenges, or other issues to use the %@ user agent."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter des sites web avec des erreurs lors de la connexion, des vérifications d'humain ou d'autres problèmes pour utiliser l'user agent %@. "
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -729,6 +1048,12 @@
             "value" : "Add-ons"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extensions"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -743,6 +1068,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Additional Options"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Options supplémentaires"
           }
         },
         "zh-Hans" : {
@@ -762,6 +1093,12 @@
             "value" : "Address"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -776,6 +1113,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Address Bar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Barre d'adresse"
           }
         },
         "zh-Hans" : {
@@ -794,6 +1137,12 @@
             "value" : "Admin Only"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réservé aux administrateurs"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -808,6 +1157,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Advanced"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avancé"
           }
         },
         "zh-Hans" : {
@@ -826,6 +1181,12 @@
             "value" : "After you close a tab, Reynard won’t remember any of your browsing history or cookies. However, downloads and new bookmarks will be saved."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Après la fermeture d'un onglet, Reynard ne conservera pas votre historique de navigation ou vos cookies. Cependant, vos téléchargements et les marques pages ajoutés seront conservés. "
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -840,6 +1201,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "All Downloads"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tous les téléchargements"
           }
         },
         "zh-Hans" : {
@@ -858,26 +1225,16 @@
             "value" : "All History"
           }
         },
-        "zh-Hans" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全部历史记录"
-          }
-        }
-      }
-    },
-    "All Websites" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "All Websites"
+            "value" : "Tout l'historique"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "所有网站"
+            "value" : "全部历史记录"
           }
         }
       }
@@ -889,6 +1246,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allow"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser"
           }
         },
         "zh-Hans" : {
@@ -908,6 +1271,12 @@
             "value" : "Allow %@ to access apps and services on devices connected to your local network?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous autoriser %@ à accéder aux applications et services sur les appareils connectés à votre réseau local ?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -923,6 +1292,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allow %@ to access other apps and services on this device?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous autoriser %@ à accéder à d'autres applications et services sur cet appareil ?"
           }
         },
         "zh-Hans" : {
@@ -942,6 +1317,12 @@
             "value" : "Allow %@ to play DRM-controlled content?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous autoriser %@ à jouer du contenu protégé par DRM ?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -957,6 +1338,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allow %@ to send notifications?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous autoriser %@ à envoyer des notifications ?"
           }
         },
         "zh-Hans" : {
@@ -976,6 +1363,12 @@
             "value" : "Allow %@ to store data in persistent storage?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous autoriser %@ à stocker des données dans la mémoire persistante ?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -993,27 +1386,16 @@
             "value" : "Allow %1$@ to use its cookies on %2$@?"
           }
         },
-        "zh-Hans" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "允许 %1$@ 在 %2$@ 上使用其 Cookie 吗？"
-          }
-        }
-      }
-    },
-    "Allow %@ to use motion & orientation sensors?" : {
-      "comment" : "Website host",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Allow %@ to use motion & orientation sensors?"
+            "value" : "Voulez-vous autoriser %1$@ à utiliser des cookies sur %2$@ ?"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "允许 %@ 使用运动与方向传感器吗？"
+            "value" : "允许 %1$@ 在 %2$@ 上使用其 Cookie 吗？"
           }
         }
       }
@@ -1025,6 +1407,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allow %@ to use your camera and microphone?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous autoriser %@ à utiliser votre caméra et votre microphone ?"
           }
         },
         "zh-Hans" : {
@@ -1044,6 +1432,12 @@
             "value" : "Allow %@ to use your camera?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous autoriser %@ à utiliser votre caméra ?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1059,6 +1453,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allow %@ to use your location?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous autoriser %@ à utiliser votre position géographique ?"
           }
         },
         "zh-Hans" : {
@@ -1078,6 +1478,12 @@
             "value" : "Allow %@ to use your microphone?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous autoriser %@ à utiliser votre microphone ?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1093,6 +1499,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allow Audio and Video"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser l'audio et la vidéo"
           }
         },
         "zh-Hans" : {
@@ -1111,10 +1523,60 @@
             "value" : "Allow in Private Browsing"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permettre en mode Navigation Privée"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "允许在无痕浏览中运行"
+          }
+        }
+      }
+    },
+    "Allow on All Websites" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow on All Websites"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permettre sur Tous les Sites Web"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在所有标签页上允许"
+          }
+        }
+      }
+    },
+    "Allow this add-on to access every website." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow this add-on to access every website."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser cette extension à accéder à tous les sites web."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许此插件访问所有标签页。"
           }
         }
       }
@@ -1126,6 +1588,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allowed %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ autorisé"
           }
         },
         "zh-Hans" : {
@@ -1144,6 +1612,12 @@
             "value" : "Allowed Websites"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sites Web autorisés"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1158,6 +1632,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Appearance"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apparence"
           }
         },
         "zh-Hans" : {
@@ -1176,6 +1656,12 @@
             "value" : "Apps and Services"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Applications et Services"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1190,6 +1676,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Are you sure you want to upload all files? Only do this if you trust the site."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Êtes-vous sûr de vouloir téléverser tous les fichiers ? Ne faites ceci que si vous avez confiance en ce site web."
           }
         },
         "zh-Hans" : {
@@ -1209,6 +1701,12 @@
             "value" : "Ask"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demander"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1223,6 +1721,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Author"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auteur"
           }
         },
         "zh-Hans" : {
@@ -1241,6 +1745,12 @@
             "value" : "Autoplay"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture automatique"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1255,6 +1765,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Blank Page"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page Blanche"
           }
         },
         "zh-Hans" : {
@@ -1274,6 +1790,12 @@
             "value" : "Block Audio and Video"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloquer l'audio et la vidéo"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1289,6 +1811,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Block Audio Only"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloquer uniquement l'audio"
           }
         },
         "zh-Hans" : {
@@ -1307,10 +1835,26 @@
             "value" : "Blocked"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloqué"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "已阻止"
+          }
+        }
+      }
+    },
+    "Blocked Trackers" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blocked Trackers"
           }
         }
       }
@@ -1321,6 +1865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bookmarks"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marque-pages"
           }
         },
         "zh-Hans" : {
@@ -1337,6 +1887,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bookmarks, History, and Tabs"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marque-pages, Historique et Onglets"
           }
         },
         "zh-Hans" : {
@@ -1356,6 +1912,12 @@
             "value" : "Bottom"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bas"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1370,6 +1932,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Browsing"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation"
           }
         },
         "zh-Hans" : {
@@ -1388,6 +1956,12 @@
             "value" : "Browsing History"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historique de navigation"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1402,6 +1976,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "bytes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "octets"
           }
         },
         "zh-Hans" : {
@@ -1420,6 +2000,12 @@
             "value" : "Cached Images and Files"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Images et fichiers en mémoire tampon"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1434,6 +2020,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Camera"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caméra"
           }
         },
         "zh-Hans" : {
@@ -1452,6 +2044,12 @@
             "value" : "Cancel"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1468,6 +2066,12 @@
             "value" : "Cancel Download"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler le Téléchargement"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1482,6 +2086,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancel Download?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler le téléchargement ?"
           }
         },
         "zh-Hans" : {
@@ -1501,6 +2111,12 @@
             "value" : "Changed %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifié %@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1517,6 +2133,12 @@
             "value" : "Choose File"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir un Fichier"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1531,6 +2153,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Choose Folder"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir un Dossier"
           }
         },
         "zh-Hans" : {
@@ -1550,6 +2178,12 @@
             "value" : "Clear"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1564,6 +2198,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clear All"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout effacer"
           }
         },
         "zh-Hans" : {
@@ -1582,10 +2222,26 @@
             "value" : "Clear Browsing Data"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer toutes les données de navigation"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "清除浏览数据"
+          }
+        }
+      }
+    },
+    "Clear Cookies and Website Data" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Cookies and Website Data"
           }
         }
       }
@@ -1596,6 +2252,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clear Downloads"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer la liste des téléchargements"
           }
         },
         "zh-Hans" : {
@@ -1614,6 +2276,12 @@
             "value" : "Clear History"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer l'historique"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1628,6 +2296,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clear Timeframe"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer sur une période"
           }
         },
         "zh-Hans" : {
@@ -1646,6 +2320,12 @@
             "value" : "Close All Tabs"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer Tous les Onglets"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1660,6 +2340,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compatibility"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compatibilité"
           }
         },
         "zh-Hans" : {
@@ -1678,6 +2364,12 @@
             "value" : "Complete Add-on Updates"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer les mises à jour d'extensions"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1694,10 +2386,27 @@
             "value" : "Confirm Upload"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmer le Téléversement"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "确认上传"
+          }
+        }
+      }
+    },
+    "Content" : {
+      "comment" : "Browsing settings section title\nWebsite settings section title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Content"
           }
         }
       }
@@ -1708,6 +2417,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cookies and Website Data"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cookies et données de sites Web"
           }
         },
         "zh-Hans" : {
@@ -1726,6 +2441,12 @@
             "value" : "Copy"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1740,6 +2461,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copy Link"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le lien"
           }
         },
         "zh-Hans" : {
@@ -1758,6 +2485,12 @@
             "value" : "Copy URL"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier l'URL"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1772,6 +2505,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Corrupt File"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fichier corrompu"
           }
         },
         "zh-Hans" : {
@@ -1790,6 +2529,12 @@
             "value" : "Could not retrieve the download URL."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de récupérer l'URL de téléchargement."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1806,10 +2551,26 @@
             "value" : "Couldn’t Clear Browsing Data"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d'effacer l'historique de navigation"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法清除浏览数据"
+          }
+        }
+      }
+    },
+    "Couldn’t Clear Cookies and Website Data" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t Clear Cookies and Website Data"
           }
         }
       }
@@ -1820,6 +2581,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Couldn’t Clear History"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d'effacer l'historique"
           }
         },
         "zh-Hans" : {
@@ -1838,6 +2605,12 @@
             "value" : "Couldn’t Disable Add-on"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de désactiver l'extension"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1852,6 +2625,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Couldn’t Enable Add-on"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d'activer l'extension"
           }
         },
         "zh-Hans" : {
@@ -1871,6 +2650,12 @@
             "value" : "Couldn’t install %@."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d'installer %@."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1885,6 +2670,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Couldn’t install this add-on."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d'installer cette extension."
           }
         },
         "zh-Hans" : {
@@ -1903,6 +2694,12 @@
             "value" : "Couldn’t Reload Add-on"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de recharger cette extension."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1917,6 +2714,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Couldn’t Remove Add-on"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de retirer cette extension."
           }
         },
         "zh-Hans" : {
@@ -1935,6 +2738,12 @@
             "value" : "Couldn’t Update Permissions"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de mettre à jour les permissions"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1949,6 +2758,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Couldn’t Update Private Browsing Access"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de mettre à jour l'accès en mode Navigation Privée"
           }
         },
         "zh-Hans" : {
@@ -1967,10 +2782,39 @@
             "value" : "Cross-Site Cookies"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cookies inter-site"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "跨站 Cookie"
+          }
+        }
+      }
+    },
+    "Custom" : {
+      "comment" : "Search engine option",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personnalisé"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义"
           }
         }
       }
@@ -1981,6 +2825,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Custom Search URL"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URL de recherche personnalisée"
           }
         },
         "zh-Hans" : {
@@ -1997,6 +2847,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Custom URL"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URL Personnalisée"
           }
         },
         "zh-Hans" : {
@@ -2016,6 +2872,12 @@
             "value" : "Date Added"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date d'ajout"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2031,6 +2893,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Day"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jour"
           }
         },
         "zh-Hans" : {
@@ -2049,6 +2917,12 @@
             "value" : "Default Setting"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paramètres par défaut"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2063,6 +2937,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Delete"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer"
           }
         },
         "zh-Hans" : {
@@ -2081,6 +2961,12 @@
             "value" : "Delete Bookmark"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le marque-page"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2097,6 +2983,12 @@
             "value" : "Delete Folder"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le Dossier"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2111,6 +3003,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deleted"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimé"
           }
         },
         "zh-Hans" : {
@@ -2130,6 +3028,12 @@
             "value" : "Denied %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ refusé"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2144,6 +3048,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Denied Websites"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sites Web refusés"
           }
         },
         "zh-Hans" : {
@@ -2163,6 +3073,12 @@
             "value" : "Deny"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refuser"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2177,6 +3093,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desktop Firefox"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox pour ordinateur"
           }
         },
         "zh-Hans" : {
@@ -2195,6 +3117,12 @@
             "value" : "Details"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détails"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2209,6 +3137,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Developer Disk Image download was cancelled."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le téléchargement d'une Image Disque de développeur a été annulé."
           }
         },
         "zh-Hans" : {
@@ -2227,6 +3161,12 @@
             "value" : "Developer Disk Image source URL is invalid."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'URL source de l'Image Disque de développeur est invalide."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2241,6 +3181,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Device Apps and Services"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Applications et services de l'appareil"
           }
         },
         "zh-Hans" : {
@@ -2259,10 +3205,26 @@
             "value" : "Discover Add-ons…"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Découvrir des extensions…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "发现扩展…"
+          }
+        }
+      }
+    },
+    "Do Not Block" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do Not Block"
           }
         }
       }
@@ -2274,6 +3236,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Do you want to download \"%@\"?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous télécharger \"%@\" ?"
           }
         },
         "zh-Hans" : {
@@ -2293,6 +3261,12 @@
             "value" : "Do you want to stop downloading %@?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous arrêter de télécharger \"%@\" ?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2307,6 +3281,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Don’t Allow"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ne Pas Autoriser"
           }
         },
         "zh-Hans" : {
@@ -2325,6 +3305,12 @@
             "value" : "Download"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2339,6 +3325,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Download Failed"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de téléchargement"
           }
         },
         "zh-Hans" : {
@@ -2357,6 +3349,12 @@
             "value" : "Download Reynard (.tipa)"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger Reynard (.tipa)"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2371,6 +3369,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Downloading"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Téléchargement en cours"
           }
         },
         "zh-Hans" : {
@@ -2389,6 +3393,12 @@
             "value" : "Downloading Update"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Téléchargement d'une mise à jour en cours"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2403,6 +3413,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Downloads"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Téléchargements"
           }
         },
         "zh-Hans" : {
@@ -2421,6 +3437,12 @@
             "value" : "e.g. youtube.com"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exemple : youtube.com"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2435,6 +3457,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Edit"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier"
           }
         },
         "zh-Hans" : {
@@ -2453,6 +3481,12 @@
             "value" : "Edit Bookmark"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier le marque-page"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2467,6 +3501,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Edit Bookmarks"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier les marque-pages"
           }
         },
         "zh-Hans" : {
@@ -2485,6 +3525,12 @@
             "value" : "Enable Add-on"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer l'extension"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2499,6 +3545,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enable JIT"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer le JIT"
           }
         },
         "zh-Hans" : {
@@ -2517,6 +3569,12 @@
             "value" : "Enable JIT to improve performance and ensure websites work properly."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activez le JIT pour améliorer les performances et s'assurer que les sites Web fonctionnent correctement."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2533,10 +3591,26 @@
             "value" : "Engine Version"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version du Moteur"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "引擎版本"
+          }
+        }
+      }
+    },
+    "Enhanced Tracking Protection" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enhanced Tracking Protection"
           }
         }
       }
@@ -2547,6 +3621,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur"
           }
         },
         "zh-Hans" : {
@@ -2566,10 +3646,26 @@
             "value" : "Error %1$d: %2$@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur %1$d: %2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "错误 %1$d：%2$@"
+          }
+        }
+      }
+    },
+    "Exceptions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exceptions"
           }
         }
       }
@@ -2580,6 +3676,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Failed to enable JIT"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d'activer le JIT"
           }
         },
         "zh-Hans" : {
@@ -2598,6 +3700,12 @@
             "value" : "Favorites"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favoris"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2612,6 +3720,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Files you download appear here"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les fichiers téléchargés apparaissent ici"
           }
         },
         "zh-Hans" : {
@@ -2630,6 +3744,12 @@
             "value" : "Firefox for Android"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox pour Android"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2644,6 +3764,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Folders"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dossiers"
           }
         },
         "zh-Hans" : {
@@ -2662,6 +3788,12 @@
             "value" : "Frequently Visited"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visités Fréquemment"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2678,6 +3810,12 @@
             "value" : "General"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Général"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2689,6 +3827,12 @@
     "GitHub - @minh-ton" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub - @minh-ton"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "GitHub - @minh-ton"
@@ -2710,6 +3854,12 @@
             "value" : "History"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historique"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2726,10 +3876,26 @@
             "value" : "Homepage"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page d'accueil"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "主页"
+          }
+        }
+      }
+    },
+    "Homepage Banners" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Homepage Banners"
           }
         }
       }
@@ -2742,10 +3908,26 @@
             "value" : "Homepage Sections"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sections de la page d'accueil"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "主页栏目"
+          }
+        }
+      }
+    },
+    "If something looks broken on this website, try turning it off." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If something looks broken on this website, try turning it off."
           }
         }
       }
@@ -2756,6 +3938,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Import Failed"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de l'importation"
           }
         },
         "zh-Hans" : {
@@ -2774,6 +3962,12 @@
             "value" : "Import Pairing File…"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importer un fichier de Pairing…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2785,6 +3979,12 @@
     "Incompatible" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incompatible"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Incompatible"
@@ -2806,6 +4006,12 @@
             "value" : "Information"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Information"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2820,6 +4026,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Install Add-on from File…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer une extension à partir d'un fichier"
           }
         },
         "zh-Hans" : {
@@ -2838,6 +4050,12 @@
             "value" : "Install the TrollStore version of Reynard to enable JIT automatically for improved performance and to ensure websites work properly."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer la version TrollStore de Reynard afin d'activer le JIT automatiquement pour améliorer les performances et s'assurer que les sites Web fonctionnent correctement."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2852,6 +4070,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Install TrollStore"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer TrollStore"
           }
         },
         "zh-Hans" : {
@@ -2870,6 +4094,12 @@
             "value" : "Installed Add-ons"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extensions installées"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2884,6 +4114,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Installing Add-on…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installation de l'extension…"
           }
         },
         "zh-Hans" : {
@@ -2903,6 +4139,12 @@
             "value" : "It's extremely rare that you encounter this issue! Make sure that your TrollStore installation or jailbroken environment is properly configured.\n\nYou may use the browser without JIT temporarily until the next launch by activating JIT-Less Mode."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il est très rare de rencontrer ce problème! Assurez-vous que votre installation de TrollStore ou que votre environnement de jailbreak est configuré correctement.\n\nVous devrez peut-être utiliser le navigateur sans JIT temporairement jusqu'au prochain démarrage en activant le mode JITless."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2914,6 +4156,12 @@
     "JIT" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JIT"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "JIT"
@@ -2935,6 +4183,12 @@
             "value" : "JIT is not supported on the OS version you are using."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le JIT n'est pas pris en charge par la version d'OS de votre appareil."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2951,6 +4205,12 @@
             "value" : "Keep Downloading"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer à Télécharger"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2965,6 +4225,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Languages"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langues"
           }
         },
         "zh-Hans" : {
@@ -2984,6 +4250,12 @@
             "value" : "Last checked %@."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifié le %@."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2998,6 +4270,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Last Hour"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernière Heure"
           }
         },
         "zh-Hans" : {
@@ -3016,6 +4294,12 @@
             "value" : "Last Tab"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernier Onglet"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3030,6 +4314,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Last Updated"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernière mise à jour"
           }
         },
         "zh-Hans" : {
@@ -3048,10 +4338,27 @@
             "value" : "Learn More"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En savoir plus"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "了解更多"
+          }
+        }
+      }
+    },
+    "Learn more about %@ Protection..." : {
+      "comment" : "Protection name placeholder",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn more about %@ Protection..."
           }
         }
       }
@@ -3062,6 +4369,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Links"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liens"
           }
         },
         "zh-Hans" : {
@@ -3080,6 +4393,12 @@
             "value" : "Loading Add-ons…"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chargement des extensions…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3094,6 +4413,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Local Network"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réseau Local"
           }
         },
         "zh-Hans" : {
@@ -3112,6 +4437,12 @@
             "value" : "Local Network Devices"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appareils sur le réseau local"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3126,6 +4457,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Location"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emplacement"
           }
         },
         "zh-Hans" : {
@@ -3144,6 +4481,12 @@
             "value" : "Make sure TrollStore's URL Scheme is enabled."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assurez-vous que le Schéma d'URL est activé sur TrollStore."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3160,6 +4503,12 @@
             "value" : "Media"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Média"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3171,6 +4520,12 @@
     "Microphone" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Microphone"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Microphone"
@@ -3192,6 +4547,12 @@
             "value" : "More About This Add-on"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En savoir plus sur cette extension"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3207,6 +4568,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Name"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom"
           }
         },
         "zh-Hans" : {
@@ -3225,6 +4592,12 @@
             "value" : "Needs Permission to Update"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demande l'autorisation pour la mise à jour"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3239,6 +4612,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Network Error"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur de Réseau"
           }
         },
         "zh-Hans" : {
@@ -3257,10 +4636,62 @@
             "value" : "New Folder"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouveau dossier"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "新建文件夹"
+          }
+        }
+      }
+    },
+    "New required data collection: The developer says this add-on will collect %@." : {
+      "comment" : "Data collection list",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New required data collection: The developer says this add-on will collect %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvelle collection de données requise : Le développeur indique que cette extension collectera %@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新数据收集请求：此插件开发者称该插件将收集%@。"
+          }
+        }
+      }
+    },
+    "New required permissions: %@" : {
+      "comment" : "Permission list",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New required permissions: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvelles permissions nécessaires : %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新权限请求：%@"
           }
         }
       }
@@ -3273,10 +4704,26 @@
             "value" : "New Tab"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvel Onglet"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "新标签页"
+          }
+        }
+      }
+    },
+    "New Updates" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Updates"
           }
         }
       }
@@ -3288,6 +4735,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Night"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuit"
           }
         },
         "zh-Hans" : {
@@ -3306,6 +4759,12 @@
             "value" : "No"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3320,6 +4779,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No Add-ons"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune extension"
           }
         },
         "zh-Hans" : {
@@ -3338,6 +4803,12 @@
             "value" : "No Add-ons Installed"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune extension installée"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3352,6 +4823,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No matching bookmarks"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun marque-page correspondant"
           }
         },
         "zh-Hans" : {
@@ -3370,6 +4847,12 @@
             "value" : "No matching downloads"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun téléchargement correspondant"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3386,10 +4869,26 @@
             "value" : "No matching history"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune entrée correspondante dans l'historique"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "没有匹配的历史记录"
+          }
+        }
+      }
+    },
+    "No Protection" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Protection"
           }
         }
       }
@@ -3402,10 +4901,26 @@
             "value" : "No release notes available."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune note de mise à jour disponible."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "暂无发行说明。"
+          }
+        }
+      }
+    },
+    "No Trackers Found" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Trackers Found"
           }
         }
       }
@@ -3416,6 +4931,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No Update Available"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune mise à jour disponible"
           }
         },
         "zh-Hans" : {
@@ -3432,6 +4953,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No updates found."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune mise à jour trouvée."
           }
         },
         "zh-Hans" : {
@@ -3451,6 +4978,12 @@
             "value" : "None"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3465,6 +4998,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Not Allowed in Private Browsing"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interdit en mode Navigation Privée"
           }
         },
         "zh-Hans" : {
@@ -3483,6 +5022,12 @@
             "value" : "Not Verified"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non Vérifié"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3497,6 +5042,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Number of Rows"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre de lignes"
           }
         },
         "zh-Hans" : {
@@ -3515,6 +5066,12 @@
             "value" : "Number of Tabs"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre d’onglets"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3529,6 +5086,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Number of Websites"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre de sites Web"
           }
         },
         "zh-Hans" : {
@@ -3548,6 +5111,12 @@
             "value" : "Off"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactivé"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3559,6 +5128,12 @@
     "OK" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
@@ -3581,6 +5156,12 @@
             "value" : "On"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activé"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3595,6 +5176,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "On Startup"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au Démarrage "
           }
         },
         "zh-Hans" : {
@@ -3614,10 +5201,38 @@
             "value" : "Open in\nFiles"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir dans\nFichiers"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "在“文件”中\n打开"
+          }
+        }
+      }
+    },
+    "Open in Files" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open in Files"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir dans Fichiers"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在“文件”中打开"
           }
         }
       }
@@ -3628,6 +5243,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open in New Private Tab"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir dans un nouvel onglet en Navigation Privée"
           }
         },
         "zh-Hans" : {
@@ -3646,6 +5267,12 @@
             "value" : "Open in New Tab"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir dans un nouvel onglet"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3660,6 +5287,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open New Tabs To"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les nouveaux onglets sur"
           }
         },
         "zh-Hans" : {
@@ -3678,6 +5311,12 @@
             "value" : "Open Settings"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les paramètres"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3694,6 +5333,12 @@
             "value" : "Open Tabs"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onglets ouverts"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3705,6 +5350,12 @@
     "Option" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Option"
@@ -3726,6 +5377,12 @@
             "value" : "Optional Data Collection"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collection de données optionnelles"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3740,6 +5397,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Optional Permissions"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permissions optionnelles"
           }
         },
         "zh-Hans" : {
@@ -3758,6 +5421,12 @@
             "value" : "Page Zoom"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom sur la page"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3774,10 +5443,26 @@
             "value" : "Page Zoom on"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom sur la page activé"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "页面缩放应用于"
+          }
+        }
+      }
+    },
+    "Password" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password"
           }
         }
       }
@@ -3788,6 +5473,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Performance Recommendation"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recommandation de performance"
           }
         },
         "zh-Hans" : {
@@ -3801,6 +5492,12 @@
     "Permissions" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permissions"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Permissions"
@@ -3822,6 +5519,12 @@
             "value" : "Persistent Storage"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mémoire persistante"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3836,6 +5539,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Photo Library"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Galerie de photos"
           }
         },
         "zh-Hans" : {
@@ -3855,6 +5564,12 @@
             "value" : "Please check that your pairing file is valid, your loopback VPN is on, and you're connected to a stable Wi-Fi network.\n\nYou may use the browser without JIT temporarily until the next launch by activating JIT-Less Mode."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veuillez vérifier que votre fichier de Pairing est valide, que votre VPN de loopback est activé et que vous êtes connecté à un réseau Wi-Fi stable.\n\nVous pouvez utiliser le navigateur sans JIT temporairement jusqu'au prochain démarrage en activant le mode JITless."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3869,6 +5584,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparing JIT"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Préparation du JIT"
           }
         },
         "zh-Hans" : {
@@ -3887,6 +5608,12 @@
             "value" : "Previous 7 Days"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 derniers jours"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3901,6 +5628,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Previous 30 Days"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 derniers jours"
           }
         },
         "zh-Hans" : {
@@ -3919,6 +5652,12 @@
             "value" : "Privacy"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vie privée"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3933,6 +5672,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Private"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privé"
           }
         },
         "zh-Hans" : {
@@ -3951,6 +5696,12 @@
             "value" : "Private Browsing"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation Privée"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3965,6 +5716,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quit Reynard"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitter Reynard"
           }
         },
         "zh-Hans" : {
@@ -3983,6 +5740,12 @@
             "value" : "Rating"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avis"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3999,10 +5762,26 @@
             "value" : "Recently Closed Tabs"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onglets récemment fermés"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "最近关闭的标签页"
+          }
+        }
+      }
+    },
+    "Recommendations" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recommendations"
           }
         }
       }
@@ -4013,6 +5792,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer"
           }
         },
         "zh-Hans" : {
@@ -4032,6 +5817,12 @@
             "value" : "Remove %@?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer %@?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4046,6 +5837,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove Add-on"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer l'extension"
           }
         },
         "zh-Hans" : {
@@ -4064,6 +5861,12 @@
             "value" : "Remove Link"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer le lien"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4080,10 +5883,27 @@
             "value" : "Remove Recently Closed Tab"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer l'onglet récemment fermé"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "从最近关闭中移除"
+          }
+        }
+      }
+    },
+    "Removing cookies and website data for %@ may require you to sign in again." : {
+      "comment" : "Website host",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removing cookies and website data for %@ may require you to sign in again."
           }
         }
       }
@@ -4096,26 +5916,16 @@
             "value" : "Request Desktop Website"
           }
         },
-        "zh-Hans" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "切换为电脑版网站"
-          }
-        }
-      }
-    },
-    "Request Desktop Website On" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Request Desktop Website On"
+            "value" : "Demander la version pour ordinateur du site Web"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请求桌面网站"
+            "value" : "切换为电脑版网站"
           }
         }
       }
@@ -4126,6 +5936,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Request Mobile Website"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demander la version pour mobile du site Web"
           }
         },
         "zh-Hans" : {
@@ -4144,6 +5960,12 @@
             "value" : "Required Data Collection"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collection de données requises"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4160,6 +5982,12 @@
             "value" : "Required DDI files are missing."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les fichiers DDI nécessaires sont manquants."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4174,6 +6002,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Required Permissions"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permissions requises"
           }
         },
         "zh-Hans" : {
@@ -4193,10 +6027,26 @@
             "value" : "Reset"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "重置"
+          }
+        }
+      }
+    },
+    "Reset Desktop Website Settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset Desktop Website Settings"
           }
         }
       }
@@ -4207,6 +6057,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reset Page Zoom Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser les paramètres de zoom de page Web"
           }
         },
         "zh-Hans" : {
@@ -4225,6 +6081,12 @@
             "value" : "Reset Permissions for All Websites"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser les permissions pour tous les sites Web"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4239,6 +6101,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reset Settings for This Website"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réaliser les paramètres pour ce site Web"
           }
         },
         "zh-Hans" : {
@@ -4257,6 +6125,12 @@
             "value" : "Restart Required"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redémarrage nécessaire"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4271,6 +6145,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restricted"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restreint"
           }
         },
         "zh-Hans" : {
@@ -4289,6 +6169,12 @@
             "value" : "Reynard Browser"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigateur Web Reynard"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4303,6 +6189,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reynard won’t remember any of your browsing history or cookies. However, downloads and new bookmarks will be saved."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reynard ne conservera pas votre historique de recherche ou vos cookies. Cependant, vos téléchargements et les marques pages ajoutés seront conservés. "
           }
         },
         "zh-Hans" : {
@@ -4321,6 +6213,12 @@
             "value" : "Save"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4335,6 +6233,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Save to Photos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer dans Photos"
           }
         },
         "zh-Hans" : {
@@ -4353,6 +6257,12 @@
             "value" : "Search"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recherche"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4367,6 +6277,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search Bookmarks"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher dans les marque-pages"
           }
         },
         "zh-Hans" : {
@@ -4385,6 +6301,12 @@
             "value" : "Search Browsing History"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher dans l'historique de recherche"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4399,6 +6321,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search Downloads"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher dans les téléchargements"
           }
         },
         "zh-Hans" : {
@@ -4417,6 +6345,12 @@
             "value" : "Search Engine"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moteur de Recherche"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4431,6 +6365,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search History"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historique de recherche"
           }
         },
         "zh-Hans" : {
@@ -4449,6 +6389,12 @@
             "value" : "Search Languages"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher dans les langues"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4463,6 +6409,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search Opened Tabs"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher dans les onglets ouverts"
           }
         },
         "zh-Hans" : {
@@ -4481,6 +6433,12 @@
             "value" : "Search or enter address"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher ou entrer une adresse"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4495,6 +6453,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search Suggestion Provider"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fournisseur de suggestions de recherche"
           }
         },
         "zh-Hans" : {
@@ -4513,6 +6477,12 @@
             "value" : "Search Suggestions"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggestions de recherche"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4529,10 +6499,32 @@
             "value" : "Select Option"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionner une option"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "选择选项"
+          }
+        }
+      }
+    },
+    "Select Options" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Options"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择多个选项"
           }
         }
       }
@@ -4543,6 +6535,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paramètres"
           }
         },
         "zh-Hans" : {
@@ -4562,6 +6560,12 @@
             "value" : "Settings for %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paramètres pour %@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4576,6 +6580,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Share"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager"
           }
         },
         "zh-Hans" : {
@@ -4594,6 +6604,12 @@
             "value" : "Share Image"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager l’image"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4608,6 +6624,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Share Link"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager le Lien"
           }
         },
         "zh-Hans" : {
@@ -4626,6 +6648,12 @@
             "value" : "Show All"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout afficher"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4640,6 +6668,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show All Websites"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher tous les sites Web"
           }
         },
         "zh-Hans" : {
@@ -4658,6 +6692,12 @@
             "value" : "Show Favorites"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les favoris"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4672,6 +6712,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show Folders on Top"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les fichiers au-dessus"
           }
         },
         "zh-Hans" : {
@@ -4690,6 +6736,12 @@
             "value" : "Show Frequently Visited"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les sites visités fréquemment"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4704,6 +6756,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show Full Website Address"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher l'adresse complète"
           }
         },
         "zh-Hans" : {
@@ -4722,6 +6780,12 @@
             "value" : "Show Image Previews"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les aperçus d'image"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4736,6 +6800,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show in Private Browsing"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher en Navigation Privée"
           }
         },
         "zh-Hans" : {
@@ -4754,6 +6824,12 @@
             "value" : "Show Less"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher moins"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4768,6 +6844,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show Link Previews"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les aperçus de liens"
           }
         },
         "zh-Hans" : {
@@ -4786,6 +6868,12 @@
             "value" : "Show Recently Closed Tabs"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les onglets récemment fermes"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4800,6 +6888,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show Search Suggestions"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les suggestions de recherche"
           }
         },
         "zh-Hans" : {
@@ -4818,10 +6912,37 @@
             "value" : "Show Tab Bar in Landscape"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher la barre d'onglets en mode Paysage"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "横屏时显示标签栏"
+          }
+        }
+      }
+    },
+    "Sign In" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign In"
+          }
+        }
+      }
+    },
+    "Sign in to %@" : {
+      "comment" : "Authentication host",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to %@"
           }
         }
       }
@@ -4832,6 +6953,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Since this is your first time enabling JIT, Reynard needs to download and mount the Developer Disk Image. This is required for JIT to work properly."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puisque c'est la première fois que vous activez le JIT, Reynard doit télécharger et monter l'Image Disque de développeur. Ceci est obligatoire pour le bon fonctionnement du JIT."
           }
         },
         "zh-Hans" : {
@@ -4850,6 +6977,12 @@
             "value" : "Some websites are available in multiple languages. Choose languages in the order you prefer."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certains sites Web sont disponibles en plusieurs langues. Veuillez choisir les langues dans l'ordre de vos préférences"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4866,6 +6999,12 @@
             "value" : "Sort By"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trier Par"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4880,6 +7019,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Support The Project"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supporter Ce Projet"
           }
         },
         "zh-Hans" : {
@@ -4899,10 +7044,1385 @@
             "value" : "System"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Système"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "跟随系统"
+          }
+        }
+      }
+    },
+    "Tabs" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabs"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onglets"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标签页"
+          }
+        }
+      }
+    },
+    "Take Photo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take Photo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prendre une Photo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍照"
+          }
+        }
+      }
+    },
+    "Take Photo or Video" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take Photo or Video"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prendre une Photo ou une Vidéo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍照或录像"
+          }
+        }
+      }
+    },
+    "Take Video" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take Video"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prendre une Vidéo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "录像"
+          }
+        }
+      }
+    },
+    "The app will now close for the JIT setting to take effect." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app will now close for the JIT setting to take effect."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reynard va se fermer afin d'appliquer la configuration du JIT."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用将立即关闭，以使 JIT 设置生效。"
+          }
+        }
+      }
+    },
+    "The required Developer Disk Image files for enabling JIT were not found.\n\nJIT has been disabled. Quit the app using the button below, then re-enable JIT from the browser settings." : {
+      "comment" : "Paragraph break intentional",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The required Developer Disk Image files for enabling JIT were not found.\n\nJIT has been disabled. Quit the app using the button below, then re-enable JIT from the browser settings."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les fichiers d'Image Disque de développeur nécessaires ont l'activation du JIT sont introuvables. \n\nLe JIT a été désactivé. Veuillez quitter Reynard en utilisant le bouton ci-dessous, puis réactivez le JIT depuis les paramètres du navigateur."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未找到启用 JIT 所需的开发者磁盘映像文件。\n\nJIT 已停用。请使用下方按钮退出应用，然后在浏览器设置中重新启用 JIT。"
+          }
+        }
+      }
+    },
+    "This add-on" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This add-on"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette extension"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此扩展"
+          }
+        }
+      }
+    },
+    "This add-on couldn’t be updated." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This add-on couldn’t be updated."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette extension n'a pas pu être mise à jour."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此插件无法被更新。"
+          }
+        }
+      }
+    },
+    "This add-on doesn’t require any permissions." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This add-on doesn’t require any permissions."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette extension ne requiert pas de permissions."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此插件不需要任何额外权限。"
+          }
+        }
+      }
+    },
+    "This add-on isn’t supported by this version of Reynard and has been disabled." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This add-on isn’t supported by this version of Reynard and has been disabled."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette extension n'est pas prise en charge par cette version de Reynard et a été désactivée."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前版本的 Reynard 不支持此扩展，已将其停用。"
+          }
+        }
+      }
+    },
+    "This build does not support in-app updates. Visit the project's Releases page to download the latest version of the app." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This build does not support in-app updates. Visit the project's Releases page to download the latest version of the app."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce build ne prend pas en charge les mises à jour dans l'application. Veuillez visites l'onglet Releases du projet pour télécharger la dernière version."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此版本不支持应用内更新。请前往项目的 Releases 页面下载最新版本。"
+          }
+        }
+      }
+    },
+    "This will clear selected browsing data. This action cannot be undone." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This will clear selected browsing data. This action cannot be undone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ceci effacera les données de navigation sélectionnées. Cette action ne pourra pas être annulée."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这将清除所选浏览数据，且无法撤销。"
+          }
+        }
+      }
+    },
+    "This will close your %d tabs." : {
+      "comment" : "Tab count",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This will close your %d tab."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This will close your %d tabs."
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cela fermera l'onglet %d"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cela fermera les onglets %d"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "这会关闭你的 %d 个标签页。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "This will reset permissions for all websites. This action cannot be undone." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This will reset permissions for all websites. This action cannot be undone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ceci réinitialisera les permissions pour tous les sites Web. Cette action ne pourra pas être annulée."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这将重置所有网站的权限，且无法撤销。"
+          }
+        }
+      }
+    },
+    "This will reset settings for this website. This action cannot be undone." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This will reset settings for this website. This action cannot be undone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ceci réinitialisera les paramètres pour ce site Web. Cette action ne pourra pas être annulée."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这将重置此网站的设置，且无法撤销。"
+          }
+        }
+      }
+    },
+    "Title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titre"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标题"
+          }
+        }
+      }
+    },
+    "Today" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd’hui"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天"
+          }
+        }
+      }
+    },
+    "Today and Yesterday" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today and Yesterday"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd’hui et Hier"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天和昨天"
+          }
+        }
+      }
+    },
+    "Top" : {
+      "comment" : "Address bar position",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haut"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顶部"
+          }
+        }
+      }
+    },
+    "Tracking Protection" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tracking Protection"
+          }
+        }
+      }
+    },
+    "Turning on tracking protection is recommended." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turning on tracking protection is recommended."
+          }
+        }
+      }
+    },
+    "Unable to access the app Application Support directory." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to access the app Application Support directory."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d'accéder au répertoire de support d'application pour l'app"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法访问应用的 Application Support 目录。"
+          }
+        }
+      }
+    },
+    "Unknown error." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown error."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur inconnue."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知错误。"
+          }
+        }
+      }
+    },
+    "Unknown size" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown size"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille inconnue"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大小未知"
+          }
+        }
+      }
+    },
+    "Unsupported" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsupported"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non pris en charge"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不受支持"
+          }
+        }
+      }
+    },
+    "Unsupported Add-ons" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsupported Add-ons"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extensions non prises en charge"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不受支持的扩展"
+          }
+        }
+      }
+    },
+    "Untitled" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Untitled"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans titre"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无标题"
+          }
+        }
+      }
+    },
+    "Update Add-on Permissions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Add-on Permissions"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre à jour les permissions d'extension"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新扩展权限"
+          }
+        }
+      }
+    },
+    "Update All Add-ons" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update All Add-ons"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre à jour toutes les extensions"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新所有扩展"
+          }
+        }
+      }
+    },
+    "Update Available" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Available"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour disponible"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有可用更新"
+          }
+        }
+      }
+    },
+    "Update Failed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Failed"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de mise à jour"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新失败"
+          }
+        }
+      }
+    },
+    "Update Now" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Now"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre à jour maintenant"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即更新"
+          }
+        }
+      }
+    },
+    "Update Unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Unavailable"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour indisponible"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法更新"
+          }
+        }
+      }
+    },
+    "Updated" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updated"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mis à jour"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已更新"
+          }
+        }
+      }
+    },
+    "Updating Add-ons…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updating Add-ons…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour des extensions…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在更新扩展…"
+          }
+        }
+      }
+    },
+    "Updating…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updating…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour en cours…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在更新…"
+          }
+        }
+      }
+    },
+    "Upload" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upload"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Téléverser"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上传"
+          }
+        }
+      }
+    },
+    "URL" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URL"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URL"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网址"
+          }
+        }
+      }
+    },
+    "Use %%s for search terms, as in example.com⁠/⁠search⁠?⁠q⁠=⁠%%s." : {
+      "comment" : "Literal %s, word joiners",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use %%s for search terms, as in example.com⁠/⁠search⁠?⁠q⁠=⁠%%s."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser %%s comme termes de recherche, par exemple : example.com/search?q=%%s"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用%%s作为搜索词，例如 example.com⁠/⁠search⁠?⁠q⁠=⁠%%s。"
+          }
+        }
+      }
+    },
+    "Use Compatibility User Agent" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Compatibility User Agent"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser un User Agent de compatibilité"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用兼容性用户代理"
+          }
+        }
+      }
+    },
+    "Use the %@ user agent for all websites to improve compatibility." : {
+      "comment" : "User agent name placeholder",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use the %@ user agent for all websites to improve compatibility."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez l'User Agent %@ sur tous les sites Web pour améliorer la compatibilité"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "对所有网站使用 %@ 用户代理以提高兼容性。"
+          }
+        }
+      }
+    },
+    "User Agent Overrides" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Agent Overrides"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Agents forcés"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户代理覆盖"
+          }
+        }
+      }
+    },
+    "User Name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Name"
+          }
+        }
+      }
+    },
+    "Version" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本"
+          }
+        }
+      }
+    },
+    "Version %@" : {
+      "comment" : "Version number",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本 %@"
+          }
+        }
+      }
+    },
+    "View Source Code" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Source Code"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lire le code source"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看源代码"
+          }
+        }
+      }
+    },
+    "Website Language" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Website Language"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langue du Site Web"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网站语言"
+          }
+        }
+      }
+    },
+    "Website Permissions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Website Permissions"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permissions du Site Web"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网站权限"
+          }
+        }
+      }
+    },
+    "Website Settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Website Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paramètres du Site Web"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网站设置"
+          }
+        }
+      }
+    },
+    "Websites" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websites"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sites web"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网站"
+          }
+        }
+      }
+    },
+    "Websites With Custom Settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websites With Custom Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sites Web avec des paramètres personnalisés"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用自定义设置的网站"
+          }
+        }
+      }
+    },
+    "What %@ Protection Blocks" : {
+      "comment" : "Protection mode name placeholder",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What %@ Protection Blocks"
+          }
+        }
+      }
+    },
+    "When the download finishes, choose the app that you used to sideload Reynard in the share sheet to install the update." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When the download finishes, choose the app that you used to sideload Reynard in the share sheet to install the update."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A la fin du téléchargement, veuillez choisir l'application avec laquelle vous avez installé Reynard depuis la fiche de partage afin de terminer la mise à jour."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下载完成后，请在分享菜单中选择用于侧载 Reynard 的应用来安装更新。"
+          }
+        }
+      }
+    },
+    "Yes" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oui"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "是"
+          }
+        }
+      }
+    },
+    "Yesterday" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yesterday"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "昨天"
+          }
+        }
+      }
+    },
+    "You may want to block access if it’s not clear why %@ needs this data." : {
+      "comment" : "Third-party host",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You may want to block access if it’s not clear why %@ needs this data."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si la raison pour laquelle %@ a besoin de cette permission n'est pas claire, vous pouvez y bloquer l'accès."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果不清楚 %@ 为什么需要这些数据，建议阻止访问。"
+          }
+        }
+      }
+    },
+    "Your browsing history appears here" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your browsing history appears here"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre historique de navigation apparaît ici"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "浏览历史记录会显示在这里"
+          }
+        }
+      }
+    },
+    "Your login information will be sent securely." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your login information will be sent securely."
+          }
+        }
+      }
+    },
+    "Your login information will not be sent securely." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your login information will not be sent securely."
+          }
+        }
+      }
+    },
+    "Zoom Level" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom Level"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niveau de Zoom"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缩放级别"
+          }
+        }
+      }
+    },
+    "%@ couldn’t be verified and has been disabled." : {
+      "comment" : "Add-on name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ couldn’t be verified and has been disabled."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法验证“%@”，已将其停用。"
+          }
+        }
+      }
+    },
+    "%@ isn’t compatible with this version of Reynard." : {
+      "comment" : "Add-on name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ isn’t compatible with this version of Reynard."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@”与当前版本的 Reynard 不兼容。"
+          }
+        }
+      }
+    },
+    "All Websites" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Websites"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有网站"
+          }
+        }
+      }
+    },
+    "Allow %@ to use motion & orientation sensors?" : {
+      "comment" : "Website host",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow %@ to use motion & orientation sensors?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许 %@ 使用运动与方向传感器吗？"
+          }
+        }
+      }
+    },
+    "Request Desktop Website On" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Request Desktop Website On"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请求桌面网站"
           }
         }
       }
@@ -4941,119 +8461,6 @@
         }
       }
     },
-    "Tabs" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tabs"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "标签页"
-          }
-        }
-      }
-    },
-    "Take Photo" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Take Photo"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "拍照"
-          }
-        }
-      }
-    },
-    "Take Photo or Video" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Take Photo or Video"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "拍照或录像"
-          }
-        }
-      }
-    },
-    "Take Video" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Take Video"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "录像"
-          }
-        }
-      }
-    },
-    "The app will now close for the JIT setting to take effect." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The app will now close for the JIT setting to take effect."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "应用将立即关闭，以使 JIT 设置生效。"
-          }
-        }
-      }
-    },
-    "The required Developer Disk Image files for enabling JIT were not found.\n\nJIT has been disabled. Quit the app using the button below, then re-enable JIT from the browser settings." : {
-      "comment" : "Paragraph break intentional",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The required Developer Disk Image files for enabling JIT were not found.\n\nJIT has been disabled. Quit the app using the button below, then re-enable JIT from the browser settings."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未找到启用 JIT 所需的开发者磁盘映像文件。\n\nJIT 已停用。请使用下方按钮退出应用，然后在浏览器设置中重新启用 JIT。"
-          }
-        }
-      }
-    },
-    "This add-on" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This add-on"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此扩展"
-          }
-        }
-      }
-    },
     "This add-on is restricted and has been disabled. You can enable it, but this may be risky." : {
       "localizations" : {
         "en" : {
@@ -5086,22 +8493,6 @@
         }
       }
     },
-    "This add-on isn’t supported by this version of Reynard and has been disabled." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This add-on isn’t supported by this version of Reynard and has been disabled."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "当前版本的 Reynard 不支持此扩展，已将其停用。"
-          }
-        }
-      }
-    },
     "This add-on was blocked for violating Mozilla’s policies and has been disabled." : {
       "localizations" : {
         "en" : {
@@ -5114,436 +8505,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "此扩展因违反 Mozilla 政策而被阻止，现已停用。"
-          }
-        }
-      }
-    },
-    "This build does not support in-app updates. Visit the project's Releases page to download the latest version of the app." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This build does not support in-app updates. Visit the project's Releases page to download the latest version of the app."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此版本不支持应用内更新。请前往项目的 Releases 页面下载最新版本。"
-          }
-        }
-      }
-    },
-    "This will clear selected browsing data. This action cannot be undone." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This will clear selected browsing data. This action cannot be undone."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "这将清除所选浏览数据，且无法撤销。"
-          }
-        }
-      }
-    },
-    "This will close your %d tabs." : {
-      "comment" : "Tab count",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "This will close your %d tab."
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "new",
-                  "value" : "This will close your %d tabs."
-                }
-              }
-            }
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "这会关闭你的 %d 个标签页。"
-          }
-        }
-      }
-    },
-    "This will reset permissions for all websites. This action cannot be undone." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This will reset permissions for all websites. This action cannot be undone."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "这将重置所有网站的权限，且无法撤销。"
-          }
-        }
-      }
-    },
-    "This will reset settings for this website. This action cannot be undone." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This will reset settings for this website. This action cannot be undone."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "这将重置此网站的设置，且无法撤销。"
-          }
-        }
-      }
-    },
-    "Title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Title"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "标题"
-          }
-        }
-      }
-    },
-    "Today" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Today"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今天"
-          }
-        }
-      }
-    },
-    "Today and Yesterday" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Today and Yesterday"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今天和昨天"
-          }
-        }
-      }
-    },
-    "Top" : {
-      "comment" : "Address bar position",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Top"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "顶部"
-          }
-        }
-      }
-    },
-    "Unable to access the app Application Support directory." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unable to access the app Application Support directory."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法访问应用的 Application Support 目录。"
-          }
-        }
-      }
-    },
-    "Unknown error." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unknown error."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未知错误。"
-          }
-        }
-      }
-    },
-    "Unknown size" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unknown size"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "大小未知"
-          }
-        }
-      }
-    },
-    "Unsupported" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unsupported"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "不受支持"
-          }
-        }
-      }
-    },
-    "Unsupported Add-ons" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unsupported Add-ons"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "不受支持的扩展"
-          }
-        }
-      }
-    },
-    "Untitled" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Untitled"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无标题"
-          }
-        }
-      }
-    },
-    "Update Add-on Permissions" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Update Add-on Permissions"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新扩展权限"
-          }
-        }
-      }
-    },
-    "Update All Add-ons" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Update All Add-ons"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新所有扩展"
-          }
-        }
-      }
-    },
-    "Update Available" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Update Available"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "有可用更新"
-          }
-        }
-      }
-    },
-    "Update Failed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Update Failed"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新失败"
-          }
-        }
-      }
-    },
-    "Update Now" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Update Now"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "立即更新"
-          }
-        }
-      }
-    },
-    "Update Unavailable" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Update Unavailable"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法更新"
-          }
-        }
-      }
-    },
-    "Updated" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Updated"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已更新"
-          }
-        }
-      }
-    },
-    "Updating Add-ons…" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Updating Add-ons…"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在更新扩展…"
-          }
-        }
-      }
-    },
-    "Updating…" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Updating…"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在更新…"
-          }
-        }
-      }
-    },
-    "Upload" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upload"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "上传"
-          }
-        }
-      }
-    },
-    "URL" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "URL"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "网址"
           }
         }
       }
@@ -5561,297 +8522,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 %1$s 表示搜索词，例如 example.com⁠/⁠search⁠?⁠q⁠=⁠%2$s。"
-          }
-        }
-      }
-    },
-    "Use Compatibility User Agent" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use Compatibility User Agent"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用兼容性用户代理"
-          }
-        }
-      }
-    },
-    "Use the %@ user agent for all websites to improve compatibility." : {
-      "comment" : "User agent name placeholder",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use the %@ user agent for all websites to improve compatibility."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "对所有网站使用 %@ 用户代理以提高兼容性。"
-          }
-        }
-      }
-    },
-    "User Agent Overrides" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "User Agent Overrides"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "用户代理覆盖"
-          }
-        }
-      }
-    },
-    "Version" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Version"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "版本"
-          }
-        }
-      }
-    },
-    "Version %@" : {
-      "comment" : "Version number",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Version %@"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "版本 %@"
-          }
-        }
-      }
-    },
-    "View Source Code" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "View Source Code"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "查看源代码"
-          }
-        }
-      }
-    },
-    "Website Language" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Website Language"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "网站语言"
-          }
-        }
-      }
-    },
-    "Website Permissions" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Website Permissions"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "网站权限"
-          }
-        }
-      }
-    },
-    "Website Settings" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Website Settings"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "网站设置"
-          }
-        }
-      }
-    },
-    "Websites" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Websites"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "网站"
-          }
-        }
-      }
-    },
-    "Websites With Custom Settings" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Websites With Custom Settings"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用自定义设置的网站"
-          }
-        }
-      }
-    },
-    "When the download finishes, choose the app that you used to sideload Reynard in the share sheet to install the update." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "When the download finishes, choose the app that you used to sideload Reynard in the share sheet to install the update."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "下载完成后，请在分享菜单中选择用于侧载 Reynard 的应用来安装更新。"
-          }
-        }
-      }
-    },
-    "Yes" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yes"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "是"
-          }
-        }
-      }
-    },
-    "Yesterday" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yesterday"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "昨天"
-          }
-        }
-      }
-    },
-    "You may want to block access if it’s not clear why %@ needs this data." : {
-      "comment" : "Third-party host",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You may want to block access if it’s not clear why %@ needs this data."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "如果不清楚 %@ 为什么需要这些数据，建议阻止访问。"
-          }
-        }
-      }
-    },
-    "Your browsing history appears here" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your browsing history appears here"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "浏览历史记录会显示在这里"
-          }
-        }
-      }
-    },
-    "Zoom Level" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zoom Level"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "缩放级别"
-          }
-        }
-      }
-    },
-    "Select Options" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Select Options"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选择多个选项"
           }
         }
       }
@@ -5905,5 +8575,5 @@
       }
     }
   },
-  "version" : "1.2"
+  "version" : "1.0"
 }

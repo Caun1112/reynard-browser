@@ -71,6 +71,9 @@ final class BookmarksViewController: UIViewController, UITableViewDataSource, UI
         tableView.delegate = self
         tableView.keyboardDismissMode = .interactive
         tableView.separatorStyle = .singleLine
+        if #available(iOS 14.0, *) {
+            tableView.selectionFollowsFocus = false
+        }
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = UX.sectionHeaderTopPadding
         }
@@ -525,7 +528,13 @@ final class BookmarksViewController: UIViewController, UITableViewDataSource, UI
     private func reloadFolder() {
         let snapshot = store.contents(of: folderID)
         sections = makeBookmarkSections(from: snapshot.items)
-        title = snapshot.parent.title
+        if snapshot.parent.isProtected && snapshot.parent.title == "Bookmarks" {
+            title = NSLocalizedString("Bookmarks", comment: "")
+        } else if snapshot.parent.isProtected && snapshot.parent.title == "Favorites" {
+            title = NSLocalizedString("Favorites", comment: "")
+        } else {
+            title = snapshot.parent.title
+        }
         updateEmptyState()
         tableView.reloadData()
     }

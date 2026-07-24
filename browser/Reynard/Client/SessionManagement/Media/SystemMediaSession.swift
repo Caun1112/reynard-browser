@@ -9,8 +9,12 @@ import Foundation
 import GeckoView
 import MediaPlayer
 
+protocol SystemMediaSessionObserver: AnyObject {
+    func systemMediaSessionStateDidChange(_ mediaSession: SystemMediaSession)
+}
+
 final class SystemMediaSession: MediaSessionDelegate {
-    private enum PlaybackState {
+    enum PlaybackState {
         case none
         case paused
         case playing
@@ -22,6 +26,7 @@ final class SystemMediaSession: MediaSessionDelegate {
         var features: MediaSessionFeatures = [.seekForward, .seekBackward, .seekTo]
         var artworkTask: URLSessionDataTask?
         var playbackState = PlaybackState.none
+        var positionState: MediaSessionPositionState?
         
         init(session: GeckoSession) {
             self.session = session
@@ -35,9 +40,36 @@ final class SystemMediaSession: MediaSessionDelegate {
     private var sessionStates: [ObjectIdentifier: SessionState] = [:]
     private var playbackHistory: [ObjectIdentifier] = []
     private var commandTargets: [Any] = []
+    weak var observer: SystemMediaSessionObserver?
+    
+    struct Snapshot {
+        let session: GeckoSession
+        let playbackState: PlaybackState
+        let positionState: MediaSessionPositionState?
+        let features: MediaSessionFeatures
+        
+        var supportsSeeking: Bool {
+            return features.contains(.seekTo) ||
+            (features.contains(.seekForward) && features.contains(.seekBackward))
+        }
+    }
+    
+    var selectedSnapshot: Snapshot? {
+        guard let selectedSession,
+              let state = sessionStates[ObjectIdentifier(selectedSession)] else {
+            return nil
+        }
+        return Snapshot(
+            session: selectedSession,
+            playbackState: state.playbackState,
+            positionState: state.positionState,
+            features: state.features
+        )
+    }
     
     init() {
         registerRemoteCommands()
+        apply(MediaSessionFeatures())
     }
     
     deinit {
@@ -50,19 +82,20 @@ final class SystemMediaSession: MediaSessionDelegate {
     
     func onActivated(session: GeckoSession) {
         _ = state(for: session)
+        notifyStateChanged(for: session)
     }
     
     func onDeactivated(session: GeckoSession) {
         let identifier = ObjectIdentifier(session)
         let wasActive = activeSession === session
-        if selectedSession === session {
-            selectedSession = nil
-        }
         sessionStates.removeValue(forKey: identifier)?.artworkTask?.cancel()
         playbackHistory.removeAll { $0 == identifier }
         
         if wasActive {
             activateMostRecentPlayingSession()
+        }
+        if selectedSession === session {
+            observer?.systemMediaSessionStateDidChange(self)
         }
     }
     
@@ -113,6 +146,7 @@ final class SystemMediaSession: MediaSessionDelegate {
             return
         }
         activate(session, state: state)
+        notifyStateChanged(for: session)
     }
     
     func onPlaybackPaused(session: GeckoSession) {
@@ -124,7 +158,9 @@ final class SystemMediaSession: MediaSessionDelegate {
         
         if activeSession === session {
             nowPlayingCenter.nowPlayingInfo = state.nowPlayingInfo
+            apply(state.features)
         }
+        notifyStateChanged(for: session)
     }
     
     func onPlaybackNone(session: GeckoSession) {
@@ -136,6 +172,7 @@ final class SystemMediaSession: MediaSessionDelegate {
         if activeSession === session {
             activateMostRecentPlayingSession()
         }
+        notifyStateChanged(for: session)
     }
     
     func select(session: GeckoSession) {
@@ -148,8 +185,25 @@ final class SystemMediaSession: MediaSessionDelegate {
         activate(session, state: state)
     }
     
+    func navigationStarted(in session: GeckoSession) {
+        let identifier = ObjectIdentifier(session)
+        guard selectedSession === session,
+              let state = sessionStates[identifier] else {
+            return
+        }
+        state.playbackState = .none
+        state.positionState = nil
+        playbackHistory.removeAll { $0 == identifier }
+        
+        if activeSession === session {
+            activateMostRecentPlayingSession()
+        }
+        observer?.systemMediaSessionStateDidChange(self)
+    }
+    
     func onPositionState(session: GeckoSession, state: MediaSessionPositionState) {
         let sessionState = self.state(for: session)
+        sessionState.positionState = state
         sessionState.nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = state.duration
         sessionState.nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = state.position
         sessionState.nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = state.playbackRate
@@ -157,6 +211,7 @@ final class SystemMediaSession: MediaSessionDelegate {
         if activeSession === session {
             nowPlayingCenter.nowPlayingInfo = sessionState.nowPlayingInfo
         }
+        notifyStateChanged(for: session)
     }
     
     func onFeatures(session: GeckoSession, features: MediaSessionFeatures) {
@@ -166,6 +221,7 @@ final class SystemMediaSession: MediaSessionDelegate {
         if activeSession === session {
             apply(features)
         }
+        notifyStateChanged(for: session)
     }
     
     private func state(for session: GeckoSession) -> SessionState {
@@ -177,6 +233,13 @@ final class SystemMediaSession: MediaSessionDelegate {
         let state = SessionState(session: session)
         sessionStates[identifier] = state
         return state
+    }
+    
+    private func notifyStateChanged(for session: GeckoSession) {
+        guard selectedSession === session else {
+            return
+        }
+        observer?.systemMediaSessionStateDidChange(self)
     }
     
     private func activate(_ session: GeckoSession, state: SessionState) {
@@ -204,10 +267,20 @@ final class SystemMediaSession: MediaSessionDelegate {
     }
     
     private func apply(_ features: MediaSessionFeatures) {
+        let hasActivePlayback = activeSession.flatMap { session in
+            sessionStates[ObjectIdentifier(session)]?.playbackState
+        }.map { $0 != .none } ?? false
+        
+        commandCenter.playCommand.isEnabled = hasActivePlayback || features.contains(.play)
+        commandCenter.pauseCommand.isEnabled = hasActivePlayback || features.contains(.pause)
+        commandCenter.stopCommand.isEnabled = features.contains(.stop)
+        commandCenter.togglePlayPauseCommand.isEnabled = hasActivePlayback || features.contains(.play) || features.contains(.pause)
         commandCenter.nextTrackCommand.isEnabled = features.contains(.nextTrack)
         commandCenter.previousTrackCommand.isEnabled = features.contains(.prevTrack)
         commandCenter.skipForwardCommand.isEnabled = features.contains(.seekForward)
         commandCenter.skipBackwardCommand.isEnabled = features.contains(.seekBackward)
+        commandCenter.seekForwardCommand.isEnabled = features.contains(.seekForward)
+        commandCenter.seekBackwardCommand.isEnabled = features.contains(.seekBackward)
         commandCenter.changePlaybackPositionCommand.isEnabled = features.contains(.seekTo)
     }
     
@@ -226,6 +299,23 @@ final class SystemMediaSession: MediaSessionDelegate {
         targets.append(commandCenter.stopCommand.addTarget { [weak self] _ in
             guard let session = self?.activeSession else { return .commandFailed }
             session.mediaSession.stop()
+            return .success
+        })
+        targets.append(commandCenter.togglePlayPauseCommand.addTarget { [weak self] _ in
+            guard let self,
+                  let session = activeSession,
+                  let state = sessionStates[ObjectIdentifier(session)] else {
+                return .commandFailed
+            }
+            
+            switch state.playbackState {
+            case .playing:
+                session.mediaSession.pause()
+            case .paused:
+                session.mediaSession.play()
+            case .none:
+                return .commandFailed
+            }
             return .success
         })
         targets.append(commandCenter.nextTrackCommand.addTarget { [weak self] _ in
@@ -248,6 +338,28 @@ final class SystemMediaSession: MediaSessionDelegate {
             session.mediaSession.seekBackward()
             return .success
         })
+        targets.append(commandCenter.seekForwardCommand.addTarget { [weak self] event in
+            guard let seekEvent = event as? MPSeekCommandEvent else {
+                return .commandFailed
+            }
+            guard seekEvent.type == .beginSeeking else {
+                return .success
+            }
+            guard let session = self?.activeSession else { return .commandFailed }
+            session.mediaSession.seekForward()
+            return .success
+        })
+        targets.append(commandCenter.seekBackwardCommand.addTarget { [weak self] event in
+            guard let seekEvent = event as? MPSeekCommandEvent else {
+                return .commandFailed
+            }
+            guard seekEvent.type == .beginSeeking else {
+                return .success
+            }
+            guard let session = self?.activeSession else { return .commandFailed }
+            session.mediaSession.seekBackward()
+            return .success
+        })
         targets.append(commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
             guard let positionEvent = event as? MPChangePlaybackPositionCommandEvent else {
                 return .commandFailed
@@ -264,13 +376,17 @@ final class SystemMediaSession: MediaSessionDelegate {
             commandCenter.playCommand,
             commandCenter.pauseCommand,
             commandCenter.stopCommand,
+            commandCenter.togglePlayPauseCommand,
             commandCenter.nextTrackCommand,
             commandCenter.previousTrackCommand,
             commandCenter.skipForwardCommand,
             commandCenter.skipBackwardCommand,
+            commandCenter.seekForwardCommand,
+            commandCenter.seekBackwardCommand,
             commandCenter.changePlaybackPositionCommand,
         ]
         zip(commands, commandTargets).forEach { command, target in
+            command.isEnabled = false
             command.removeTarget(target)
         }
         commandTargets.removeAll()

@@ -60,7 +60,11 @@ final class LinkPreviewViewController: UIViewController {
         )
         sessionManager.bindDelegates(
             to: session,
-            delegates: SessionDelegates(content: self, navigation: self)
+            delegates: SessionDelegates(
+                content: self,
+                navigation: self,
+                history: self
+            )
         )
         self.session = session
     }
@@ -76,6 +80,7 @@ final class LinkPreviewViewController: UIViewController {
     func releaseSession() -> GeckoSession? {
         hasClosedSession = true
         if let session {
+            session.mediaSession.muteAudio(false)
             sessionManager.deactivate(session)
         }
         let committedSession = session
@@ -102,13 +107,14 @@ final class LinkPreviewViewController: UIViewController {
         }
         
         sessionManager.open(session)
+        session.mediaSession.muteAudio(true)
         geckoView.session = session
         sessionManager.activate(session)
         session.load(pageURL)
     }
 }
 
-extension LinkPreviewViewController: ContentDelegate, NavigationDelegate {
+extension LinkPreviewViewController: ContentDelegate, NavigationDelegate, HistoryDelegate {
     func onTitleChange(session: GeckoSession, title: String) {
         pageTitle = title
     }
@@ -119,5 +125,21 @@ extension LinkPreviewViewController: ContentDelegate, NavigationDelegate {
             return
         }
         pageURL = url
+    }
+    
+    func onVisited(session: GeckoSession, url: String, lastVisitedURL: String?, flags: Int) async -> Bool {
+        guard !session.isPrivateMode else {
+            return false
+        }
+        
+        return await HistoryStore.shared.visitedStatuses(for: [url]).first ?? false
+    }
+    
+    func getVisited(session: GeckoSession, urls: [String]) async -> [Bool]? {
+        guard !session.isPrivateMode else {
+            return Array(repeating: false, count: urls.count)
+        }
+        
+        return await HistoryStore.shared.visitedStatuses(for: urls)
     }
 }

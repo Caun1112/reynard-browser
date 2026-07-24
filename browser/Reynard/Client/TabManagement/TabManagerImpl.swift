@@ -34,6 +34,17 @@ final class TabManagerImplementation: NSObject, TabManager {
         promptPresenter: PermissionPromptPresenter()
     )
     private let systemMediaSession = SystemMediaSession()
+    private lazy var pictureInPictureCoordinator: PictureInPictureCoordinating? = {
+        guard Prefs.ExperimentalSettings.isVideoPictureInPictureEnabled,
+              #available(iOS 15.0, *) else {
+            return nil
+        }
+        return PictureInPictureCoordinator(
+            delegate: self,
+            mediaSession: systemMediaSession,
+            sessionManager: sessionManager
+        )
+    }()
     
     private weak var delegate: TabManagerDelegate?
     private let store: TabManagementStore
@@ -579,6 +590,7 @@ final class TabManagerImplementation: NSObject, TabManager {
         }
         sessionManager.activate(selectedTab.session)
         systemMediaSession.select(session: selectedTab.session)
+        pictureInPictureCoordinator?.selectedSessionDidChange()
         applyNavigationState(to: selectedTab)
         
         delegate?.tabManager(self, didSelectTabAt: index, previousIndex: previousIndex)
@@ -783,6 +795,8 @@ final class TabManagerImplementation: NSObject, TabManager {
         recordNavigation(url, for: tab)
         tab.state.navigationState = sessionManager.useStoredNavigationHistory(for: tab.id)
         sessionManager.activate(session)
+        systemMediaSession.select(session: session)
+        pictureInPictureCoordinator?.selectedSessionDidChange()
         
         delegate?.tabManagerDidChangeTabs(self)
         delegate?.tabManager(self, didReplaceSelectedSession: oldSession, with: session)
@@ -944,15 +958,32 @@ extension TabManagerImplementation: ContentDelegate {
     
     func onCookieBannerHandled(session: GeckoSession) {}
     
-    func onExternalResponse(session: GeckoSession, response: ExternalResponseInfo) {
-        if delegate?.tabManager(self, shouldHandleExternalResponse: response, for: session) == true {
-            return
-        }
-        guard let download = DownloadStore.shared.pendingDownload(from: response) else {
-            return
-        }
-        
-        delegate?.tabManager(self, didRequestDownload: download)
+    func onExternalResponse(session: GeckoSession, response: ExternalResponseInfo) async -> Bool {
+        return await delegate?.tabManager(
+            self,
+            shouldStartExternalResponse: response,
+            for: session
+        ) ?? false
+    }
+    
+    func onExternalResponseProgress(
+        session: GeckoSession,
+        localFilePath: String,
+        bytesReceived: Int64
+    ) -> Bool {
+        return delegate?.tabManager(
+            self,
+            shouldContinueExternalResponseAt: localFilePath,
+            bytesReceived: bytesReceived
+        ) ?? false
+    }
+    
+    func onExternalResponseComplete(session: GeckoSession, localFilePath: String, succeeded: Bool) {
+        delegate?.tabManager(
+            self,
+            didCompleteExternalResponseAt: localFilePath,
+            succeeded: succeeded
+        )
     }
     
     func onSavePdf(session: GeckoSession, request: SavePdfInfo) {
@@ -1107,6 +1138,20 @@ extension TabManagerImplementation: NavigationDelegate {
     }
 }
 
+@available(iOS 15.0, *)
+extension TabManagerImplementation: PictureInPictureCoordinatorDelegate {
+    func pictureInPictureCoordinator(
+        _ coordinator: PictureInPictureCoordinator,
+        restore session: GeckoSession
+    ) -> Bool {
+        guard let location = tabLocation(for: session) else {
+            return false
+        }
+        selectTab(at: location.index, mode: location.mode)
+        return true
+    }
+}
+
 extension TabManagerImplementation: HistoryDelegate {
     func onVisited(session: GeckoSession, url: String, lastVisitedURL: String?, flags: Int) async -> Bool {
         guard !session.isPrivateMode,
@@ -1129,6 +1174,8 @@ extension TabManagerImplementation: HistoryDelegate {
 
 extension TabManagerImplementation: ProgressDelegate {
     func onPageStart(session: GeckoSession, url: String) {
+        systemMediaSession.navigationStarted(in: session)
+        pictureInPictureCoordinator?.navigationStarted(in: session)
         guard let location = tabLocation(for: session) else {
             return
         }
@@ -1140,6 +1187,7 @@ extension TabManagerImplementation: ProgressDelegate {
             return
         }
         
+        sessionManager.trackingProtection.clearBlockedTrackers(for: session)
         if sessionManager.needsSettingsUpdate(
             to: session,
             currentURL: tab.url,
@@ -1167,6 +1215,7 @@ extension TabManagerImplementation: ProgressDelegate {
         tab.state.loadingState = .idle
         notifyUpdate(at: location.index, mode: location.mode, reason: .loading)
         notifyUpdate(at: location.index, mode: location.mode, reason: .thumbnail)
+        delegate?.tabManager(self, didFinishLoading: session)
     }
     
     func onProgressChange(session: GeckoSession, progress: Int) {
