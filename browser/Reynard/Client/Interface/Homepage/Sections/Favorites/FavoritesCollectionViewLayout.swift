@@ -25,9 +25,10 @@ struct FavoritesLayoutMetrics: Equatable {
     
     init(width: CGFloat, columnCount: Int, horizontalInset: CGFloat, lineSpacing: CGFloat) {
         self.columnCount = max(columnCount, 1)
-        self.horizontalInset = horizontalInset
         self.lineSpacing = lineSpacing
-        let contentWidth = max(width - (horizontalInset * 2), 1)
+        let availableWidth = max(width - (horizontalInset * 2), 1)
+        let contentWidth = RightHandLayout.isEnabled ? min(availableWidth, RightHandLayout.controlWidth) : availableWidth
+        self.horizontalInset = RightHandLayout.isEnabled ? max(horizontalInset, width - horizontalInset - contentWidth) : horizontalInset
         let totalMinimumSpacing = CGFloat(max(self.columnCount - 1, 0)) * UX.minimumInteritemSpacing
         let availableIconWidth = (contentWidth - totalMinimumSpacing) / CGFloat(self.columnCount)
         let itemWidth = min(UX.maximumIconSize, availableIconWidth)

@@ -36,6 +36,8 @@ final class AddWebsiteLanguageCell: UITableViewCell {
     }
     
     private func configureButton() {
+        addButton.frame.size = CGSize(width: 48, height: 48)
+        addButton.accessibilityLabel = NSLocalizedString("Add", comment: "")
         addButton.tintColor = .systemGreen
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
     }

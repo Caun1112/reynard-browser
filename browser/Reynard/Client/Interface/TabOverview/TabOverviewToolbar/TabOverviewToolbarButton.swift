@@ -9,7 +9,7 @@ import UIKit
 
 final class TabOverviewToolbarButton: UIButton {
     private enum UX {
-        static let toolbarButtonSideLength: CGFloat = 42
+        static let toolbarButtonSideLength: CGFloat = 48
         static let toolbarButtonCornerRadius: CGFloat = 21
         static let toolbarButtonBorderWidth: CGFloat = 1
         static let toolbarButtonSymbolPointSize: CGFloat = 17
@@ -34,6 +34,12 @@ final class TabOverviewToolbarButton: UIButton {
         configureAppearance()
         configureImage()
         configureConstraints()
+        accessibilityIdentifier = "tabOverview.\(action)"
+        switch action {
+        case .clear: accessibilityLabel = NSLocalizedString("Close Tabs", comment: "")
+        case .add: accessibilityLabel = NSLocalizedString("New Tab", comment: "")
+        case .done: accessibilityLabel = NSLocalizedString("Done", comment: "")
+        }
     }
     
     required init?(coder: NSCoder) {

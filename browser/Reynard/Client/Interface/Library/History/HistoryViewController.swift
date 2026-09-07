@@ -51,6 +51,7 @@ final class HistoryViewController: UIViewController, UITableViewDataSource, UITa
         return item
     }()
     private var showsNavigationClearAction: Bool {
+        if RightHandLayout.isEnabled { return true }
         if #available(iOS 26.0, *) {
             return true
         }
@@ -239,7 +240,7 @@ final class HistoryViewController: UIViewController, UITableViewDataSource, UITa
                 browserViewController?.tabManager.createTab(selecting: true, mode: .regular)
             }
         }
-        let navigationController = UINavigationController(rootViewController: viewController)
+        let navigationController = ReachableNavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .pageSheet
         present(navigationController, animated: true)
     }

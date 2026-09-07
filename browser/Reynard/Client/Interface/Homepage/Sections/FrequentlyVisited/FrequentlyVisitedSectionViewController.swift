@@ -102,6 +102,16 @@ final class FrequentlyVisitedSectionViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard RightHandLayout.isEnabled else { return }
+        let leftInset = max(0, scrollView.bounds.width - UX.cardWidth - 2 * UX.shadowMargin)
+        let previousInset = scrollView.contentInset.left
+        guard abs(previousInset - leftInset) > 0.5 else { return }
+        scrollView.contentInset.left = leftInset
+        scrollView.contentOffset.x += previousInset - leftInset
+    }
     
     func setContentMode(_ contentMode: HomepageContentMode) {
         guard self.contentMode != contentMode else {

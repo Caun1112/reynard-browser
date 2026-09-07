@@ -63,11 +63,16 @@ final class AppAppearancePickerCell: UITableViewCell {
         stackView.distribution = .fillEqually
         contentView.addSubview(stackView)
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+        if RightHandLayout.isEnabled {
+            stackView.semanticContentAttribute = .forceLeftToRight
+            stackView.widthAnchor.constraint(equalToConstant: 240).isActive = true
+        } else {
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        }
     }
     
     private func connectActions() {

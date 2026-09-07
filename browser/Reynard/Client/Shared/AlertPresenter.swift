@@ -34,7 +34,7 @@ enum AlertPresenter {
                 return
             }
             
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let alert = UIAlertController(title: title, message: message, preferredStyle: RightHandLayout.isEnabled ? .actionSheet : .alert)
             for button in buttons {
                 alert.addAction(UIAlertAction(title: button.title, style: button.style) { _ in
                     button.handler?()

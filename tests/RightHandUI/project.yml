@@ -1,0 +1,58 @@
+name: RightHandUI
+options:
+  deploymentTarget:
+    iOS: '13.0'
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    CODE_SIGNING_ALLOWED: NO
+    TARGETED_DEVICE_FAMILY: '1,2'
+targets:
+  RightHandUI:
+    type: application
+    platform: iOS
+    sources:
+      - Host
+      - ../../browser/Reynard/Client/Shared/RightHandLayout.swift
+      - ../../browser/Reynard/Client/Shared/ReachableNavigationController.swift
+      - ../../browser/Reynard/Client/Shared/ContentModalNavigationController.swift
+      - ../../browser/Reynard/Client/Shared/ReachableTextPromptController.swift
+      - ../../browser/Reynard/Client/Extensions/NSLayoutConstraint+Priority.swift
+      - ../../browser/Reynard/Client/Interface/Chrome/Toolbar/BottomToolbar.swift
+      - ../../browser/Reynard/Client/Interface/Chrome/Toolbar/ToolBarButton.swift
+      - ../../browser/Reynard/Client/Interface/TabOverview/TabOverviewToolbar/TabOverviewBottomToolbar.swift
+      - ../../browser/Reynard/Client/Interface/TabOverview/TabOverviewToolbar/TabOverviewToolbarButton.swift
+      - ../../browser/Reynard/Client/Interface/TabOverview/TabOverviewClearTabsMenu.swift
+      - ../../browser/Reynard/Client/Interface/Homepage/Sections/Favorites/FavoritesCollectionViewLayout.swift
+    resources:
+      - ../../browser/Reynard/Resources/Assets.xcassets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.caun.reynard.RightHandUI
+    info:
+      path: generated/Info.plist
+      properties:
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+  RightHandUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: UITests
+    dependencies:
+      - target: RightHandUI
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.caun.reynard.RightHandUITests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  RightHandUI:
+    build:
+      targets:
+        RightHandUI: all
+    test:
+      targets:
+        - RightHandUITests
+      gatherCoverageData: false

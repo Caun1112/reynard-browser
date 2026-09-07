@@ -110,6 +110,7 @@ final class HomepageRootViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateSectionStackWidth()
+        updateScrollInsets()
     }
     
     // MARK: - Public API
@@ -178,10 +179,12 @@ final class HomepageRootViewController: UIViewController {
     private func updateScrollInsets() {
         let isAtTop = scrollView.contentOffset.y <= -scrollView.contentInset.top
         let effectiveVisibleContentInsets = contentMode.isDetached ? .zero : visibleContentInsets
+        let reachableTopInset: CGFloat = RightHandLayout.isEnabled && view.bounds.height > 600
+            ? min(300, view.bounds.height * 0.32) : 0
         let contentInset = UIEdgeInsets(
-            top: effectiveVisibleContentInsets.top + (folder == nil ? UX.topInset : UX.folderTopInset),
+            top: max(effectiveVisibleContentInsets.top, reachableTopInset) + (folder == nil ? UX.topInset : UX.folderTopInset),
             left: 0,
-            bottom: effectiveVisibleContentInsets.bottom + UX.bottomInset,
+            bottom: max(effectiveVisibleContentInsets.bottom, view.safeAreaInsets.bottom) + UX.bottomInset,
             right: 0
         )
         scrollView.contentInset = contentInset

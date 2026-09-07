@@ -320,7 +320,7 @@ final class DonationRecommendationViewController: UIViewController, HomepageReco
         + notNowButton.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).width
         + UX.buttonSpacing
         
-        let usesVerticalButtons = requiredHorizontalButtonWidth > availableButtonWidth
+        let usesVerticalButtons = RightHandLayout.isEnabled || requiredHorizontalButtonWidth > availableButtonWidth
         buttonStackView.axis = usesVerticalButtons ? .vertical : .horizontal
         buttonStackView.alignment = usesVerticalButtons ? .fill : .center
         buttonStackView.spacing = usesVerticalButtons ? UX.labelSpacing : UX.buttonSpacing

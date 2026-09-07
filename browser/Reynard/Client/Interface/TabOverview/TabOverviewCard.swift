@@ -21,8 +21,8 @@ final class TabOverviewCard: UICollectionViewCell {
         static let cardTransitionSnapshotOutset: CGFloat = 18
         static let closeButtonTopInset: CGFloat = 10
         static let closeButtonTrailingInset: CGFloat = 10
-        static let closeButtonSideLength: CGFloat = 24
-        static let closeButtonTouchTargetScale: CGFloat = 2
+        static var closeButtonSideLength: CGFloat { RightHandLayout.isEnabled ? 44 : 24 }
+        static var closeButtonTouchTargetScale: CGFloat { RightHandLayout.isEnabled ? 1 : 2 }
         static let closeButtonCornerRadius: CGFloat = 12
         static let closeButtonSymbolPointSize: CGFloat = 12
         static let closeButtonBackgroundAlpha: CGFloat = 0.6

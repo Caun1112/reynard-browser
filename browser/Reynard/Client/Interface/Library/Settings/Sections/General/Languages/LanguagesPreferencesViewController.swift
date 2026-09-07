@@ -203,7 +203,7 @@ final class LanguagesPreferencesViewController: SettingsTableViewController {
         let viewController = AddWebsiteLanguageViewController(selectedCodes: languageCodes) { [weak self] language in
             self?.add(language)
         }
-        let navigationController = UINavigationController(rootViewController: viewController)
+        let navigationController = ReachableNavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .pageSheet
         present(navigationController, animated: true)
     }

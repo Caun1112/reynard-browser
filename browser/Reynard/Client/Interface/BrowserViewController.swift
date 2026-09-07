@@ -629,6 +629,9 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
             ? resolveCompactLayout(interfaceIdiom: .pad, orientation: orientation)
             : resolvePadLayout(interfaceIdiom: .pad, orientation: orientation)
         }
+        if RightHandLayout.isEnabled {
+            return resolvePhoneLayout(orientation: orientation)
+        }
         
         guard orientation == .portrait else {
             return resolvePadLayout(interfaceIdiom: .phone, orientation: .landscape)
@@ -700,10 +703,10 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
         return rootView.bounds.width
     }
     
-    private func resolvePhoneLayout() -> BrowserLayout {
+    private func resolvePhoneLayout(orientation: BrowserLayout.ViewportOrientation = .portrait) -> BrowserLayout {
         return BrowserLayout(
             interfaceIdiom: .phone,
-            orientation: .portrait,
+            orientation: orientation,
             chromeMode: .phone,
             chromePosition: .bottom,
             tabOverviewToolbarPosition: .bottom,

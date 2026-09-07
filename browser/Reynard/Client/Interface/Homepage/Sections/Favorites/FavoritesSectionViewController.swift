@@ -412,7 +412,7 @@ final class FavoritesSectionViewController: UIViewController {
     
     func presentBookmarkEditor(for bookmark: BookmarkSnapshot) {
         let viewController = EditBookmarkViewController(bookmark: bookmark, store: bookmarkStore)
-        let navigationController = UINavigationController(rootViewController: viewController)
+        let navigationController = ReachableNavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .pageSheet
         UIApplication.shared.topViewController()?.present(navigationController, animated: true)
     }

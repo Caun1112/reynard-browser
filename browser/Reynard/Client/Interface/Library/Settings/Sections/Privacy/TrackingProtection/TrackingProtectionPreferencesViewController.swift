@@ -518,7 +518,7 @@ final class TrackingProtectionPreferencesViewController: SettingsTableViewContro
             return
         }
         let details = TrackingProtectionDetailsViewController(protectionLevel: Prefs.TrackingProtectionPreferences.level)
-        let navigationController = UINavigationController(rootViewController: details)
+        let navigationController = ReachableNavigationController(rootViewController: details)
         navigationController.modalPresentationStyle = .pageSheet
         present(navigationController, animated: true)
     }

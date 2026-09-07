@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ContentModalNavigationController: UINavigationController {
+final class ContentModalNavigationController: ReachableNavigationController {
     private let onDismissed: () -> Void
     
     init(rootViewController: UIViewController, onDismissed: @escaping () -> Void) {

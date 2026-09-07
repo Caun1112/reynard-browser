@@ -12,7 +12,7 @@ final class TabOverviewBottomToolbar: UIView {
         static let toolbarContentHorizontalInset: CGFloat = 32
         static let actionControlsBottomOffset: CGFloat = 54
         static let modeControlToActionControlsSpacing: CGFloat = 18
-        static let tabModeControlHeight: CGFloat = 32
+        static let tabModeControlHeight: CGFloat = 44
     }
     
     var onClearTabs: (() -> Void)?
@@ -69,6 +69,7 @@ final class TabOverviewBottomToolbar: UIView {
         actionButtonStackView.axis = .horizontal
         actionButtonStackView.alignment = .center
         actionButtonStackView.distribution = .equalSpacing
+        actionButtonStackView.semanticContentAttribute = .forceLeftToRight
         tabModeControl.translatesAutoresizingMaskIntoConstraints = false
         tabModeControl.selectedSegmentIndex = TabOverview.Mode.regularTabs.rawValue
     }
@@ -90,14 +91,25 @@ final class TabOverviewBottomToolbar: UIView {
             actionControlsView = actionButtonStackView
         }
         NSLayoutConstraint.activate([
-            actionControlsView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.toolbarContentHorizontalInset),
-            actionControlsView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.toolbarContentHorizontalInset),
             actionControlsView.centerYAnchor.constraint(equalTo: bottomAnchor, constant: -UX.actionControlsBottomOffset),
-            tabModeControl.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: UX.toolbarContentHorizontalInset),
-            tabModeControl.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -UX.toolbarContentHorizontalInset),
             tabModeControl.heightAnchor.constraint(equalToConstant: UX.tabModeControlHeight),
             tabModeControl.bottomAnchor.constraint(equalTo: actionControlsView.topAnchor, constant: -UX.modeControlToActionControlsSpacing),
         ])
+        if RightHandLayout.isEnabled {
+            NSLayoutConstraint.activate([
+                actionControlsView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -RightHandLayout.edgeInset),
+                actionControlsView.widthAnchor.constraint(equalToConstant: 208),
+                tabModeControl.rightAnchor.constraint(equalTo: actionControlsView.rightAnchor),
+                tabModeControl.widthAnchor.constraint(equalTo: actionControlsView.widthAnchor),
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                actionControlsView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.toolbarContentHorizontalInset),
+                actionControlsView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.toolbarContentHorizontalInset),
+                tabModeControl.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: UX.toolbarContentHorizontalInset),
+                tabModeControl.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -UX.toolbarContentHorizontalInset),
+            ])
+        }
     }
     
     private func configureActions() {

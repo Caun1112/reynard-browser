@@ -278,7 +278,7 @@ final class UpdateAvailableViewController: UIViewController, HomepageRecommendat
         
         let requiredHorizontalButtonWidth = settingsButton.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).width
         
-        let usesVerticalButtons = requiredHorizontalButtonWidth > availableButtonWidth
+        let usesVerticalButtons = RightHandLayout.isEnabled || requiredHorizontalButtonWidth > availableButtonWidth
         buttonStackView.axis = usesVerticalButtons ? .vertical : .horizontal
         buttonStackView.alignment = usesVerticalButtons ? .fill : .center
         buttonStackView.spacing = usesVerticalButtons ? UX.labelSpacing : UX.buttonSpacing

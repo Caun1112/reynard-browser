@@ -122,6 +122,10 @@ final class AddressBar: UIView {
     private var labelLeadingToBackgroundConstraint: NSLayoutConstraint!
     private var labelTrailingToButtonConstraint: NSLayoutConstraint!
     private var labelTrailingToBackgroundConstraint: NSLayoutConstraint!
+    private var textTrailingToMenuConstraint: NSLayoutConstraint!
+    private var labelTrailingToMenuConstraint: NSLayoutConstraint!
+    private var menuToReloadConstraint: NSLayoutConstraint!
+    private var menuToEdgeConstraint: NSLayoutConstraint!
     
     private let addressBarBackground: UIView = {
         let view = UIView()
@@ -593,15 +597,14 @@ final class AddressBar: UIView {
             dismissWidthConstraint,
             dismissHeightConstraint,
             
-            leadingButton.leadingAnchor.constraint(equalTo: addressBarContent.leadingAnchor, constant: UX.addressBarContentHorizontalInset),
             leadingButton.centerYAnchor.constraint(equalTo: addressBarContent.centerYAnchor),
-            leadingButton.widthAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
-            leadingButton.heightAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
+            leadingButton.widthAnchor.constraint(equalToConstant: RightHandLayout.isEnabled ? 44 : UX.addressBarButtonSize),
+            leadingButton.heightAnchor.constraint(equalToConstant: RightHandLayout.isEnabled ? 44 : UX.addressBarButtonSize),
             
-            trailingButton.trailingAnchor.constraint(equalTo: addressBarContent.trailingAnchor, constant: -UX.addressBarContentHorizontalInset),
+            trailingButton.trailingAnchor.constraint(equalTo: addressBarContent.trailingAnchor, constant: RightHandLayout.isEnabled ? -4 : -UX.addressBarContentHorizontalInset),
             trailingButton.centerYAnchor.constraint(equalTo: addressBarContent.centerYAnchor),
-            trailingButton.widthAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
-            trailingButton.heightAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
+            trailingButton.widthAnchor.constraint(equalToConstant: RightHandLayout.isEnabled ? 44 : UX.addressBarButtonSize),
+            trailingButton.heightAnchor.constraint(equalToConstant: RightHandLayout.isEnabled ? 44 : UX.addressBarButtonSize),
             
             textField.topAnchor.constraint(equalTo: addressBarContent.topAnchor),
             textField.bottomAnchor.constraint(equalTo: addressBarContent.bottomAnchor),
@@ -633,6 +636,19 @@ final class AddressBar: UIView {
         labelLeadingToBackgroundConstraint = addressLabel.leadingAnchor.constraint(equalTo: addressBarContent.leadingAnchor, constant: UX.addressBarContentHorizontalInset)
         labelTrailingToButtonConstraint = addressLabel.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing)
         labelTrailingToBackgroundConstraint = addressLabel.trailingAnchor.constraint(equalTo: addressBarContent.trailingAnchor, constant: -UX.addressBarContentHorizontalInset)
+        textTrailingToMenuConstraint = textField.trailingAnchor.constraint(equalTo: leadingButton.leadingAnchor, constant: -4)
+        labelTrailingToMenuConstraint = addressLabel.trailingAnchor.constraint(equalTo: leadingButton.leadingAnchor, constant: -4)
+        menuToReloadConstraint = leadingButton.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -4)
+        menuToEdgeConstraint = leadingButton.trailingAnchor.constraint(equalTo: addressBarContent.trailingAnchor, constant: -4)
+        if RightHandLayout.isEnabled {
+            semanticContentAttribute = .forceLeftToRight
+            addressBarContent.semanticContentAttribute = .forceLeftToRight
+        } else {
+            leadingButton.leadingAnchor.constraint(equalTo: addressBarContent.leadingAnchor, constant: UX.addressBarContentHorizontalInset).isActive = true
+        }
+        leadingButton.accessibilityLabel = NSLocalizedString("Page Menu", comment: "")
+        leadingButton.accessibilityIdentifier = "addressBar.menu"
+        trailingButton.accessibilityIdentifier = "addressBar.reload"
     }
     
     private func configureTargets() {
@@ -734,7 +750,21 @@ final class AddressBar: UIView {
             labelLeadingToBackgroundConstraint,
             labelTrailingToButtonConstraint,
             labelTrailingToBackgroundConstraint,
+            textTrailingToMenuConstraint,
+            labelTrailingToMenuConstraint,
+            menuToReloadConstraint,
+            menuToEdgeConstraint,
         ])
+        if RightHandLayout.isEnabled {
+            NSLayoutConstraint.activate([
+                textLeadingToBackgroundConstraint,
+                labelLeadingToBackgroundConstraint,
+                showsLeadingButton ? textTrailingToMenuConstraint : (showsTrailingButton ? textTrailingToButtonConstraint : textTrailingToBackgroundConstraint),
+                showsLeadingButton ? labelTrailingToMenuConstraint : (showsTrailingButton ? labelTrailingToButtonConstraint : labelTrailingToBackgroundConstraint),
+                showsTrailingButton ? menuToReloadConstraint : menuToEdgeConstraint,
+            ])
+            return
+        }
         
         NSLayoutConstraint.activate([
             showsLeadingButton ? textLeadingToButtonConstraint : textLeadingToBackgroundConstraint,
@@ -798,6 +828,7 @@ final class AddressBar: UIView {
             return
         }
         trailingButton.setImage(UIImage(named: state == .stop ? "reynard.xmark" : "reynard.arrow.clockwise"), for: .normal)
+        trailingButton.accessibilityLabel = state == .stop ? NSLocalizedString("Stop", comment: "") : NSLocalizedString("Reload", comment: "")
     }
     
     // MARK: - Display Content

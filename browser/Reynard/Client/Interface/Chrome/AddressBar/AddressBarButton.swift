@@ -33,8 +33,8 @@ final class AddressBarButton: UIButton {
     
     private func configureAppearance() {
         imageView?.contentMode = .scaleAspectFit
-        contentHorizontalAlignment = .fill
-        contentVerticalAlignment = .fill
+        contentHorizontalAlignment = RightHandLayout.isEnabled ? .center : .fill
+        contentVerticalAlignment = RightHandLayout.isEnabled ? .center : .fill
         contentEdgeInsets = .zero
         setPreferredSymbolConfiguration(
             UIImage.SymbolConfiguration(pointSize: UX.addressBarButtonSymbolPointSize, weight: .regular),
@@ -161,8 +161,8 @@ final class AddressBarButton: UIButton {
         }
         
         let bounds = self.bounds
-        let widthIncrease = bounds.width * (UX.addressBarButtonTouchTargetScale - 1) / 2
-        let heightIncrease = bounds.height * (UX.addressBarButtonTouchTargetScale - 1) / 2
+        let widthIncrease = max(0, (44 - bounds.width) / 2)
+        let heightIncrease = max(0, (44 - bounds.height) / 2)
         let hitFrame = bounds.insetBy(dx: -widthIncrease, dy: -heightIncrease)
         
         return hitFrame.contains(point)

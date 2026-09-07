@@ -99,6 +99,9 @@ final class ToolbarButton: UIButton {
     }
     
     override var intrinsicContentSize: CGSize {
+        if RightHandLayout.isEnabled {
+            return CGSize(width: RightHandLayout.touchSize, height: RightHandLayout.touchSize)
+        }
         let sideLength = toolbarButtonType == .download
         ? UX.downloadButtonSideLength
         : UX.standardButtonSideLength
@@ -138,6 +141,19 @@ final class ToolbarButton: UIButton {
         tintColor = .label
         layer.cornerRadius = UX.toolbarButtonCornerRadius
         layer.cornerCurve = .continuous
+        accessibilityLabel = {
+            switch toolbarButtonType {
+            case .back: return NSLocalizedString("Back", comment: "")
+            case .forward: return NSLocalizedString("Forward", comment: "")
+            case .share: return NSLocalizedString("Share", comment: "")
+            case .library: return NSLocalizedString("Library", comment: "")
+            case .tabOverview: return NSLocalizedString("Tabs", comment: "")
+            case .download: return NSLocalizedString("Downloads", comment: "")
+            case .newTab: return NSLocalizedString("New Tab", comment: "")
+            case .sidebar: return NSLocalizedString("Sidebar", comment: "")
+            }
+        }()
+        accessibilityIdentifier = "browser.\(toolbarButtonType)"
     }
     
     private func configureImage() {

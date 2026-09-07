@@ -9,7 +9,7 @@ import UIKit
 
 final class ActionBar: UIView {
     private enum UX {
-        static let closeButtonSize: CGFloat = 28
+        static let closeButtonSize: CGFloat = 44
         static let closeButtonCornerRadius: CGFloat = 14
         static let horizontalInset: CGFloat = 13
         static let closeSymbolPointSize: CGFloat = 10
@@ -101,6 +101,7 @@ final class ActionBar: UIView {
         button.setImage(UIImage(named: "reynard.xmark", in: .main, with: configuration), for: .normal)
         button.tintColor = .secondaryLabel
         button.backgroundColor = .clear
+        button.accessibilityLabel = NSLocalizedString("Done", comment: "")
         button.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         return button
     }()

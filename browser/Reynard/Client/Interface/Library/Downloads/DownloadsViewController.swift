@@ -49,6 +49,7 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
         return item
     }()
     private var showsNavigationMenu: Bool {
+        if RightHandLayout.isEnabled { return true }
         if #available(iOS 26.0, *) {
             return true
         }
@@ -294,7 +295,7 @@ final class DownloadsViewController: UIViewController, UITableViewDataSource, UI
         let clearViewController = ClearDownloadsViewController { startDate in
             DownloadStore.shared.clearCompletedDownloadFiles(since: startDate)
         }
-        let navigationController = UINavigationController(rootViewController: clearViewController)
+        let navigationController = ReachableNavigationController(rootViewController: clearViewController)
         navigationController.modalPresentationStyle = .pageSheet
         present(navigationController, animated: true)
     }

@@ -77,6 +77,12 @@ final class TabOverviewPresentation {
     func cardSize(in collectionView: UICollectionView) -> CGSize {
         let horizontalInsets = collectionView.adjustedContentInset.left + collectionView.adjustedContentInset.right
         let availableWidth = collectionView.bounds.width - horizontalInsets
+        if RightHandLayout.isEnabled {
+            // Every card reaches the right edge; its close control is no longer
+            // stranded in a left-hand grid column.
+            return CGSize(width: max(1, floor(availableWidth)),
+                          height: min(240, max(140, collectionView.bounds.height * 0.3)) + UX.cardMetadataHeight)
+        }
         let tabViewAspectRatio = max(UX.cardMinimumPreviewAspectRatio, tabOverview.previewAspectRatio)
         
         let targetWidth = context.browserLayout.chromeMode == .phone

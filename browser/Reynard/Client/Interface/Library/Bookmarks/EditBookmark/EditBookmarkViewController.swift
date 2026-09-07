@@ -280,7 +280,7 @@ final class EditBookmarkViewController: UIViewController, UITableViewDataSource,
                 limitsToFavorites: limitsToFavorites,
                 store: store
             )
-            let navigationController = UINavigationController(rootViewController: viewController)
+            let navigationController = ReachableNavigationController(rootViewController: viewController)
             navigationController.modalPresentationStyle = .pageSheet
             present(navigationController, animated: true)
         } else if indexPath.section == 2 {

@@ -13,7 +13,7 @@ final class FindInPageActionBar: UIView, UITextFieldDelegate {
         static let contentLeadingInset: CGFloat = 12
         static let contentMaximumWidth: CGFloat = 650
         static let searchBarToControlsSpacing: CGFloat = 12
-        static let controlsHeight: CGFloat = 38
+        static let controlsHeight: CGFloat = 44
         static let searchContentInset: CGFloat = 12
         static let resultLabelWidth: CGFloat = 52
         static let resultLabelSpacing: CGFloat = 10
@@ -22,7 +22,7 @@ final class FindInPageActionBar: UIView, UITextFieldDelegate {
         static let separatorWidth: CGFloat = 1
         static let controlsCornerRadius: CGFloat = 19
         static let controlSymbolPointSize: CGFloat = 14
-        static let contentTrailingInset: CGFloat = 53
+        static let contentTrailingInset: CGFloat = 65
         static let backgroundAlpha: CGFloat = 0.34
         static let disabledAlpha: CGFloat = 0.32
         static let shadowOpacity: Float = 0.14

@@ -96,6 +96,21 @@ final class UserAgentOverridesPreferencesViewController: SettingsTableViewContro
     }
     
     private func promptForOverrideDomain() {
+        if RightHandLayout.isEnabled {
+            ReachableTextPromptController.present(from: self, title: NSLocalizedString("Add Website", comment: ""), confirmTitle: NSLocalizedString("Add", comment: ""), fields: [
+                { field in
+                    field.placeholder = NSLocalizedString("e.g. youtube.com", comment: "")
+                    field.autocorrectionType = .no
+                    field.autocapitalizationType = .none
+                    field.keyboardType = .URL
+                    field.clearButtonMode = .whileEditing
+                }
+            ], validate: { !($0.first ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) { [weak self] values in
+                guard let text = values?.first else { return }
+                self?.addOverrideDomain(text)
+            }
+            return
+        }
         let alert = UIAlertController(title: NSLocalizedString("Add Website", comment: ""), message: nil, preferredStyle: .alert)
         alert.addTextField { field in
             field.placeholder = NSLocalizedString("e.g. youtube.com", comment: "")

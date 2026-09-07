@@ -179,7 +179,7 @@ final class JITSettingsSection: NSObject {
         let alert = UIAlertController(
             title: NSLocalizedString("Preparing JIT", comment: ""),
             message: NSLocalizedString("Since this is your first time enabling JIT, Reynard needs to download and mount the Developer Disk Image. This is required for JIT to work properly.", comment: ""),
-            preferredStyle: .alert
+            preferredStyle: RightHandLayout.isEnabled ? .actionSheet : .alert
         )
         let progressView = UIProgressView(progressViewStyle: .default)
         progressView.translatesAutoresizingMaskIntoConstraints = false
@@ -254,7 +254,7 @@ final class JITSettingsSection: NSObject {
         let alert = UIAlertController(
             title: NSLocalizedString("Restart Required", comment: ""),
             message: NSLocalizedString("The app will now close for the JIT setting to take effect.", comment: ""),
-            preferredStyle: .alert
+            preferredStyle: RightHandLayout.isEnabled ? .actionSheet : .alert
         )
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { _ in
             UIApplication.shared.perform(#selector(NSXPCConnection.suspend))

@@ -220,7 +220,7 @@ final class SelectPicker: NSObject, UIAdaptivePresentationControllerDelegate {
             self?.presentedController = nil
             self?.finish(selectedIds)
         }
-        let navigationController = UINavigationController(rootViewController: multiSelectController)
+        let navigationController = ReachableNavigationController(rootViewController: multiSelectController)
         navigationController.modalPresentationStyle = .pageSheet
         navigationController.presentationController?.delegate = self
         

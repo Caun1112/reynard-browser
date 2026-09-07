@@ -234,6 +234,7 @@ final class PageZoomPreferencesViewController: SettingsTableViewController {
         }
         button.menu = pageZoomMenu(for: mode)
         button.sizeToFit()
+        button.frame.size = CGSize(width: max(48, button.bounds.width), height: max(44, button.bounds.height))
         return button
     }
     

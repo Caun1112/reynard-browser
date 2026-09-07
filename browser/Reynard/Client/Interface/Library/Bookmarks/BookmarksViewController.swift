@@ -99,7 +99,9 @@ final class BookmarksViewController: UIViewController, UITableViewDataSource, UI
         self.folderID = folderID
         self.store = store
         self.startsEditing = startsEditing
-        if #available(iOS 26.0, *) {
+        if RightHandLayout.isEnabled {
+            showsNavigationMenu = folderID == nil
+        } else if #available(iOS 26.0, *) {
             showsNavigationMenu = folderID == nil
         } else {
             showsNavigationMenu = false
@@ -357,7 +359,7 @@ final class BookmarksViewController: UIViewController, UITableViewDataSource, UI
             }
             
             let viewController = EditBookmarkViewController(bookmark: bookmark, store: self.store)
-            let navigationController = UINavigationController(rootViewController: viewController)
+            let navigationController = ReachableNavigationController(rootViewController: viewController)
             navigationController.modalPresentationStyle = .pageSheet
             self.present(navigationController, animated: true)
             completion(true)
@@ -416,7 +418,7 @@ final class BookmarksViewController: UIViewController, UITableViewDataSource, UI
     
     @objc private func showNewFolderEditor() {
         let viewController = NewBookmarkFolderViewController(selectedFolderID: folderID, store: store)
-        let navigationController = UINavigationController(rootViewController: viewController)
+        let navigationController = ReachableNavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .pageSheet
         present(navigationController, animated: true)
     }

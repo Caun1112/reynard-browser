@@ -522,6 +522,28 @@ final class DNSOverHTTPSPreferencesViewController: SettingsTableViewController, 
     // MARK: - Exceptions
     
     private func promptForException() {
+        if RightHandLayout.isEnabled {
+            ReachableTextPromptController.present(from: self, title: NSLocalizedString("Add Website", comment: ""), confirmTitle: NSLocalizedString("Add", comment: ""), fields: [
+                { field in
+                    field.placeholder = NSLocalizedString("e.g. youtube.com", comment: "")
+                    field.autocorrectionType = .no
+                    field.autocapitalizationType = .none
+                    field.keyboardType = .URL
+                    field.clearButtonMode = .whileEditing
+                }
+            ], validate: { [weak self] values in
+                guard let self, let host = self.validatedExceptionHost(values.first ?? "") else { return false }
+                return !self.exceptions.contains(host)
+            }) { [weak self] values in
+                guard let self, let value = values?.first, let host = self.validatedExceptionHost(value), !self.exceptions.contains(host) else { return }
+                self.exceptions.append(host)
+                self.exceptions.sort()
+                Prefs.DNSOverHTTPSPreferences.exceptions = self.exceptions
+                DNSOverHTTPSPolicyController.applyDNSOverHTTPS()
+                self.tableView.reloadData()
+            }
+            return
+        }
         let alert = UIAlertController(
             title: NSLocalizedString("Add Website", comment: ""),
             message: nil,

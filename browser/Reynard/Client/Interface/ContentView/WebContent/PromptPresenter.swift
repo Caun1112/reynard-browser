@@ -85,7 +85,7 @@ final class PromptPresenter: PromptPresenting {
             let alert = PromptAlertController(
                 title: request.title.isEmpty ? nil : request.title,
                 message: request.message.isEmpty ? nil : request.message,
-                preferredStyle: .alert
+                preferredStyle: RightHandLayout.isEnabled ? .actionSheet : .alert
             )
             alert.onDismissed = {
                 continuation.resume()
@@ -105,7 +105,7 @@ final class PromptPresenter: PromptPresenting {
             let alert = PromptAlertController(
                 title: request.title.isEmpty ? nil : request.title,
                 message: request.message.isEmpty ? nil : request.message,
-                preferredStyle: .alert
+                preferredStyle: RightHandLayout.isEnabled ? .actionSheet : .alert
             )
             alert.onDismissed = {
                 continuation.resume(returning: response)
@@ -139,6 +139,15 @@ final class PromptPresenter: PromptPresenting {
     private func presentText(request: TextPromptRequest) async -> PromptResponse? {
         guard let presenter = UIApplication.shared.topViewController() else {
             return nil
+        }
+        if RightHandLayout.isEnabled {
+            return await withCheckedContinuation { continuation in
+                ReachableTextPromptController.present(from: presenter, title: request.title, message: request.message, fields: [
+                    { $0.text = request.value }
+                ]) { values in
+                    continuation.resume(returning: values.map { .text($0.first ?? "") })
+                }
+            }
         }
         
         return await withCheckedContinuation { continuation in
@@ -175,6 +184,31 @@ final class PromptPresenter: PromptPresenting {
         ? NSLocalizedString("Your login information will be sent securely.", comment: "")
         : NSLocalizedString("Your login information will not be sent securely.", comment: "")
         let passwordOnly = request.mode == "password"
+        if RightHandLayout.isEnabled {
+            return await withCheckedContinuation { continuation in
+                var fields: [(UITextField) -> Void] = []
+                if !passwordOnly {
+                    fields.append { field in
+                        field.placeholder = NSLocalizedString("User Name", comment: "")
+                        field.text = request.username
+                        field.textContentType = .username
+                        field.autocapitalizationType = .none
+                        field.autocorrectionType = .no
+                    }
+                }
+                fields.append { field in
+                    field.placeholder = NSLocalizedString("Password", comment: "")
+                    field.text = request.password
+                    field.textContentType = .password
+                    field.isSecureTextEntry = true
+                }
+                ReachableTextPromptController.present(from: presenter, title: title, message: message, confirmTitle: NSLocalizedString("Sign In", comment: ""), fields: fields) { values in
+                    continuation.resume(returning: values.map {
+                        .auth(username: passwordOnly ? request.username : ($0.first ?? ""), password: $0.last ?? "")
+                    })
+                }
+            }
+        }
         
         return await withCheckedContinuation { continuation in
             var response: PromptResponse?
@@ -228,7 +262,7 @@ final class PromptPresenter: PromptPresenting {
             let alert = PromptAlertController(
                 title: NSLocalizedString("Confirm Upload", comment: ""),
                 message: message,
-                preferredStyle: .alert
+                preferredStyle: RightHandLayout.isEnabled ? .actionSheet : .alert
             )
             alert.onDismissed = {
                 continuation.resume(returning: response)

@@ -766,6 +766,7 @@ final class SiteSettingsViewController: UITableViewController, UINavigationContr
         }
         button.menu = menu(titles: titles, selectedIndex: selectedIndex, onSelect: onSelect)
         button.sizeToFit()
+        button.frame.size = CGSize(width: max(48, button.bounds.width), height: max(44, button.bounds.height))
         return button
     }
     

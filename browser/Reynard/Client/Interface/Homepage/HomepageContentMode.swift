@@ -13,6 +13,7 @@ enum HomepageContentMode: Equatable {
     case detachedWide
     
     var favoriteColumnCount: Int {
+        if RightHandLayout.isEnabled { return 2 }
         switch self {
         case .embeddedNarrow, .detachedNarrow:
             return 4
@@ -24,6 +25,7 @@ enum HomepageContentMode: Equatable {
     }
     
     var recentlyCloseTabsColumnCount: Int {
+        if RightHandLayout.isEnabled { return 1 }
         switch self {
         case .embeddedNarrow, .detachedNarrow:
             return 1

@@ -25,7 +25,7 @@ struct PermissionPromptPresenter: PermissionPromptPresenting {
             let alert = PromptAlertController(
                 title: title,
                 message: message,
-                preferredStyle: .alert
+                preferredStyle: RightHandLayout.isEnabled ? .actionSheet : .alert
             )
             alert.onDismissed = {
                 continuation.resume(returning: allowed)

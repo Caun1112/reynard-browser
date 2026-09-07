@@ -20,7 +20,7 @@ final class AddonPopupViewController: UIViewController, ContentDelegate, Navigat
         static let sheetCornerRadius: CGFloat = 16
         static let closeButtonTopInset: CGFloat = 8
         static let closeButtonTrailingInset: CGFloat = 12
-        static let closeButtonSize: CGFloat = 30
+        static let closeButtonSize: CGFloat = 44
         static let geckoViewTopSpacing: CGFloat = 8
         static let shadowOpacity: Float = 0.18
         static let shadowRadius: CGFloat = 12
@@ -256,11 +256,19 @@ final class AddonPopupViewController: UIViewController, ContentDelegate, Navigat
     
     private func constrainCloseButton(_ closeButton: UIButton, in sheetView: UIView) {
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.topAnchor, constant: UX.closeButtonTopInset),
             closeButton.trailingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.trailingAnchor, constant: -UX.closeButtonTrailingInset),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize)
         ])
+        if RightHandLayout.isEnabled {
+            if #available(iOS 15.0, *) {
+                closeButton.bottomAnchor.constraint(equalTo: sheetView.keyboardLayoutGuide.topAnchor, constant: -8).isActive = true
+            } else {
+                closeButton.bottomAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.bottomAnchor, constant: -8).isActive = true
+            }
+        } else {
+            closeButton.topAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.topAnchor, constant: UX.closeButtonTopInset).isActive = true
+        }
     }
     
     private func constrainModalTopBorder(in sheetView: UIView) {
@@ -276,11 +284,20 @@ final class AddonPopupViewController: UIViewController, ContentDelegate, Navigat
         geckoView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            geckoView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.geckoViewTopSpacing),
             geckoView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
             geckoView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
-            geckoView.bottomAnchor.constraint(equalTo: sheetView.bottomAnchor)
         ])
+        if RightHandLayout.isEnabled {
+            NSLayoutConstraint.activate([
+                geckoView.topAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.topAnchor, constant: UX.geckoViewTopSpacing),
+                geckoView.bottomAnchor.constraint(equalTo: closeButton.topAnchor, constant: -8),
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                geckoView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.geckoViewTopSpacing),
+                geckoView.bottomAnchor.constraint(equalTo: sheetView.bottomAnchor),
+            ])
+        }
     }
     
     // MARK: - Actions & Delegates

@@ -20,7 +20,7 @@ protocol HomepageViewControllerDelegate: AnyObject {
     func homepageViewControllerDidStartScrolling()
 }
 
-final class HomepageViewController: UINavigationController {
+final class HomepageViewController: ReachableNavigationController {
     weak var homepageDelegate: HomepageViewControllerDelegate?
     
     private let rootViewController: HomepageRootViewController

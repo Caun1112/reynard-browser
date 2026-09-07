@@ -63,6 +63,16 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
         navigationController?.delegate = self
         removeNavigationActionsIfNeeded()
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard RightHandLayout.isEnabled else { return }
+        let width = min(240, view.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right - 24)
+        tabBar.frame = CGRect(x: view.bounds.width - view.safeAreaInsets.right - width - 12,
+                              y: tabBar.frame.minY, width: width, height: tabBar.frame.height)
+        tabBar.semanticContentAttribute = .forceLeftToRight
+        tabBar.itemPositioning = .fill
+    }
     
     // MARK: - Delegates
     
@@ -141,6 +151,7 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
         }
         
         title = section.title
+        (navigationController as? ReachableNavigationController)?.refreshReachableActions()
     }
     
     private func removeNavigationActionsIfNeeded() {
@@ -152,9 +163,11 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
     }
     
     private var selectedSectionHasNavigationAction: Bool {
-        guard #available(iOS 26.0, *),
-              let selectedTag = viewControllers?[safe: selectedIndex]?.tabBarItem.tag else {
+        guard let selectedTag = viewControllers?[safe: selectedIndex]?.tabBarItem.tag else {
             return false
+        }
+        if !RightHandLayout.isEnabled {
+            if #unavailable(iOS 26.0) { return false }
         }
         
         return selectedTag == LibrarySection.bookmarks.rawValue ||

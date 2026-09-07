@@ -101,7 +101,7 @@ final class ExperimentalFeaturesViewController: SettingsTableViewController {
         let alert = UIAlertController(
             title: "Restart Required",
             message: "The app will now close for the experimental setting to take effect.",
-            preferredStyle: .alert
+            preferredStyle: RightHandLayout.isEnabled ? .actionSheet : .alert
         )
         alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
             UIApplication.shared.perform(#selector(NSXPCConnection.suspend))

@@ -237,7 +237,7 @@ final class AddonCoordinator: NSObject, AddonEmbedderDelegate {
                     continuation.resume(returning: response)
                 }
                 
-                let navigationController = UINavigationController(rootViewController: promptViewController)
+                let navigationController = ReachableNavigationController(rootViewController: promptViewController)
                 navigationController.modalPresentationStyle = .pageSheet
                 delegate.presentAddonViewController(self, navigationController)
             }

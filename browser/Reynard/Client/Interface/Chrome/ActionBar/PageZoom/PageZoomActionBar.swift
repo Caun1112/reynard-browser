@@ -10,9 +10,9 @@ import UIKit
 final class PageZoomActionBar: UIView {
     private enum UX {
         static let backgroundHeight: CGFloat = 62
-        static let controlsHeight: CGFloat = 38
-        static let controlsWidth: CGFloat = 184
-        static let controlButtonWidth: CGFloat = 55
+        static let controlsHeight: CGFloat = 44
+        static let controlsWidth: CGFloat = 168
+        static let controlButtonWidth: CGFloat = 48
         static let separatorWidth: CGFloat = 1
         static let controlsCornerRadius: CGFloat = 19
         static let percentFontSize: CGFloat = 16
@@ -177,7 +177,6 @@ final class PageZoomActionBar: UIView {
             backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
             backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            controlsShadowView.centerXAnchor.constraint(equalTo: centerXAnchor),
             controlsShadowView.centerYAnchor.constraint(equalTo: centerYAnchor),
             controlsShadowView.widthAnchor.constraint(equalToConstant: UX.controlsWidth),
             controlsShadowView.heightAnchor.constraint(equalToConstant: UX.controlsHeight),
@@ -213,6 +212,11 @@ final class PageZoomActionBar: UIView {
             zoomInButton.widthAnchor.constraint(equalToConstant: UX.controlButtonWidth),
             
         ])
+        if RightHandLayout.isEnabled {
+            controlsShadowView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -65).isActive = true
+        } else {
+            controlsShadowView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        }
     }
     
     private func updateShadowColor() {
