@@ -96,6 +96,26 @@ extension TabOverviewCollection: UICollectionViewDataSource, UICollectionViewDel
         tabOverview?.presentation.cardSize(in: collectionView) ?? .zero
     }
     
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        guard RightHandLayout.isEnabled,
+              let layout = collectionViewLayout as? UICollectionViewFlowLayout,
+              let presentation = tabOverview?.presentation else { return .zero }
+        let cardSize = presentation.cardSize(in: collectionView)
+        let count = collectionView.numberOfItems(inSection: section)
+        let inset = collectionView.adjustedContentInset
+        let availableWidth = collectionView.bounds.width - inset.left - inset.right
+        let availableHeight = collectionView.bounds.height - inset.top - inset.bottom
+        let contentHeight = CGFloat(count) * cardSize.height
+            + CGFloat(max(0, count - 1)) * layout.minimumLineSpacing
+        // Short lists sit above the toolbar; longer lists remain vertically scrollable.
+        return UIEdgeInsets(top: max(0, availableHeight - contentHeight),
+                            left: max(0, availableWidth - cardSize.width), bottom: 0, right: 0)
+    }
+
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if let longPressGesture = gestureRecognizer as? UILongPressGestureRecognizer,
            let collectionView = longPressGesture.view as? UICollectionView,
@@ -108,8 +128,7 @@ extension TabOverviewCollection: UICollectionViewDataSource, UICollectionViewDel
         if let panGesture = gestureRecognizer as? UIPanGestureRecognizer,
            let collectionView = panGesture.view as? UICollectionView {
             let velocity = panGesture.velocity(in: collectionView)
-            guard velocity.x < 0,
-                  abs(velocity.x) > abs(velocity.y),
+            guard abs(velocity.x) > abs(velocity.y),
                   let indexPath = collectionView.indexPathForItem(at: panGesture.location(in: collectionView)),
                   !isInsertionPlaceholder(in: collectionView, at: indexPath),
                   let tabCard = collectionView.cellForItem(at: indexPath) as? TabOverviewCard else {

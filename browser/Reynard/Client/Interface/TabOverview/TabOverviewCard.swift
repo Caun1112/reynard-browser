@@ -28,7 +28,7 @@ final class TabOverviewCard: UICollectionViewCell {
         static let closeButtonBackgroundAlpha: CGFloat = 0.6
         static let tabMetadataTopSpacing: CGFloat = 4
         static let tabMetadataHorizontalInset: CGFloat = 6
-        static let tabMetadataHeight: CGFloat = 18
+        static var tabMetadataHeight: CGFloat { RightHandLayout.isEnabled ? 44 : 18 }
         static let tabMetadataItemSpacing: CGFloat = 4
         static let faviconSideLength: CGFloat = 16
         static let faviconCornerRadius: CGFloat = 3

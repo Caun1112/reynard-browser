@@ -582,7 +582,7 @@ final class TabOverviewCollection: NSObject {
             return
         }
         
-        let offset = min(0, gestureRecognizer.translation(in: cell).x)
+        let offset = gestureRecognizer.translation(in: collectionView).x
         let progress = abs(offset) / max(cell.bounds.width, 1)
         cell.setSwipeOffset(offset, progress: progress)
         swipeState = .active(
@@ -609,9 +609,9 @@ final class TabOverviewCollection: NSObject {
         
         swipeState = .idle
         
-        let offset = min(0, gestureRecognizer.translation(in: cell).x)
-        let projectedOffset = offset + (gestureRecognizer.velocity(in: cell).x * 0.2)
-        let shouldClose = !cancelled && projectedOffset < -(cell.bounds.width * 0.425)
+        let offset = gestureRecognizer.translation(in: collectionView).x
+        let projectedOffset = offset + (gestureRecognizer.velocity(in: collectionView).x * 0.2)
+        let shouldClose = !cancelled && abs(projectedOffset) > cell.bounds.width * 0.425
         
         if shouldClose {
             UIView.animate(
@@ -619,7 +619,8 @@ final class TabOverviewCollection: NSObject {
                 delay: 0,
                 options: [.curveEaseOut, .beginFromCurrentState],
                 animations: {
-                    cell.setSwipeOffset(-max(collectionView.bounds.width, cell.bounds.width), progress: 1)
+                    let direction: CGFloat = projectedOffset < 0 ? -1 : 1
+                    cell.setSwipeOffset(direction * max(collectionView.bounds.width, cell.bounds.width), progress: 1)
                 },
                 completion: { [weak self, weak cell] _ in
                     guard let self, let cell else { return }

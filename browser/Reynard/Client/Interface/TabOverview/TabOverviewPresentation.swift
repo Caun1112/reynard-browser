@@ -78,10 +78,9 @@ final class TabOverviewPresentation {
         let horizontalInsets = collectionView.adjustedContentInset.left + collectionView.adjustedContentInset.right
         let availableWidth = collectionView.bounds.width - horizontalInsets
         if RightHandLayout.isEnabled {
-            // Every card reaches the right edge; its close control is no longer
-            // stranded in a left-hand grid column.
-            return CGSize(width: max(1, floor(availableWidth)),
-                          height: min(240, max(140, collectionView.bounds.height * 0.3)) + UX.cardMetadataHeight)
+            // Keep previews and titles within the right thumb’s reach.
+            return CGSize(width: max(1, floor(min(280, availableWidth * 0.78))),
+                          height: min(180, max(100, collectionView.bounds.height * 0.23)) + 48)
         }
         let tabViewAspectRatio = max(UX.cardMinimumPreviewAspectRatio, tabOverview.previewAspectRatio)
         
