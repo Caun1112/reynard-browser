@@ -7,7 +7,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let window = UIWindow(frame: UIScreen.main.bounds)
         let scenario = ProcessInfo.processInfo.arguments
         let root: UIViewController
-        if scenario.contains("toolbar") {
+        if scenario.contains("library") {
+            root = ReachableNavigationController(rootViewController: LibraryScreen())
+        } else if scenario.contains("toolbar") {
             root = ToolbarScreen()
         } else {
             root = ReachableNavigationController(rootViewController: FormScreen(isEditor: false))
@@ -113,4 +115,29 @@ final class FormScreen: UITableViewController {
     @objc private func fieldChanged() { save.isEnabled = !(field.text ?? "").isEmpty }
     @objc private func saveForm() { view.endEditing(true); title = "Saved" }
     @objc private func cancelForm() { navigationController?.popViewController(animated: true) }
+}
+
+// Reproduce the nested tab-controller container used by the library sheet.
+final class LibraryScreen: UITabBarController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "Settings"
+        let settings = FormScreen(isEditor: false)
+        settings.tabBarItem = UITabBarItem(title: "Settings", image: nil, tag: 0)
+        setViewControllers([settings], animated: false)
+        tabBar.isHidden = true
+        if #available(iOS 14.0, *) {
+            let sections = UIBarButtonItem(title: "Library", menu: UIMenu(children: [
+                UIAction(title: "Settings", state: .on) { _ in }
+            ]))
+            sections.accessibilityIdentifier = "library.sections"
+            navigationItem.leftBarButtonItem = sections
+        }
+        let close = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain,
+                                    target: self, action: #selector(closeLibrary))
+        close.accessibilityIdentifier = "library.close"
+        close.accessibilityLabel = "Close"
+        navigationItem.rightBarButtonItem = close
+    }
+    @objc private func closeLibrary() { title = "Closed" }
 }

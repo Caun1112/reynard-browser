@@ -62,6 +62,29 @@ final class RightHandUITests: XCTestCase {
         attachScreenshot("browser-dark")
     }
 
+    func testLibraryHasOneTitleAndUnobstructedList() {
+        let app = XCUIApplication()
+        app.launchArguments = ["library"]
+        app.launch()
+        let close = app.buttons["library.close"]
+        XCTAssertTrue(close.waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts.matching(NSPredicate(format: "label == %@", "Settings")).count, 1)
+        assertReachable(close, in: app)
+        assertReachable(app.buttons["library.sections"], in: app)
+        let firstRow = app.staticTexts["Appearance"]
+        XCTAssertTrue(firstRow.isHittable)
+        XCTAssertLessThan(firstRow.frame.maxY, app.windows.firstMatch.frame.midY)
+        let lastRow = app.staticTexts["Setting 12"]
+        if !lastRow.isHittable { app.tables.firstMatch.swipeUp() }
+        XCTAssertTrue(lastRow.isHittable)
+        XCTAssertLessThanOrEqual(lastRow.frame.maxY, app.staticTexts["Settings"].frame.minY)
+        attachScreenshot("library-clean-layout")
+        app.buttons["library.sections"].tap()
+        app.buttons["Settings"].tap()
+        close.tap()
+        XCTAssertTrue(app.staticTexts["Closed"].waitForExistence(timeout: 3))
+    }
+
     private func assertReachable(_ button: XCUIElement, in app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) {
         let frame = button.frame
         let screen = app.windows.firstMatch.frame

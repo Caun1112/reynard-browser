@@ -6,8 +6,6 @@ class ReachableNavigationController: UINavigationController {
     private let dock = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
     private let rows = UIStackView()
     private let titleLabel = UILabel()
-    private let readingTitleLabel = UILabel()
-    private var readingTitleBottomConstraint: NSLayoutConstraint!
     private var titleHeightConstraint: NSLayoutConstraint!
     private var bottomConstraint: NSLayoutConstraint!
     private var dockHeightConstraint: NSLayoutConstraint!
@@ -35,16 +33,6 @@ class ReachableNavigationController: UINavigationController {
         dock.translatesAutoresizingMaskIntoConstraints = false
         dock.accessibilityIdentifier = "navigation.bottomDock"
         view.addSubview(dock)
-        readingTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        readingTitleLabel.font = .preferredFont(forTextStyle: .largeTitle)
-        readingTitleLabel.adjustsFontForContentSizeCategory = true
-        readingTitleLabel.textAlignment = .right
-        readingTitleLabel.numberOfLines = 2
-        readingTitleLabel.textColor = .label
-        readingTitleLabel.isAccessibilityElement = false
-        view.addSubview(readingTitleLabel)
-        readingTitleBottomConstraint = readingTitleLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textColor = .label
@@ -62,9 +50,6 @@ class ReachableNavigationController: UINavigationController {
         dockHeightConstraint = dock.heightAnchor.constraint(equalToConstant: 84)
         titleHeightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 28)
         NSLayoutConstraint.activate([
-            readingTitleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 24),
-            readingTitleLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -24),
-            readingTitleBottomConstraint,
             dock.leftAnchor.constraint(equalTo: view.leftAnchor),
             dock.rightAnchor.constraint(equalTo: view.rightAnchor),
             bottomConstraint,
@@ -92,7 +77,6 @@ class ReachableNavigationController: UINavigationController {
         super.viewDidLayoutSubviews()
         refreshReachableActions()
         if RightHandLayout.isEnabled {
-            view.bringSubviewToFront(readingTitleLabel)
             view.bringSubviewToFront(dock)
         }
     }
@@ -129,7 +113,6 @@ class ReachableNavigationController: UINavigationController {
                 && seen.insert(ObjectIdentifier(item)).inserted
         }
         titleLabel.text = controller.navigationItem.title ?? controller.title
-        readingTitleLabel.text = titleLabel.text
         let titleHeight = max(28, ceil(titleLabel.font.lineHeight))
         titleHeightConstraint.constant = titleHeight
         dock.isHidden = items.isEmpty
@@ -165,13 +148,6 @@ class ReachableNavigationController: UINavigationController {
         }
         var insets = originalInsets
         insets.bottom += height + keyboardOverlap
-        // A reading header lets the first form/list row start within thumb reach.
-        // The full height becomes available while typing and in landscape.
-        let readingSpace: CGFloat = height > 0 && view.bounds.height > 600 && keyboardOverlap == 0
-            ? min(340, max(0, (view.bounds.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom - height) * 0.45)) : 0
-        insets.top += readingSpace
-        readingTitleLabel.isHidden = readingSpace < 100
-        readingTitleBottomConstraint.constant = readingSpace - 24
         if controller.additionalSafeAreaInsets != insets {
             controller.additionalSafeAreaInsets = insets
         }

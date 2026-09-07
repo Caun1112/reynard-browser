@@ -8,6 +8,7 @@
 import UIKit
 
 final class LibraryViewController: UITabBarController, UITabBarControllerDelegate, UINavigationControllerDelegate {
+    private var sectionMenuItem: UIBarButtonItem?
     private let initialSection: LibrarySection
     private let isPrivateMode: Bool
     private let startsEditingBookmarks: Bool
@@ -64,16 +65,6 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
         removeNavigationActionsIfNeeded()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        guard RightHandLayout.isEnabled else { return }
-        let width = min(240, view.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right - 24)
-        tabBar.frame = CGRect(x: view.bounds.width - view.safeAreaInsets.right - width - 12,
-                              y: tabBar.frame.minY, width: width, height: tabBar.frame.height)
-        tabBar.semanticContentAttribute = .forceLeftToRight
-        tabBar.itemPositioning = .fill
-    }
-    
     // MARK: - Delegates
     
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
@@ -95,6 +86,10 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
         view.backgroundColor = .systemGroupedBackground
         delegate = self
         LibraryTabBarStyle.apply(to: tabBar)
+        if RightHandLayout.isEnabled {
+            // The bottom navigation dock owns section switching on iPhone.
+            tabBar.isHidden = true
+        }
     }
     
     private func installSections() {
@@ -151,9 +146,34 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
         }
         
         title = section.title
+        updateSectionMenu()
         (navigationController as? ReachableNavigationController)?.refreshReachableActions()
     }
     
+    private func updateSectionMenu() {
+        guard RightHandLayout.isEnabled else { return }
+        if #available(iOS 14.0, *) {
+            if sectionMenuItem == nil {
+                let item = UIBarButtonItem(title: NSLocalizedString("Library", comment: ""),
+                                           image: UIImage(systemName: "square.grid.2x2"),
+                                           primaryAction: nil, menu: nil)
+                item.accessibilityLabel = NSLocalizedString("Library", comment: "")
+                item.accessibilityIdentifier = "library.sections"
+                sectionMenuItem = item
+                navigationItem.leftBarButtonItems = [item] + (navigationItem.leftBarButtonItems ?? [])
+            }
+            sectionMenuItem?.menu = UIMenu(children: visibleSections.enumerated().map { index, section in
+                UIAction(title: section.title, image: section.tabBarItem.image,
+                         state: index == selectedIndex ? .on : .off) { [weak self] _ in
+                    guard let self else { return }
+                    self.selectedIndex = index
+                    self.updateNavigationTitle()
+                    self.removeNavigationActionsIfNeeded()
+                }
+            })
+        }
+    }
+
     private func removeNavigationActionsIfNeeded() {
         guard !selectedSectionHasNavigationAction else {
             return
@@ -180,6 +200,13 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
     }
     
     private func makeCloseButton() -> UIBarButtonItem {
+        if RightHandLayout.isEnabled {
+            let button = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain,
+                                         target: self, action: #selector(closeLibrary))
+            button.accessibilityLabel = NSLocalizedString("Close", comment: "")
+            button.accessibilityIdentifier = "library.close"
+            return button
+        }
         if #available(iOS 26.0, *) {
             let button = UIBarButtonItem.reachableSystemItem(
                 .close,
