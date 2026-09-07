@@ -22,13 +22,18 @@ on:
         required: false
         default: true
         type: boolean
+      prepare_dependencies_only:
+        description: Build and cache the engine and support library without packaging the app
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
 
 jobs:
   prepare:
-    if: ${{ github.repository_owner == 'minh-ton' && (github.event_name != 'push' || startsWith(github.event.head_commit.message, 'Bump version to ')) }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.repository_owner == 'minh-ton' && (github.event_name != 'push' || startsWith(github.event.head_commit.message, 'Bump version to '))) }}
     name: Select build variants
     runs-on: ubuntu-latest
     outputs:
@@ -126,7 +131,7 @@ jobs:
 
       - name: Hash Rust toolchain for cache
         id: rust_toolchain
-        run: echo "hash=$(rustc -Vv | shasum -a 256 | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+        run: echo "hash=$({ rustc -Vv; xcodebuild -version; } | shasum -a 256 | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
 
       - name: Restore Gecko dependency cache
         uses: actions/cache@v4
@@ -152,36 +157,59 @@ jobs:
       - name: Set up sccache
         uses: mozilla-actions/sccache-action@v0.0.11
 
+      - name: Restore compiled Gecko SDK
+        id: gecko_sdk
+        uses: actions/cache@v4
+        with:
+          path: ~/reynard-sdk/gecko-dist.tar.gz
+          key: gecko-sdk-v1-${{ matrix.variant }}-${{ runner.arch }}-${{ steps.rust_toolchain.outputs.hash }}-${{ hashFiles('engine/release.txt', 'patches/**', 'tools/development/build-gecko.sh') }}
+
+      - name: Unpack compiled Gecko SDK
+        if: steps.gecko_sdk.outputs.cache-hit == 'true'
+        run: |
+          mkdir -p engine/firefox/obj-aarch64-apple-ios/dist
+          tar -xzf ~/reynard-sdk/gecko-dist.tar.gz -C engine/firefox/obj-aarch64-apple-ios/dist
+
       - name: Build Gecko
+        if: steps.gecko_sdk.outputs.cache-hit != 'true'
         env:
           CC: clang
           CXX: clang++
           LD: ld64.lld
         run: ./tools/development/build-gecko.sh ${{ matrix.build_args }}
 
+      - name: Archive compiled Gecko SDK
+        if: steps.gecko_sdk.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/reynard-sdk
+          # Dereference generated header/resource symlinks so the SDK is self-contained.
+          tar -czhf ~/reynard-sdk/gecko-dist.tar.gz -C engine/firefox/obj-aarch64-apple-ios/dist bin include
+
       - name: Build idevice support library
         run: ./tools/development/build-idevice.sh
 
       - name: Install packaging dependencies
+        if: ${{ !inputs.prepare_dependencies_only }}
         run: brew install ldid
 
       - name: Build app
+        if: ${{ !inputs.prepare_dependencies_only }}
         run: ./tools/release/build-app.sh --no-signing ${{ github.event_name == 'schedule' && '--nightly' || '' }}
 
       - name: Create IPA
-        if: ${{ matrix.variant == 'standard' && (github.event_name != 'workflow_dispatch' || inputs.build_normal_ipa) }}
+        if: ${{ !inputs.prepare_dependencies_only && matrix.variant == 'standard' && (github.event_name != 'workflow_dispatch' || inputs.build_normal_ipa) }}
         run: ./tools/release/create-ipa.sh
 
       - name: Create TrollStore TIPA
-        if: ${{ matrix.variant == 'standard' && (github.event_name != 'workflow_dispatch' || inputs.build_trollstore_tipa) }}
+        if: ${{ !inputs.prepare_dependencies_only && matrix.variant == 'standard' && (github.event_name != 'workflow_dispatch' || inputs.build_trollstore_tipa) }}
         run: ./tools/release/create-ipa.sh --trollstore
 
       - name: Create Jailbroken IPA
-        if: ${{ matrix.variant == 'nojemalloc' && (github.event_name != 'workflow_dispatch' || inputs.build_jailbroken_ipa) }}
+        if: ${{ !inputs.prepare_dependencies_only && matrix.variant == 'nojemalloc' && (github.event_name != 'workflow_dispatch' || inputs.build_jailbroken_ipa) }}
         run: ./tools/release/create-ipa.sh --jailbroken
 
       - name: Upload IPA
-        if: ${{ matrix.variant == 'standard' && (github.event_name != 'workflow_dispatch' || inputs.build_normal_ipa) }}
+        if: ${{ !inputs.prepare_dependencies_only && matrix.variant == 'standard' && (github.event_name != 'workflow_dispatch' || inputs.build_normal_ipa) }}
         uses: actions/upload-artifact@v4
         with:
           name: Reynard.ipa
@@ -189,7 +217,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload TrollStore TIPA
-        if: ${{ matrix.variant == 'standard' && (github.event_name != 'workflow_dispatch' || inputs.build_trollstore_tipa) }}
+        if: ${{ !inputs.prepare_dependencies_only && matrix.variant == 'standard' && (github.event_name != 'workflow_dispatch' || inputs.build_trollstore_tipa) }}
         uses: actions/upload-artifact@v4
         with:
           name: Reynard-TrollStore.tipa
@@ -197,7 +225,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload Jailbroken IPA
-        if: ${{ matrix.variant == 'nojemalloc' && (github.event_name != 'workflow_dispatch' || inputs.build_jailbroken_ipa) }}
+        if: ${{ !inputs.prepare_dependencies_only && matrix.variant == 'nojemalloc' && (github.event_name != 'workflow_dispatch' || inputs.build_jailbroken_ipa) }}
         uses: actions/upload-artifact@v4
         with:
           name: Reynard-Jailbroken.ipa
