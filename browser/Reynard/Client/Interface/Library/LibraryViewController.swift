@@ -181,8 +181,8 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
     
     private func makeCloseButton() -> UIBarButtonItem {
         if #available(iOS 26.0, *) {
-            let button = UIBarButtonItem(
-                barButtonSystemItem: .close,
+            let button = UIBarButtonItem.reachableSystemItem(
+                .close,
                 target: self,
                 action: #selector(closeLibrary)
             )
@@ -190,8 +190,8 @@ final class LibraryViewController: UITabBarController, UITabBarControllerDelegat
             return button
         }
         
-        return UIBarButtonItem(
-            barButtonSystemItem: .done,
+        return UIBarButtonItem.reachableSystemItem(
+            .done,
             target: self,
             action: #selector(closeLibrary)
         )

@@ -234,12 +234,12 @@ final class AddonPermissionPromptViewController: UITableViewController {
         
         if #available(iOS 26.0, *) {
             navigationItem.rightBarButtonItems = [
-                UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(dismissModal))
+                UIBarButtonItem.reachableSystemItem(.cancel, target: self, action: #selector(dismissModal))
             ]
             navigationItem.rightBarButtonItems?.first?.tintColor = .label
         } else {
             navigationItem.rightBarButtonItems = [
-                UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissModal))
+                UIBarButtonItem.reachableSystemItem(.done, target: self, action: #selector(dismissModal))
             ]
         }
     }

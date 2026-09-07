@@ -79,12 +79,12 @@ final class LibraryActionButton: UIButton {
     
     static func makeSheetCloseButton(target: AnyObject, action: Selector) -> UIBarButtonItem {
         if #available(iOS 26.0, *) {
-            let item = UIBarButtonItem(barButtonSystemItem: .cancel, target: target, action: action)
+            let item = UIBarButtonItem.reachableSystemItem(.cancel, target: target, action: action)
             item.tintColor = .label
             return item
         }
         
-        return UIBarButtonItem(barButtonSystemItem: .done, target: target, action: action)
+        return UIBarButtonItem.reachableSystemItem(.done, target: target, action: action)
     }
     
     // MARK: - View Setup

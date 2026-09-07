@@ -241,10 +241,10 @@ enum SiteSettingsUtils {
     static func makeDismissButton(target: Any?, action: Selector) -> UIBarButtonItem {
         let button: UIBarButtonItem
         if #available(iOS 26.0, *) {
-            button = UIBarButtonItem(barButtonSystemItem: .cancel, target: target, action: action)
+            button = UIBarButtonItem.reachableSystemItem(.cancel, target: target, action: action)
             button.tintColor = .label
         } else {
-            button = UIBarButtonItem(barButtonSystemItem: .done, target: target, action: action)
+            button = UIBarButtonItem.reachableSystemItem(.done, target: target, action: action)
         }
         return button
     }

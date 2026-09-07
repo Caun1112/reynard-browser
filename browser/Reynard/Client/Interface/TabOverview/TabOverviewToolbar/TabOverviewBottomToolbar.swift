@@ -121,17 +121,17 @@ final class TabOverviewBottomToolbar: UIView {
     private func makeLiquidGlassActionToolbar() -> UIToolbar {
         let toolbar = UIToolbar()
         toolbar.translatesAutoresizingMaskIntoConstraints = false
-        let clearTabsItem = UIBarButtonItem(barButtonSystemItem: .trash, target: nil, action: nil)
-        let addTabItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTabButtonTapped))
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
+        let clearTabsItem = UIBarButtonItem.reachableSystemItem(.trash, target: nil, action: nil)
+        let addTabItem = UIBarButtonItem.reachableSystemItem(.add, target: self, action: #selector(addTabButtonTapped))
+        let doneItem = UIBarButtonItem.reachableSystemItem(.done, target: self, action: #selector(doneTapped))
         clearTabsItem.tintColor = .label
         addTabItem.tintColor = .label
         doneItem.tintColor = .label
         toolbar.items = [
             clearTabsItem,
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem.reachableSystemItem(.flexibleSpace, target: nil, action: nil),
             addTabItem,
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem.reachableSystemItem(.flexibleSpace, target: nil, action: nil),
             doneItem,
         ]
         return toolbar

@@ -203,6 +203,14 @@ final class BookmarksViewController: UIViewController, UITableViewDataSource, UI
             withIdentifier: BookmarkItemCell.reuseIdentifier,
             for: indexPath
         ) as! BookmarkItemCell
+        cell.editingAccessoryView = nil
+        if RightHandLayout.isEnabled, self.tableView(tableView, canEditRowAt: indexPath) {
+            cell.shouldIndentWhileEditing = false
+            cell.editingAccessoryView = ReachableDeleteButton { [weak self, weak cell] in
+                guard let self, let cell, let currentIndexPath = self.tableView.indexPath(for: cell) else { return }
+                self.tableView(self.tableView, commit: .delete, forRowAt: currentIndexPath)
+            }
+        }
         
         switch item {
         case let .folder(folder):
@@ -283,7 +291,8 @@ final class BookmarksViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        self.tableView(tableView, canEditRowAt: indexPath) ? .delete : .none
+        if RightHandLayout.isEnabled && tableView.isEditing { return .none }
+        return self.tableView(tableView, canEditRowAt: indexPath) ? .delete : .none
     }
     
     func tableView(
@@ -755,7 +764,7 @@ final class BookmarksViewController: UIViewController, UITableViewDataSource, UI
             return
         }
         
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let flexibleSpace = UIBarButtonItem.reachableSystemItem(.flexibleSpace, target: nil, action: nil)
         let items: [UIBarButtonItem]
         if isEditing {
             items = [newFolderButton, flexibleSpace, editButtonItem]

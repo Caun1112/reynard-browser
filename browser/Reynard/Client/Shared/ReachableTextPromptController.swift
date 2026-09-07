@@ -49,7 +49,7 @@ final class ReachableTextPromptController: UITableViewController, UITextFieldDel
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem.reachableSystemItem(.cancel, target: self, action: #selector(cancel))
         navigationItem.rightBarButtonItem = confirmItem
         tableView.keyboardDismissMode = .interactive
         tableView.rowHeight = max(56, UIFont.preferredFont(forTextStyle: .body).lineHeight + 24)

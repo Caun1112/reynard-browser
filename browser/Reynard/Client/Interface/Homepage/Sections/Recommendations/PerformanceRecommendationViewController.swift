@@ -282,12 +282,13 @@ final class PerformanceRecommendationViewController: UIViewController, HomepageR
     private func makeActionButton(title: String, imageName: String, action: Selector) -> UIButton {
         let configuration = UIImage.SymbolConfiguration(pointSize: UX.actionIconSize, weight: .regular)
         let button = UIButton(type: .system)
+        button.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
         button.setTitle(title, for: .normal)
         button.setImage(UIImage(named: imageName, in: .main, with: configuration), for: .normal)
         button.tintColor = .label
         button.titleLabel?.font = .preferredFont(forTextStyle: .body)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.contentHorizontalAlignment = .leading
+        button.contentHorizontalAlignment = RightHandLayout.isEnabled ? .right : .leading
         button.semanticContentAttribute = .forceLeftToRight
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: UX.buttonImageSpacing, bottom: 0, right: -UX.buttonImageSpacing)
         button.setContentHuggingPriority(.required, for: .horizontal)

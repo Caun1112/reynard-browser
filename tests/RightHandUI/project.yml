@@ -14,6 +14,7 @@ targets:
     sources:
       - Host
       - ../../browser/Reynard/Client/Shared/RightHandLayout.swift
+      - ../../browser/Reynard/Client/Shared/ReachableBarButton.swift
       - ../../browser/Reynard/Client/Shared/ReachableNavigationController.swift
       - ../../browser/Reynard/Client/Shared/ContentModalNavigationController.swift
       - ../../browser/Reynard/Client/Shared/ReachableTextPromptController.swift

@@ -210,7 +210,7 @@ final class SidebarMenuViewController: UIViewController, UICollectionViewDelegat
             return [item]
         }
         
-        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let spacer = UIBarButtonItem.reachableSystemItem(.fixedSpace, target: nil, action: nil)
         spacer.width = leadingSpace
         return [spacer, item]
     }

@@ -64,9 +64,9 @@ final class NewBookmarkFolderViewController: UIViewController, UITableViewDataSo
         navigationItem.largeTitleDisplayMode = .never
         
         if #available(iOS 26.0, *) {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+            navigationItem.leftBarButtonItem = UIBarButtonItem.reachableSystemItem(.cancel, target: self, action: #selector(cancel))
             navigationItem.leftBarButtonItem?.tintColor = .label
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(createFolder))
+            navigationItem.rightBarButtonItem = UIBarButtonItem.reachableSystemItem(.done, target: self, action: #selector(createFolder))
             navigationItem.rightBarButtonItem?.tintColor = .label
         } else {
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""), style: .done, target: self, action: #selector(createFolder))

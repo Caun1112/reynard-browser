@@ -131,13 +131,13 @@ final class EditBookmarkViewController: UIViewController, UITableViewDataSource,
         navigationItem.largeTitleDisplayMode = .never
         
         if #available(iOS 26.0, *) {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(saveBookmark))
+            navigationItem.rightBarButtonItem = UIBarButtonItem.reachableSystemItem(.done, target: self, action: #selector(saveBookmark))
             navigationItem.rightBarButtonItem?.tintColor = .label
             if bookmark != nil {
-                navigationItem.leftBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteBookmark))]
+                navigationItem.leftBarButtonItems = [UIBarButtonItem.reachableSystemItem(.trash, target: self, action: #selector(deleteBookmark))]
                 navigationItem.leftBarButtonItems?.first?.tintColor = .systemRed
             } else {
-                navigationItem.leftBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))]
+                navigationItem.leftBarButtonItems = [UIBarButtonItem.reachableSystemItem(.cancel, target: self, action: #selector(cancel))]
                 navigationItem.leftBarButtonItems?.first?.tintColor = .label
             }
         } else {

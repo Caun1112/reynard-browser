@@ -45,13 +45,13 @@ final class MultiSelectViewController: UIViewController, UITableViewDataSource, 
     
     private func configureNavigation() {
         title = NSLocalizedString("Select Options", comment: "")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .done,
+        navigationItem.rightBarButtonItem = UIBarButtonItem.reachableSystemItem(
+            .done,
             target: self,
             action: #selector(doneTapped)
         )
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .cancel,
+        navigationItem.leftBarButtonItem = UIBarButtonItem.reachableSystemItem(
+            .cancel,
             target: self,
             action: #selector(cancelTapped)
         )

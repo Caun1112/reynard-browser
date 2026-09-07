@@ -143,25 +143,19 @@ class ReachableNavigationController: UINavigationController {
             displayedItems = items
             rows.arrangedSubviews.forEach { $0.removeFromSuperview() }
             for start in stride(from: 0, to: items.count, by: itemsPerRow) {
-                let toolbar = UIToolbar()
-                toolbar.semanticContentAttribute = .forceLeftToRight
-                toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
-                toolbar.setShadowImage(UIImage(), forToolbarPosition: .any)
-                toolbar.tintColor = .label
-                toolbar.heightAnchor.constraint(equalToConstant: 48).isActive = true
+                let row = UIStackView()
+                RightHandLayout.align(row)
+                row.distribution = .fillEqually
+                row.heightAnchor.constraint(equalToConstant: 48).isActive = true
                 let group = Array(items[start..<min(start + itemsPerRow, items.count)])
-                var rowItems = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)]
-                for (index, item) in group.enumerated() {
-                    item.width = max(item.width, 48)
-                    if index > 0 {
-                        let space = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-                        space.width = 12
-                        rowItems.append(space)
+                for item in group {
+                    if let customView = item.customView {
+                        row.addArrangedSubview(customView)
+                    } else {
+                        row.addArrangedSubview(ReachableBarButton(item: item))
                     }
-                    rowItems.append(item)
                 }
-                toolbar.items = rowItems
-                rows.addArrangedSubview(toolbar)
+                rows.addArrangedSubview(row)
             }
         }
         if insetOwner !== controller {

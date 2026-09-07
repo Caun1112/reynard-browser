@@ -103,8 +103,8 @@ final class TrackingProtectionDetailsViewController: SettingsTableViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .done,
+        navigationItem.rightBarButtonItem = UIBarButtonItem.reachableSystemItem(
+            .done,
             target: self,
             action: #selector(dismissDetails)
         )

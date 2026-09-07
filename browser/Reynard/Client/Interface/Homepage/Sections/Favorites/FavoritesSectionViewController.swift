@@ -67,6 +67,8 @@ final class FavoritesSectionViewController: UIViewController {
     private lazy var showAllButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+        button.widthAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
         button.tintColor = .label
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.addTarget(self, action: #selector(showAllButtonTapped), for: .touchUpInside)

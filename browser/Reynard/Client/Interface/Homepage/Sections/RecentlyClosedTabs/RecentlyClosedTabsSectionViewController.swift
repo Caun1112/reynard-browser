@@ -44,6 +44,8 @@ final class RecentlyClosedTabsSectionViewController: UIViewController {
     private lazy var clearAllButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+        button.widthAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
         button.tintColor = .label
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.setTitle(NSLocalizedString("Clear All", comment: ""), for: .normal)

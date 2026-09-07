@@ -88,6 +88,13 @@ final class LanguagesPreferencesViewController: SettingsTableViewController {
             let cell = SettingsTableViewCell(style: .default, reuseIdentifier: nil)
             cell.textLabel?.text = WebsiteLanguageCatalog.title(for: code)
             cell.selectionStyle = .none
+            if RightHandLayout.isEnabled && canEditLanguages {
+                cell.shouldIndentWhileEditing = false
+                cell.editingAccessoryView = ReachableDeleteButton { [weak self, weak cell] in
+                    guard let self, let cell, let currentIndexPath = self.tableView.indexPath(for: cell) else { return }
+                    self.tableView(self.tableView, commit: .delete, forRowAt: currentIndexPath)
+                }
+            }
             return cell
         case .addLanguage:
             let cell = SettingsTableViewCell(style: .default, reuseIdentifier: nil)
@@ -126,6 +133,7 @@ final class LanguagesPreferencesViewController: SettingsTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if RightHandLayout.isEnabled && tableView.isEditing { return .none }
         return self.tableView(tableView, canEditRowAt: indexPath) ? .delete : .none
     }
     
