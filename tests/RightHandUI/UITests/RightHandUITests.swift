@@ -20,6 +20,11 @@ final class RightHandUITests: XCTestCase {
         assertToolbarSingleRow(in: app)
         attachScreenshot("browser-portrait")
         XCUIDevice.shared.orientation = .landscapeLeft
+        let rotationFinished = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            let screen = app.windows.firstMatch.frame
+            return screen.width > screen.height && app.buttons["browser.back"].isHittable
+        }, object: app)
+        XCTAssertEqual(XCTWaiter.wait(for: [rotationFinished], timeout: 10), .completed)
         for identifier in ["back", "forward", "share", "library", "download", "tabOverview"] {
             assertReachable(app.buttons["browser.\(identifier)"], in: app, rightReach: 360)
         }
