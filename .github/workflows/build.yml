@@ -50,6 +50,8 @@ jobs:
           RUNTIME_ID=$(xcrun simctl list runtimes -j | python3 -c 'import json,sys; print(next(r["identifier"] for r in json.load(sys.stdin)["runtimes"] if r["isAvailable"] and r["name"].startswith("iOS")))')
           SIMULATOR_ID=$(xcrun simctl create "Reynard Right Hand" com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro-Max "$RUNTIME_ID")
           echo "SIMULATOR_ID=$SIMULATOR_ID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$SIMULATOR_ID"
+          xcrun simctl bootstatus "$SIMULATOR_ID" -b
       - name: Test reachability, navigation and keyboard handling
         run: |
           xcodebuild test -project tests/RightHandUI/RightHandUI.xcodeproj -scheme RightHandUI \
