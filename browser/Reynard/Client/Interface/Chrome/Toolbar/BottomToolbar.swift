@@ -9,17 +9,19 @@ import UIKit
 
 final class BottomToolbar: UIView {
     private enum UX {
-        static var bottomToolbarStandardContentHeight: CGFloat { RightHandLayout.isEnabled ? 164 : 94 }
-        static var bottomToolbarCompactContentHeight: CGFloat { RightHandLayout.isEnabled ? 112 : 44 }
-        static var bottomToolbarButtonStackHeight: CGFloat { RightHandLayout.isEnabled ? 104 : 30 }
+        static var bottomToolbarStandardContentHeight: CGFloat { RightHandLayout.isEnabled ? 108 : 94 }
+        static var bottomToolbarCompactContentHeight: CGFloat { RightHandLayout.isEnabled ? 56 : 44 }
+        static var bottomToolbarButtonStackHeight: CGFloat { RightHandLayout.isEnabled ? 48 : 30 }
         static let bottomToolbarButtonStackBottomInset: CGFloat = 5
         static let addressBarHorizontalInset: CGFloat = 12
         static let addressBarTopInset: CGFloat = 8
         static let bottomToolbarButtonStackHorizontalInset: CGFloat = 24
         static let bottomToolbarButtonStackTopSpacing: CGFloat = 7
         static let bottomToolbarButtonSpacing: CGFloat = 8
+        static let rightHandButtonWidth: CGFloat = 44
+        static let rightHandButtonSpacing: CGFloat = 2
         static let backgroundViewHorizontalExtension: CGFloat = 16
-        static var addressBarDockedVerticalAdjustment: CGFloat { RightHandLayout.isEnabled ? 106 : 36 }
+        static var addressBarDockedVerticalAdjustment: CGFloat { RightHandLayout.isEnabled ? 50 : 36 }
         static let keyboardDockedBlurTopExtension: CGFloat = 24
         static let borderWidth: CGFloat = 0.5
     }
@@ -85,18 +87,15 @@ final class BottomToolbar: UIView {
     
     private lazy var buttons: UIStackView = {
         if RightHandLayout.isEnabled {
-            let secondary = UIStackView(arrangedSubviews: [shareButton, downloadButton, forwardButton])
-            let primary = UIStackView(arrangedSubviews: [libraryButton, tabOverviewButton, backButton])
-            for row in [secondary, primary] {
-                RightHandLayout.align(row)
-                row.distribution = .fillEqually
-                row.heightAnchor.constraint(equalToConstant: RightHandLayout.touchSize).isActive = true
-            }
-            let stack = UIStackView(arrangedSubviews: [secondary, primary])
+            let stack = UIStackView(arrangedSubviews: [shareButton, downloadButton, forwardButton, libraryButton, tabOverviewButton, backButton])
             stack.translatesAutoresizingMaskIntoConstraints = false
-            stack.axis = .vertical
-            stack.spacing = RightHandLayout.spacing
-            stack.alignment = .fill
+            RightHandLayout.align(stack)
+            stack.axis = .horizontal
+            stack.spacing = UX.rightHandButtonSpacing
+            stack.distribution = .fillEqually
+            for button in stack.arrangedSubviews {
+                button.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.rightHandButtonWidth).isActive = true
+            }
             return stack
         }
         let stack = UIStackView(arrangedSubviews: [backButton, forwardButton, shareButton, libraryButton, downloadButton, tabOverviewButton])
@@ -328,7 +327,8 @@ final class BottomToolbar: UIView {
         if RightHandLayout.isEnabled {
             NSLayoutConstraint.activate([
                 buttons.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -RightHandLayout.edgeInset),
-                buttons.widthAnchor.constraint(equalToConstant: RightHandLayout.controlWidth),
+                buttons.widthAnchor.constraint(equalToConstant: UX.rightHandButtonWidth * 6 + UX.rightHandButtonSpacing * 5),
+                buttons.leftAnchor.constraint(greaterThanOrEqualTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: RightHandLayout.edgeInset),
             ])
         } else {
             NSLayoutConstraint.activate([

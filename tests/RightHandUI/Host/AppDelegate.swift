@@ -45,7 +45,7 @@ final class ToolbarScreen: UIViewController {
             toolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         toolbar.attachAddressBar(addressBar)
-        toolbar.apply(state: .standard, hidesButtons: false)
+        toolbar.apply(state: ProcessInfo.processInfo.arguments.contains("compact") ? .compact : .standard, hidesButtons: false)
         toolbar.updateNavigation(canGoBack: true, canGoForward: true, canShare: true)
         toolbar.onBack = { [weak self] in self?.result.text = "Back" }
         toolbar.onForward = { [weak self] in self?.result.text = "Forward" }

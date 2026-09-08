@@ -13,15 +13,17 @@ final class RightHandUITests: XCTestCase {
         for (identifier, title) in [("back", "Back"), ("forward", "Forward"), ("share", "Share"), ("library", "Library"), ("download", "Downloads"), ("tabOverview", "Tabs")] {
             let button = app.buttons["browser.\(identifier)"]
             XCTAssertTrue(button.waitForExistence(timeout: 5))
-            assertReachable(button, in: app)
+            assertReachable(button, in: app, rightReach: 360)
             button.tap()
             XCTAssertEqual(app.staticTexts["result"].label, title)
         }
+        assertToolbarSingleRow(in: app)
         attachScreenshot("browser-portrait")
         XCUIDevice.shared.orientation = .landscapeLeft
         for identifier in ["back", "forward", "share", "library", "download", "tabOverview"] {
-            assertReachable(app.buttons["browser.\(identifier)"], in: app)
+            assertReachable(app.buttons["browser.\(identifier)"], in: app, rightReach: 360)
         }
+        assertToolbarSingleRow(in: app)
         attachScreenshot("browser-landscape")
     }
 
@@ -58,7 +60,7 @@ final class RightHandUITests: XCTestCase {
         app.launchArguments = ["toolbar", "dark"]
         app.launch()
         XCTAssertTrue(app.buttons["browser.back"].waitForExistence(timeout: 5))
-        assertReachable(app.buttons["browser.back"], in: app)
+        assertReachable(app.buttons["browser.back"], in: app, rightReach: 360)
         attachScreenshot("browser-dark")
     }
 
@@ -85,13 +87,36 @@ final class RightHandUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Closed"].waitForExistence(timeout: 3))
     }
 
-    private func assertReachable(_ button: XCUIElement, in app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) {
+    func testCompactBrowserToolbarUsesOneReachableRow() {
+        let app = XCUIApplication()
+        app.launchArguments = ["toolbar", "compact"]
+        app.launch()
+        XCTAssertTrue(app.buttons["browser.back"].waitForExistence(timeout: 5))
+        assertToolbarSingleRow(in: app)
+        attachScreenshot("browser-compact-single-row")
+    }
+
+    private func assertToolbarSingleRow(in app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) {
+        let back = app.buttons["browser.back"].frame
+        for identifier in ["share", "download", "forward", "library", "tabOverview", "back"] {
+            let button = app.buttons["browser.\(identifier)"]
+            assertReachable(button, in: app, rightReach: 360, file: file, line: line)
+            XCTAssertEqual(button.frame.midY, back.midY, accuracy: 1, file: file, line: line)
+            XCTAssertLessThanOrEqual(button.frame.height, 48, file: file, line: line)
+        }
+        let screen = app.windows.firstMatch.frame
+        if screen.height > screen.width {
+            XCTAssertEqual(back.maxX, screen.maxX - 12, accuracy: 1, file: file, line: line)
+        }
+    }
+
+    private func assertReachable(_ button: XCUIElement, in app: XCUIApplication, rightReach: CGFloat = 280, file: StaticString = #filePath, line: UInt = #line) {
         let frame = button.frame
         let screen = app.windows.firstMatch.frame
         XCTAssertTrue(button.isHittable, file: file, line: line)
         XCTAssertGreaterThanOrEqual(frame.width, 44, file: file, line: line)
         XCTAssertGreaterThanOrEqual(frame.height, 44, file: file, line: line)
-        XCTAssertGreaterThanOrEqual(frame.minX, screen.maxX - 280, file: file, line: line)
+        XCTAssertGreaterThanOrEqual(frame.minX, screen.maxX - rightReach, file: file, line: line)
         XCTAssertGreaterThanOrEqual(frame.minY, screen.maxY - 250, file: file, line: line)
         XCTAssertLessThanOrEqual(frame.maxX, screen.maxX, file: file, line: line)
         XCTAssertLessThanOrEqual(frame.maxY, screen.maxY, file: file, line: line)
