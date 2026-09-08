@@ -4,6 +4,7 @@ import UIKit
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        precondition(UIImage(named: "reynard.chevron.backward") != nil, "UI checks require the production icon assets")
         let window = UIWindow(frame: UIScreen.main.bounds)
         let scenario = ProcessInfo.processInfo.arguments
         let root: UIViewController
@@ -139,5 +140,5 @@ final class LibraryScreen: UITabBarController {
         close.accessibilityLabel = "Close"
         navigationItem.rightBarButtonItem = close
     }
-    @objc private func closeLibrary() { title = "Closed" }
+    @objc private func closeLibrary() { navigationItem.title = "Closed" }
 }

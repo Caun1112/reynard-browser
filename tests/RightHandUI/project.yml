@@ -25,8 +25,8 @@ targets:
       - ../../browser/Reynard/Client/Interface/TabOverview/TabOverviewToolbar/TabOverviewToolbarButton.swift
       - ../../browser/Reynard/Client/Interface/TabOverview/TabOverviewClearTabsMenu.swift
       - ../../browser/Reynard/Client/Interface/Homepage/Sections/Favorites/FavoritesCollectionViewLayout.swift
-    resources:
-      - ../../browser/Reynard/Resources/Assets.xcassets
+      - path: ../../browser/Reynard/Resources/Assets.xcassets
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.caun.reynard.RightHandUI

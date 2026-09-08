@@ -82,7 +82,10 @@ final class RightHandUITests: XCTestCase {
         XCTAssertLessThanOrEqual(lastRow.frame.maxY, app.staticTexts["Settings"].frame.minY)
         attachScreenshot("library-clean-layout")
         app.buttons["library.sections"].tap()
-        app.buttons["Settings"].tap()
+        let settingsMenuItem = app.buttons["Settings"]
+        settingsMenuItem.tap()
+        let menuDismissed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: settingsMenuItem)
+        XCTAssertEqual(XCTWaiter.wait(for: [menuDismissed], timeout: 5), .completed)
         close.tap()
         XCTAssertTrue(app.staticTexts["Closed"].waitForExistence(timeout: 3))
     }

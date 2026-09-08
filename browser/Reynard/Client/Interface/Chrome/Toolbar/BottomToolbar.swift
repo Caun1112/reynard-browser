@@ -94,6 +94,7 @@ final class BottomToolbar: UIView {
             stack.spacing = UX.rightHandButtonSpacing
             stack.distribution = .fillEqually
             for button in stack.arrangedSubviews {
+                button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
                 button.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.rightHandButtonWidth).isActive = true
             }
             return stack
