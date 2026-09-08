@@ -3,7 +3,11 @@ import UIKit
 /// Keeps the original navigation items (including menus and enabled state), but
 /// presents them in a bottom dock on iPhone. iPad retains standard navigation.
 class ReachableNavigationController: UINavigationController {
-    private let dock = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
+    private let dock = UIView()
+    private let barLayout = UIStackView()
+    private var rowsWidthConstraint: NSLayoutConstraint!
+    private var rowsHeightConstraint: NSLayoutConstraint!
+    private var barBottomConstraint: NSLayoutConstraint!
     private let rows = UIStackView()
     private let titleLabel = UILabel()
     private var titleHeightConstraint: NSLayoutConstraint!
@@ -32,37 +36,61 @@ class ReachableNavigationController: UINavigationController {
         super.setToolbarHidden(true, animated: false)
         dock.translatesAutoresizingMaskIntoConstraints = false
         dock.accessibilityIdentifier = "navigation.bottomDock"
+        dock.backgroundColor = .secondarySystemGroupedBackground
+        dock.isOpaque = true
         view.addSubview(dock)
+
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textColor = .label
         titleLabel.textAlignment = .right
         titleLabel.numberOfLines = 1
+        titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.accessibilityTraits = .header
+        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        dock.contentView.addSubview(titleLabel)
 
         rows.axis = .vertical
         rows.spacing = 4
         rows.translatesAutoresizingMaskIntoConstraints = false
-        dock.contentView.addSubview(rows)
-        bottomConstraint = dock.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        dockHeightConstraint = dock.heightAnchor.constraint(equalToConstant: 84)
+        barLayout.axis = .horizontal
+        barLayout.alignment = .center
+        barLayout.spacing = 12
+        barLayout.translatesAutoresizingMaskIntoConstraints = false
+        barLayout.addArrangedSubview(titleLabel)
+        barLayout.addArrangedSubview(rows)
+        dock.addSubview(barLayout)
+
+        let separator = UIView()
+        separator.backgroundColor = .separator
+        separator.translatesAutoresizingMaskIntoConstraints = false
+        dock.addSubview(separator)
+
+        // The opaque surface reaches the physical bottom. Only the controls
+        // are inset above the home indicator (or moved above the keyboard).
+        bottomConstraint = dock.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        dockHeightConstraint = dock.heightAnchor.constraint(equalToConstant: 64)
+        barBottomConstraint = barLayout.bottomAnchor.constraint(equalTo: dock.bottomAnchor, constant: -8)
+        rowsWidthConstraint = rows.widthAnchor.constraint(equalToConstant: 104).withPriority(.defaultHigh)
+        rowsHeightConstraint = rows.heightAnchor.constraint(equalToConstant: 48)
         titleHeightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 28)
         NSLayoutConstraint.activate([
             dock.leftAnchor.constraint(equalTo: view.leftAnchor),
             dock.rightAnchor.constraint(equalTo: view.rightAnchor),
             bottomConstraint,
             dockHeightConstraint,
-            titleLabel.topAnchor.constraint(equalTo: dock.contentView.topAnchor, constant: 8),
-            titleLabel.leftAnchor.constraint(greaterThanOrEqualTo: dock.contentView.safeAreaLayoutGuide.leftAnchor, constant: 16),
-            titleLabel.rightAnchor.constraint(equalTo: dock.contentView.safeAreaLayoutGuide.rightAnchor, constant: -16),
+            barLayout.topAnchor.constraint(equalTo: dock.topAnchor, constant: 8),
+            barLayout.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16),
+            barLayout.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -RightHandLayout.edgeInset),
+            barBottomConstraint,
             titleHeightConstraint,
-            rows.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            rows.rightAnchor.constraint(equalTo: dock.contentView.safeAreaLayoutGuide.rightAnchor, constant: -RightHandLayout.edgeInset),
-            rows.widthAnchor.constraint(equalToConstant: 240).withPriority(.defaultHigh),
-            rows.leftAnchor.constraint(greaterThanOrEqualTo: dock.contentView.safeAreaLayoutGuide.leftAnchor, constant: RightHandLayout.edgeInset),
-            rows.bottomAnchor.constraint(equalTo: dock.contentView.bottomAnchor, constant: -4),
+            rowsWidthConstraint,
+            rowsHeightConstraint,
+            rows.widthAnchor.constraint(lessThanOrEqualTo: barLayout.widthAnchor),
+            separator.topAnchor.constraint(equalTo: dock.topAnchor),
+            separator.leftAnchor.constraint(equalTo: dock.leftAnchor),
+            separator.rightAnchor.constraint(equalTo: dock.rightAnchor),
+            separator.heightAnchor.constraint(equalToConstant: 1 / UIScreen.main.scale),
         ])
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(scheduleRefresh), name: UIContentSizeCategory.didChangeNotification, object: nil)
@@ -116,10 +144,24 @@ class ReachableNavigationController: UINavigationController {
         let titleHeight = max(28, ceil(titleLabel.font.lineHeight))
         titleHeightConstraint.constant = titleHeight
         dock.isHidden = items.isEmpty
-        let itemsPerRow = traitCollection.preferredContentSizeCategory.isAccessibilityCategory ? 2 : 3
+        let usesLargeText = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+        let itemsPerRow = usesLargeText ? 2 : 3
         let rowCount = (items.count + itemsPerRow - 1) / itemsPerRow
-        let height = items.isEmpty ? 0 : CGFloat(rowCount) * 52 + titleHeight + 12
-        dockHeightConstraint.constant = height
+        let rowHeight = CGFloat(max(1, rowCount)) * 48 + CGFloat(max(0, rowCount - 1)) * 4
+        let controlHeight = usesLargeText ? rowHeight + titleHeight + 8 : max(rowHeight, titleHeight)
+        let height = controlHeight + 16
+        let bottomPadding = max(0, view.safeAreaInsets.bottom - keyboardOverlap)
+        dockHeightConstraint.constant = height + bottomPadding
+        bottomConstraint.constant = -keyboardOverlap
+        barBottomConstraint.constant = -8 - bottomPadding
+        barLayout.axis = usesLargeText ? .vertical : .horizontal
+        barLayout.alignment = usesLargeText ? .trailing : .center
+        barLayout.spacing = usesLargeText ? 8 : 12
+        rowsHeightConstraint.constant = rowHeight
+        // Icon-only actions stay compact; text actions have room for their labels.
+        let buttonWidth: CGFloat = items.contains { $0.image == nil } ? 80 : 48
+        let columns = max(1, min(items.count, itemsPerRow))
+        rowsWidthConstraint.constant = CGFloat(columns) * buttonWidth + CGFloat(columns - 1) * RightHandLayout.spacing
 
         if displayedItems.map(ObjectIdentifier.init) != items.map(ObjectIdentifier.init)
             || rows.arrangedSubviews.count != rowCount {
@@ -147,7 +189,7 @@ class ReachableNavigationController: UINavigationController {
             originalInsets = controller.additionalSafeAreaInsets
         }
         var insets = originalInsets
-        insets.bottom += height + keyboardOverlap
+        insets.bottom += (items.isEmpty ? 0 : height) + max(0, keyboardOverlap - view.safeAreaInsets.bottom)
         if controller.additionalSafeAreaInsets != insets {
             controller.additionalSafeAreaInsets = insets
         }
@@ -181,8 +223,7 @@ class ReachableNavigationController: UINavigationController {
         let keyboardFrame = view.convert(frame, from: nil)
         let intersection = view.bounds.intersection(keyboardFrame)
         keyboardOverlap = intersection.isNull || intersection.maxY < view.bounds.maxY - 1
-            ? 0 : max(0, view.bounds.maxY - intersection.minY - view.safeAreaInsets.bottom)
-        bottomConstraint.constant = -keyboardOverlap
+            ? 0 : max(0, view.bounds.maxY - intersection.minY)
         refreshReachableActions()
         let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double ?? 0.25
         let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt ?? 7

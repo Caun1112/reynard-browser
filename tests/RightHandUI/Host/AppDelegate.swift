@@ -8,7 +8,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let window = UIWindow(frame: UIScreen.main.bounds)
         let scenario = ProcessInfo.processInfo.arguments
         let root: UIViewController
-        if scenario.contains("library") {
+        if scenario.contains("library-sheet") {
+            root = LibrarySheetPresenter()
+        } else if scenario.contains("library") {
             root = ReachableNavigationController(rootViewController: LibraryScreen())
         } else if scenario.contains("toolbar") {
             root = ToolbarScreen()
@@ -94,7 +96,7 @@ final class FormScreen: UITableViewController {
             }
         }
     }
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { isEditor ? 1 : 12 }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { isEditor ? 1 : (ProcessInfo.processInfo.arguments.contains("long-list") ? 40 : 12) }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         if isEditor {
@@ -128,7 +130,7 @@ final class LibraryScreen: UITabBarController {
         setViewControllers([settings], animated: false)
         tabBar.isHidden = true
         if #available(iOS 14.0, *) {
-            let sections = UIBarButtonItem(title: "Library", menu: UIMenu(children: [
+            let sections = UIBarButtonItem(title: "Library", image: UIImage(systemName: "square.grid.2x2"), primaryAction: nil, menu: UIMenu(children: [
                 UIAction(title: "Settings", state: .on) { _ in }
             ]))
             sections.accessibilityIdentifier = "library.sections"
@@ -140,5 +142,33 @@ final class LibraryScreen: UITabBarController {
         close.accessibilityLabel = "Close"
         navigationItem.rightBarButtonItem = close
     }
-    @objc private func closeLibrary() { navigationItem.title = "Closed" }
+    @objc private func closeLibrary() {
+        if navigationController?.presentingViewController != nil {
+            navigationController?.dismiss(animated: true)
+        } else {
+            navigationItem.title = "Closed"
+        }
+    }
+}
+
+final class LibrarySheetPresenter: UIViewController {
+    private var didPresentLibrary = false
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard !didPresentLibrary else { return }
+        didPresentLibrary = true
+        let navigation = ContentModalNavigationController(rootViewController: LibraryScreen()) { [weak self] in
+            let result = UILabel()
+            result.text = "Closed"
+            result.accessibilityIdentifier = "sheet.closed"
+            result.frame = CGRect(x: 24, y: 120, width: 200, height: 48)
+            self?.view.addSubview(result)
+        }
+        navigation.modalPresentationStyle = .pageSheet
+        present(navigation, animated: true)
+    }
 }

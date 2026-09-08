@@ -53,9 +53,15 @@ final class RightHandUITests: XCTestCase {
         XCTAssertTrue(save.isEnabled)
         XCTAssertTrue(save.isHittable)
         XCTAssertLessThanOrEqual(save.frame.maxY, app.keyboards.firstMatch.frame.minY + 1)
+        XCTAssertEqual(app.otherElements["navigation.bottomDock"].frame.maxY,
+                       app.keyboards.firstMatch.frame.minY, accuracy: 1)
         attachScreenshot("editor-keyboard")
         save.tap()
         XCTAssertTrue(app.staticTexts["Saved"].firstMatch.waitForExistence(timeout: 3))
+        let keyboardDismissed = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            abs(app.otherElements["navigation.bottomDock"].frame.maxY - app.windows.firstMatch.frame.maxY) <= 1
+        }, object: app)
+        XCTAssertEqual(XCTWaiter.wait(for: [keyboardDismissed], timeout: 10), .completed)
         app.buttons["navigation.back"].tap()
         XCTAssertTrue(app.buttons["edit"].waitForExistence(timeout: 3))
     }
@@ -85,6 +91,8 @@ final class RightHandUITests: XCTestCase {
         if !lastRow.isHittable { app.tables.firstMatch.swipeUp() }
         XCTAssertTrue(lastRow.isHittable)
         XCTAssertLessThanOrEqual(lastRow.frame.maxY, app.staticTexts["Settings"].frame.minY)
+        assertDockCoversBottom(in: app)
+        XCTAssertEqual(app.staticTexts["Settings"].frame.midY, close.frame.midY, accuracy: 1)
         attachScreenshot("library-clean-layout")
         app.buttons["library.sections"].tap()
         let settingsMenuItem = app.buttons["Settings"]
@@ -102,6 +110,46 @@ final class RightHandUITests: XCTestCase {
         XCTAssertTrue(app.buttons["browser.back"].waitForExistence(timeout: 5))
         assertToolbarSingleRow(in: app)
         attachScreenshot("browser-compact-single-row")
+    }
+
+    func testSettingsSheetCoversBottomWhileScrollingInBothAppearances() {
+        for appearance in ["light", "dark"] {
+            let app = XCUIApplication()
+            app.launchArguments = ["library-sheet", "long-list", appearance]
+            app.launch()
+            let close = app.buttons["library.close"]
+            XCTAssertTrue(close.waitForExistence(timeout: 10))
+            assertDockCoversBottom(in: app)
+            let table = app.tables.firstMatch
+            table.swipeUp()
+            assertDockCoversBottom(in: app)
+            attachScreenshot("settings-sheet-\(appearance)-scroll")
+            let lastRow = app.staticTexts["Setting 40"]
+            for _ in 0..<8 {
+                if lastRow.isHittable && lastRow.frame.maxY <= app.otherElements["navigation.bottomDock"].frame.minY { break }
+                table.swipeUp()
+            }
+            XCTAssertTrue(lastRow.isHittable)
+            XCTAssertLessThanOrEqual(lastRow.frame.maxY, app.otherElements["navigation.bottomDock"].frame.minY)
+            assertDockCoversBottom(in: app)
+            attachScreenshot("settings-sheet-\(appearance)-bottom")
+            close.tap()
+            XCTAssertTrue(app.staticTexts["sheet.closed"].waitForExistence(timeout: 5))
+            app.terminate()
+        }
+    }
+
+    private func assertDockCoversBottom(in app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) {
+        let dock = app.otherElements["navigation.bottomDock"].frame
+        let window = app.windows.firstMatch.frame
+        XCTAssertEqual(dock.maxY, window.maxY, accuracy: 1, file: file, line: line)
+        XCTAssertEqual(dock.minX, window.minX, accuracy: 1, file: file, line: line)
+        XCTAssertEqual(dock.width, window.width, accuracy: 1, file: file, line: line)
+        let close = app.buttons["library.close"]
+        assertReachable(close, in: app, file: file, line: line)
+        XCTAssertEqual(close.frame.height, 48, accuracy: 1, file: file, line: line)
+        XCTAssertEqual(close.frame.midY, app.buttons["library.sections"].frame.midY, accuracy: 1, file: file, line: line)
+        XCTAssertLessThan(close.frame.maxY, dock.maxY, file: file, line: line)
     }
 
     private func assertToolbarSingleRow(in app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) {
