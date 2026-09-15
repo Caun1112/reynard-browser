@@ -62,11 +62,16 @@ final class BrowserPreferences {
             key("CompatibilitySettings", "customOscpu"): "",
             key("CompatibilitySettings", "customBuildID"): "",
             
+            // Developer
+            key("DeveloperSettings", "remoteDebuggingEnabled"): false,
+            key("DeveloperSettings", "remoteDebuggingPort"): 6000,
+            
             // Browsing
             key("BrowsingSettings", "requestDesktopWebsite"): UIDevice.current.userInterfaceIdiom == .pad,
             key("BrowsingSettings", "showLinkPreviews"): true,
             key("BrowsingSettings", "showImagePreviews"): true,
             key("BrowsingSettings", "openLinksInExternalApps"): true,
+            key("BrowsingSettings", "openLinksInNewTabsBehavior"): OpenLinksInNewTabsBehavior.switchTabImmediately.rawValue,
             key("BrowsingSettings", "defaultPageZoomLevel"): PageZoomLevels.defaultLevel,
             
             // New Tab
@@ -305,6 +310,16 @@ final class BrowserPreferences {
             }
             set {
                 prefs.set(newValue, forSetting: "BrowsingSettings", key: "openLinksInExternalApps")
+            }
+        }
+        
+        static var openLinksInNewTabsBehavior: OpenLinksInNewTabsBehavior {
+            get {
+                let rawValue = prefs.string(forSetting: "BrowsingSettings", key: "openLinksInNewTabsBehavior") ?? OpenLinksInNewTabsBehavior.switchTabImmediately.rawValue
+                return OpenLinksInNewTabsBehavior(rawValue: rawValue) ?? .switchTabImmediately
+            }
+            set {
+                prefs.set(newValue.rawValue, forSetting: "BrowsingSettings", key: "openLinksInNewTabsBehavior")
             }
         }
         
@@ -877,6 +892,27 @@ final class BrowserPreferences {
             }
             set {
                 prefs.set(newValue.trimmingCharacters(in: .whitespacesAndNewlines), forSetting: "CompatibilitySettings", key: "customBuildID")
+            }
+        }
+    }
+    
+    // MARK: - Developer
+    struct DeveloperSettings {
+        static var remoteDebuggingEnabled: Bool {
+            get {
+                return prefs.bool(forSetting: "DeveloperSettings", key: "remoteDebuggingEnabled")
+            }
+            set {
+                prefs.set(newValue, forSetting: "DeveloperSettings", key: "remoteDebuggingEnabled")
+            }
+        }
+        
+        static var remoteDebuggingPort: Int {
+            get {
+                return prefs.integer(forSetting: "DeveloperSettings", key: "remoteDebuggingPort")
+            }
+            set {
+                prefs.set(newValue, forSetting: "DeveloperSettings", key: "remoteDebuggingPort")
             }
         }
     }

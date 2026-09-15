@@ -9,7 +9,6 @@ import UIKit
 
 final class FindInPageActionBar: UIView, UITextFieldDelegate {
     private enum UX {
-        static let backgroundHeight: CGFloat = 62
         static let contentLeadingInset: CGFloat = 12
         static let contentMaximumWidth: CGFloat = 650
         static let searchBarToControlsSpacing: CGFloat = 12
@@ -83,16 +82,23 @@ final class FindInPageActionBar: UIView, UITextFieldDelegate {
         view.layer.shadowOpacity = UX.shadowOpacity
         view.layer.shadowRadius = UX.shadowRadius
         view.layer.shadowOffset = UX.shadowOffset
+        view.layer.shadowColor = UIColor.black.cgColor
         return view
     }()
     
     private let searchBarBackground: UIVisualEffectView = {
         let view = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.contentView.backgroundColor = UIColor.systemBackground.withAlphaComponent(UX.backgroundAlpha)
+        view.contentView.backgroundColor = UIColor { traitCollection in
+            let backgroundColor: UIColor = traitCollection.userInterfaceStyle == .dark
+            ? .tertiarySystemBackground.withAlphaComponent(0.8)
+            : .systemBackground.withAlphaComponent(0.8)
+            return backgroundColor.resolvedColor(with: traitCollection)
+        }
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = UX.controlsCornerRadius
         view.layer.borderWidth = UX.borderWidth
+        view.layer.borderColor = UIColor.separator.withAlphaComponent(0.2).cgColor
         view.clipsToBounds = true
         return view
     }()
@@ -106,16 +112,23 @@ final class FindInPageActionBar: UIView, UITextFieldDelegate {
         view.layer.shadowOpacity = UX.shadowOpacity
         view.layer.shadowRadius = UX.shadowRadius
         view.layer.shadowOffset = UX.shadowOffset
+        view.layer.shadowColor = UIColor.black.cgColor
         return view
     }()
     
     private let controlsBackground: UIVisualEffectView = {
         let view = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.contentView.backgroundColor = UIColor.systemBackground.withAlphaComponent(UX.backgroundAlpha)
+        view.contentView.backgroundColor = UIColor { traitCollection in
+            let backgroundColor: UIColor = traitCollection.userInterfaceStyle == .dark
+            ? .tertiarySystemBackground.withAlphaComponent(0.8)
+            : .systemBackground.withAlphaComponent(0.8)
+            return backgroundColor.resolvedColor(with: traitCollection)
+        }
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = UX.controlsCornerRadius
         view.layer.borderWidth = UX.borderWidth
+        view.layer.borderColor = UIColor.separator.withAlphaComponent(0.2).cgColor
         view.clipsToBounds = true
         return view
     }()
@@ -154,8 +167,6 @@ final class FindInPageActionBar: UIView, UITextFieldDelegate {
             self?.onDismiss?()
         }
         searchField.addTarget(self, action: #selector(searchTextChanged), for: .editingChanged)
-        updateShadowColor()
-        updateBorderColor()
         updateNavigationButtons()
     }
     
@@ -172,16 +183,6 @@ final class FindInPageActionBar: UIView, UITextFieldDelegate {
                 cornerRadius: UX.controlsCornerRadius
             ).cgPath
         }
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle else {
-            return
-        }
-        
-        updateShadowColor()
-        updateBorderColor()
     }
     
     // MARK: - Presentation
@@ -304,8 +305,6 @@ final class FindInPageActionBar: UIView, UITextFieldDelegate {
         )
         
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: UX.backgroundHeight),
-            
             backgroundView.topAnchor.constraint(equalTo: topAnchor),
             backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -420,15 +419,5 @@ final class FindInPageActionBar: UIView, UITextFieldDelegate {
         button.tintColor = .label
         button.addTarget(self, action: action, for: .touchUpInside)
         return button
-    }
-    
-    private func updateShadowColor() {
-        let shadowColor: UIColor = traitCollection.userInterfaceStyle == .dark ? .white : .black
-        [searchBarShadowView, controlsShadowView].forEach { $0.layer.shadowColor = shadowColor.cgColor }
-    }
-    
-    private func updateBorderColor() {
-        let borderColor = UIColor.separator.withAlphaComponent(0.2).cgColor
-        [searchBarBackground, controlsBackground].forEach { $0.layer.borderColor = borderColor }
     }
 }

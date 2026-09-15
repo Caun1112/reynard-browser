@@ -41,6 +41,13 @@ enum RuntimePreferences {
             ])
         }
         
+        // Disable mobile viewport on iPad
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            GeckoRuntime.setDefaultPrefs([
+                "dom.meta-viewport.enabled": false
+            ])
+        }
+        
         // HTTPS-only mode
         HTTPSOnlyModePolicyController.applyHTTPSOnlyMode()
         
@@ -50,5 +57,8 @@ enum RuntimePreferences {
         // Tracking Protection
         TrackingProtectionPolicyController.applyEnhancedTrackingProtection()
         TrackingProtectionPolicyController.applyGlobalPrivacyControl()
+        
+        // Remote Debugging
+        RemoteDebuggingSettingController.applyRemoteDebugging()
     }
 }

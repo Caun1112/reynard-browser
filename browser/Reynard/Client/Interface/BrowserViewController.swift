@@ -87,6 +87,30 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
     
     // MARK: - Lifecycle
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if #available(iOS 26.0, *) {
+            return .default
+        }
+        
+        guard browserLayout.chromeMode == .phone,
+              !tabOverview.isPresented else {
+            return .default
+        }
+        
+        switch contentView.state.overlayPresentation {
+        case .visible(.homepage):
+            let foregroundColor = HomepageWallpaper.foregroundColor(for: .embedded(layout: browserLayout))
+            return foregroundColor.isLightColor(in: traitCollection) ? .lightContent : .darkContent
+        case .visible(.search):
+            return .default
+        case .hidden:
+            let backgroundColor = tabManager.selectedTab.map {
+                sessionManager.pageBackgroundColor(for: $0.session)
+            } ?? .systemBackground
+            return backgroundColor.isLightColor(in: traitCollection) ? .darkContent : .lightContent
+        }
+    }
+    
     override var prefersStatusBarHidden: Bool {
         return isShowingFullscreenMedia
     }
@@ -253,6 +277,9 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
     // MARK: - Browser Layout
     
     private func configureBrowserInterface() {
+        contentView.onAppearanceChanged = { [weak self] in
+            self?.setNeedsStatusBarAppearanceUpdate()
+        }
         browserChrome.configureAddressBar(
             delegate: self,
             searchDelegate: self,
@@ -301,12 +328,12 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
             self?.sidebarCoordinator.toggle(animated: true)
         }
         browserChrome.onBack = { [weak self] in
-            self?.toolbarController.reset()
+            self?.toolbarController.reset(preserveManualCollapse: true)
             self?.prepareThumbnailForNavigation()
             self?.tabManager.goBack()
         }
         browserChrome.onForward = { [weak self] in
-            self?.toolbarController.reset()
+            self?.toolbarController.reset(preserveManualCollapse: true)
             self?.prepareThumbnailForNavigation()
             self?.tabManager.goForward()
         }
@@ -330,7 +357,7 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
                     return
                 }
                 
-                self.toolbarController.reset()
+                self.toolbarController.reset(preserveManualCollapse: true)
                 self.prepareThumbnailForNavigation()
                 switch direction {
                 case .back:
@@ -451,6 +478,9 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
                 self?.toolbarController.restoreBottomToolbar()
             }
         }
+        browserChrome.onKeyboardDismissal = { [weak self] in
+            self?.tabManager.selectedTab?.session.engineView?.resignFirstResponder()
+        }
     }
     
     func updateBrowserLayout(
@@ -471,7 +501,6 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
             dismissAddressBarEditingAndOverlays()
         }
         applyBrowserLayout(animated: animated)
-        homepageOverlayCoordinator.updatePresentedLayout()
         homepageOverlayCoordinator.updatePresentation(animated: false)
         searchOverlayCoordinator.updatePresentedLayout()
         
@@ -531,6 +560,7 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
         applyTabOverviewLayout()
         applyBrowserChromeLayout(animated: animated)
         updateNavigationButtons()
+        setNeedsStatusBarAppearanceUpdate()
     }
     
     private func applyFullscreenLayout() {
@@ -761,6 +791,12 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
     private func observeNotifications() {
         NotificationCenter.default.addObserver(
             self,
+            selector: #selector(setNeedsStatusBarAppearanceUpdate),
+            name: .homepageSettingsDidChange,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
             selector: #selector(keyboardFrameWillChange(_:)),
             name: UIResponder.keyboardWillChangeFrameNotification,
             object: nil
@@ -877,46 +913,43 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
         }
         
         let keyboardFrame = view.convert(frameValue.cgRectValue, from: nil)
-        let keyboardInset = max(
-            0,
-            view.bounds.maxY - keyboardFrame.minY - view.safeAreaInsets.bottom
-        )
         let keyboardOverlap = max(0, view.bounds.maxY - keyboardFrame.minY)
-        let animation = keyboardAnimation(from: notification)
-        let isInHardwareKeyboardMode = tabManager.selectedTab?.session.isInHardwareKeyboardMode() == true
-        if !searchOverlayCoordinator.isFocused
-            && !tabOverview.isPresented
-            && keyboardInset > 0
-            && !isInHardwareKeyboardMode {
-            contentView.relocateFocusedInput(
-                above: keyboardFrame,
-                animationDuration: animation.duration,
-                animationOptions: animation.curve
-            )
-        } else {
-            contentView.resetFocusedInputRelocation(
-                animationDuration: animation.duration,
-                animationOptions: animation.curve
-            )
-        }
+        let keyboardInset = max(0, keyboardOverlap - view.safeAreaInsets.bottom)
+        let shouldAdjustForKeyboard = keyboardInset > 0
+        && !tabOverview.isPresented
+        && tabManager.selectedTab?.session.isInHardwareKeyboardMode() != true
+        let shouldRelocateInput = shouldAdjustForKeyboard
+        && !searchOverlayCoordinator.isFocused
+        && !browserChrome.isShowingFindInPage
+        && presentedControllerInHierarchy == nil
         
-        let shouldDockActionBar = !tabOverview.isPresented
-        && keyboardInset > 0
-        && !isInHardwareKeyboardMode
-        && browserChrome.isShowingFindInPage
-        let shouldDockAddressBar = !tabOverview.isPresented
-        && keyboardInset > 0
-        && !isInHardwareKeyboardMode
-        && (
-            browserLayout.chromeMode == .phone && searchOverlayCoordinator.isFocused
-        )
+        let animation = keyboardAnimation(from: notification)
+        if shouldRelocateInput && browserLayout.interfaceIdiom == .phone {
+            browserChrome.showActionBar(.keyboardDismissal, animated: false)
+        } else if browserChrome.isShowingKeyboardDismissal {
+            browserChrome.dismissActionBar(animated: false)
+        }
+        let shouldDockActionBar = shouldAdjustForKeyboard
+        && (browserChrome.isShowingFindInPage || browserChrome.isShowingKeyboardDismissal)
+        let shouldDockAddressBar = shouldAdjustForKeyboard
+        && browserLayout.chromeMode == .phone && searchOverlayCoordinator.isFocused
         browserChrome.dockActionBar(offset: shouldDockActionBar ? -keyboardOverlap : 0)
         browserChrome.dockAddressBar(offset: shouldDockAddressBar ? -keyboardInset : 0)
         animateLayout(animation)
+        
+        contentView.updateFocusedInputRelocation(
+            above: shouldRelocateInput ? keyboardFrame : nil,
+            bottomInset: browserChrome.isShowingKeyboardDismissal ? ActionBarStyle.compact.height : 0,
+            animationDuration: animation.duration,
+            animationOptions: animation.curve
+        )
     }
     
     @objc private func keyboardWillHide(_ notification: Notification) {
         let animation = keyboardAnimation(from: notification)
+        if browserChrome.isShowingKeyboardDismissal {
+            browserChrome.dismissActionBar(animated: false)
+        }
         contentView.resetFocusedInputRelocation(
             animationDuration: animation.duration,
             animationOptions: animation.curve

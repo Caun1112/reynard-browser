@@ -7,24 +7,40 @@
 
 import UIKit
 
+enum ActionBarStyle {
+    case compact
+    case standard
+    
+    var height: CGFloat {
+        switch self {
+        case .compact:
+            return 41
+        case .standard:
+            return 62
+        }
+    }
+}
+
 final class ActionBar: UIView {
     private enum UX {
         static let closeButtonSize: CGFloat = 44
         static let closeButtonCornerRadius: CGFloat = 14
         static let horizontalInset: CGFloat = 13
         static let closeSymbolPointSize: CGFloat = 10
-        static let backgroundAlpha: CGFloat = 0.34
         static let shadowOpacity: Float = 0.14
         static let shadowRadius: CGFloat = 8
         static let shadowOffset = CGSize(width: 0, height: 3)
         static let borderWidth: CGFloat = 0.5
     }
     
-    static let height: CGFloat = 62
-    
     enum Item: Equatable {
         case findInPage
         case pageZoom
+        case keyboardDismissal
+        
+        var style: ActionBarStyle {
+            return self == .keyboardDismissal ? .compact : .standard
+        }
     }
     
     var onFindInPage: ((_ query: String?, _ backwards: Bool) async -> (current: Int, total: Int)?)? {
@@ -53,6 +69,7 @@ final class ActionBar: UIView {
     }
     
     var onClose: (() -> Void)?
+    var onKeyboardDismissal: (() -> Void)?
     
     private(set) var item: Item?
     
@@ -60,9 +77,15 @@ final class ActionBar: UIView {
         return item == .findInPage && !isHidden
     }
     
+    var isShowingKeyboardDismissal: Bool {
+        return item == .keyboardDismissal && !isHidden && alpha > 0
+    }
+    
     private let findInPageActionBar = FindInPageActionBar()
     private let pageZoomActionBar = PageZoomActionBar()
+    private let keyboardDismissalActionBar = KeyboardDismissalActionBar()
     private var hasPreparedFindInPageDismissal = false
+    private var heightConstraint: NSLayoutConstraint!
     
     private let closeShadowView: UIView = {
         let view = UIView()
@@ -70,6 +93,7 @@ final class ActionBar: UIView {
         view.backgroundColor = .clear
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = UX.closeButtonCornerRadius
+        view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = UX.shadowOpacity
         view.layer.shadowRadius = UX.shadowRadius
         view.layer.shadowOffset = UX.shadowOffset
@@ -79,10 +103,16 @@ final class ActionBar: UIView {
     private let closeBackground: UIVisualEffectView = {
         let view = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.contentView.backgroundColor = UIColor.systemBackground.withAlphaComponent(UX.backgroundAlpha)
+        view.contentView.backgroundColor = UIColor { traitCollection in
+            let backgroundColor: UIColor = traitCollection.userInterfaceStyle == .dark
+            ? .tertiarySystemBackground.withAlphaComponent(0.8)
+            : .systemBackground.withAlphaComponent(0.8)
+            return backgroundColor.resolvedColor(with: traitCollection)
+        }
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = UX.closeButtonCornerRadius
         view.layer.borderWidth = UX.borderWidth
+        view.layer.borderColor = UIColor.separator.withAlphaComponent(0.2).cgColor
         view.clipsToBounds = true
         return view
     }()
@@ -113,12 +143,13 @@ final class ActionBar: UIView {
         configureAppearance()
         configureHierarchy()
         configureConstraints()
-        updateShadowColor()
-        updateBorderColor()
         setItem(nil)
         
         findInPageActionBar.onDismiss = { [weak self] in
             self?.onClose?()
+        }
+        keyboardDismissalActionBar.onDone = { [weak self] in
+            self?.onKeyboardDismissal?()
         }
     }
     
@@ -134,16 +165,6 @@ final class ActionBar: UIView {
         ).cgPath
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle else {
-            return
-        }
-        
-        updateShadowColor()
-        updateBorderColor()
-    }
-    
     // MARK: - Presentation
     
     func setItem(_ item: Item?) {
@@ -155,9 +176,12 @@ final class ActionBar: UIView {
             findInPageActionBar.prepareForPresentation()
         }
         self.item = item
+        heightConstraint.constant = item?.style.height ?? ActionBarStyle.standard.height
         isHidden = item == nil
         findInPageActionBar.isHidden = item != .findInPage
         pageZoomActionBar.isHidden = item != .pageZoom
+        keyboardDismissalActionBar.isHidden = item != .keyboardDismissal
+        closeShadowView.isHidden = item == .keyboardDismissal
     }
     
     func prepareForDismissal() {
@@ -197,6 +221,7 @@ final class ActionBar: UIView {
     private func configureHierarchy() {
         addSubview(findInPageActionBar)
         addSubview(pageZoomActionBar)
+        addSubview(keyboardDismissalActionBar)
         addSubview(closeShadowView)
         closeShadowView.addSubview(closeBackground)
         closeShadowView.addSubview(closeButton)
@@ -204,8 +229,9 @@ final class ActionBar: UIView {
     }
     
     private func configureConstraints() {
+        heightConstraint = heightAnchor.constraint(equalToConstant: ActionBarStyle.standard.height)
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: ActionBar.height),
+            heightConstraint,
             
             pageZoomActionBar.topAnchor.constraint(equalTo: topAnchor),
             pageZoomActionBar.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -216,6 +242,11 @@ final class ActionBar: UIView {
             findInPageActionBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             findInPageActionBar.trailingAnchor.constraint(equalTo: trailingAnchor),
             findInPageActionBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            keyboardDismissalActionBar.topAnchor.constraint(equalTo: topAnchor),
+            keyboardDismissalActionBar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            keyboardDismissalActionBar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            keyboardDismissalActionBar.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             closeShadowView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalInset),
             closeShadowView.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -237,15 +268,5 @@ final class ActionBar: UIView {
             topBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
             topBorderView.heightAnchor.constraint(equalToConstant: UX.borderWidth),
         ])
-    }
-    
-    private func updateShadowColor() {
-        let color: UIColor = traitCollection.userInterfaceStyle == .dark ? .white : .black
-        closeShadowView.layer.shadowColor = color.cgColor
-    }
-    
-    private func updateBorderColor() {
-        let color = UIColor.separator.withAlphaComponent(0.2)
-        closeBackground.layer.borderColor = color.cgColor
     }
 }
