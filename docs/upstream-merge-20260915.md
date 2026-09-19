@@ -156,3 +156,19 @@ f032616 Make tab cards reachable and allow swiping closed in either direction
 a8b8c08 Use full-size live action controls and right-side editing accessories
 490018c Adapt iPhone controls and navigation for right-hand reachability
 ea2c577 Allow fork builds and cache Gecko SDK for UI iteration
+
+## 最终验证结果（2026-09-19）
+
+- GitHub Actions [34952311148](https://github.com/Caun1112/reynard-browser/actions/runs/34952311148) 全部成功；构建源码提交为 `f40493ba3ed6b13cab2dd4fb6ea5c46f7bb2c169`。
+- Gecko 补丁应用、Gecko/idevice 编译、Release arm64 归档、普通 IPA 打包全部通过。
+- iPhone 15 Pro Max UI 测试：6 项通过，0 失败；本地报告位于 `dist/merge-validation`。
+- IPA：`dist/merged-20260915/Reynard.ipa`，108,096,180 字节。
+- IPA SHA-256：`070a54ab098bb6e2448061883fb774b807741be329df2768074d3950e7b55049`。
+- GitHub artifact ZIP SHA-256 与 API 提供摘要一致：`f2af60ee8c03f57118173be4c40b82196f58c17aaead56c2ed04adcedafd8f67`。
+- ZIP CRC 完整性检查通过；主程序、OpenIn、Reynard Helper 均为版本 `0.13.1`、构建号 `f40493b`。
+- codesign 检查确认主程序及两个扩展均为 `code object is not signed at all`；包内没有 embedded.mobileprovision。
+- `libswift_Concurrency.dylib` 为上游打包流程生成的 ad-hoc 签名，TeamIdentifier 未设置。
+- 真机安装、JIT 与网页运行回归未执行，不能由 UI harness 或归档成功替代。
+- 本次后续提交仅补充此验证报告，未修改已验证的应用源代码。
+
+原功能分支 `codex/right-hand-ui` 可安全快进至包含上述合并与报告的提交；远端备份仍指向原始 `544bcd9`。要撤销上游合并，可在共享分支执行 `git revert -m 1 f40493b`，不需要强推。
