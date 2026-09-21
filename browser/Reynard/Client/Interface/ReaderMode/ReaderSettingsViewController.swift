@@ -411,7 +411,7 @@ final class ReaderSettingsViewController: UIViewController, UIPopoverPresentatio
         materialContainers.append(material)
         return material
     }
-
+    
     private func configureOpaqueMaterialContainers() {
         materialContainers.forEach {
             $0.effect = nil
@@ -485,7 +485,9 @@ final class ReaderSettingsViewController: UIViewController, UIPopoverPresentatio
                 self.readerMode.setFontType(fontType, for: self.tabManager.selectedTab?.session)
                 self.refreshAppearance()
             }
-            action.attributedTitle = NSAttributedString(string: title, attributes: [.font: font(for: fontType)])
+            if action.responds(to: Selector(("setAttributedTitle:"))) {
+                action.attributedTitle = NSAttributedString(string: title, attributes: [.font: font(for: fontType)])
+            }
             return action
         }
         fontButton.setTitle(title(for: selectedFontType) + " ", for: .normal)
