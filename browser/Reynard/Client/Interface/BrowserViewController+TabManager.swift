@@ -321,7 +321,7 @@ extension BrowserViewController {
             captureThumbnail(forTabAt: index, mode: tabManager.selectedTabMode)
         case .customURL:
             guard let tab = tabManager.activeTabs[safe: index],
-                  URLUtils.isWebURL(Prefs.NewTabSettings.customNewTabURL) else {
+                  URLUtils.normalizedNewTabURL(from: Prefs.NewTabSettings.customNewTabURL) != nil else {
                 return
             }
             

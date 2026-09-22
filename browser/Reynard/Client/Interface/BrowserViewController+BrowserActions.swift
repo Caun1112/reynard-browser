@@ -175,7 +175,7 @@ extension BrowserViewController {
                 completion()
             }
         case .customURL:
-            if URLUtils.isWebURL(Prefs.NewTabSettings.customNewTabURL) {
+            if URLUtils.normalizedNewTabURL(from: Prefs.NewTabSettings.customNewTabURL) != nil {
                 tabManager.browse(to: Prefs.NewTabSettings.customNewTabURL, in: tab)
             }
             completion()
