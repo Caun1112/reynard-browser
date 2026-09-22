@@ -167,6 +167,7 @@ extension BrowserViewController: TabBarDataSource, TabOverviewDataSource, TabOve
                }) {
                 tabManager.selectTab(at: tabIndex, mode: mode)
             }
+            scrollTabOverviewToTab(at: tabManager.selectedTabIndex)
             tabOverview.prepareDismissSelectionForCurrentTab()
         }
         setTabOverviewVisible(false, animated: true)
