@@ -425,7 +425,10 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
             self.presentShareSheet(
                 items: [url],
                 sourceView: sourceView,
-                sourceRect: sourceView.bounds
+                sourceRect: sourceView.bounds,
+                applicationActivities: [
+                    PagePrintActivity(session: tab.session, jobName: tab.title)
+                ]
             )
         }
         browserChrome.onLibrary = { [weak self] in

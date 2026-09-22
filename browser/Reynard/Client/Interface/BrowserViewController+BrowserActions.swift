@@ -12,6 +12,7 @@ extension BrowserViewController {
         items: [Any],
         sourceView: UIView,
         sourceRect: CGRect,
+        applicationActivities: [UIActivity]? = nil,
         completion: ((Bool, Error?) -> Void)? = nil
     ) {
         guard !items.isEmpty else {
@@ -20,7 +21,7 @@ extension BrowserViewController {
         
         let activityController = UIActivityViewController(
             activityItems: items,
-            applicationActivities: nil
+            applicationActivities: applicationActivities
         )
         if let popover = activityController.popoverPresentationController {
             popover.sourceView = sourceView

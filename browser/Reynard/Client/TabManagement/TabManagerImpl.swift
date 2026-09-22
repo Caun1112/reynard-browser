@@ -32,6 +32,13 @@ final class TabManagerImplementation: NSObject, TabManager {
         presenter: PromptPresenter(),
         onPromptFinished: requestContentKeyboardFocus
     )
+    private lazy var pagePrintCoordinator = PagePrintCoordinator { [weak self] session in
+        guard let self,
+              let location = self.tabLocation(for: session) else {
+            return nil
+        }
+        return self.tabs(for: location.mode)[location.index].title
+    }
     private lazy var selectionActionCoordinator = SelectionActionCoordinator(
         presenter: SelectionActionPresenter(onMenuDismissed: requestContentKeyboardFocus)
     )
@@ -223,6 +230,7 @@ final class TabManagerImplementation: NSObject, TabManager {
             progress: self,
             scroll: self,
             prompt: promptCoordinator,
+            print: pagePrintCoordinator,
             selectionAction: selectionActionCoordinator,
             mediaSession: systemMediaSession
         )
