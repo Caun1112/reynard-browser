@@ -92,7 +92,7 @@ extension BrowserViewController {
     }
     
     @objc func goBackKeyCommand(_ sender: UIKeyCommand) {
-        guard tabManager.selectedTab?.state.navigationState.canGoBack == true else {
+        guard tabManager.canGoBack else {
             return
         }
         exitFullscreenIfNeeded()

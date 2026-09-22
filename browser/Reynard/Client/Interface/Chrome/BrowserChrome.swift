@@ -551,8 +551,8 @@ final class BrowserChrome: UIView, UIGestureRecognizerDelegate {
         addressBar.performAfterMenuDismissal(action)
     }
     
-    func animateAutomaticNewTabTransition(to tab: Tab, completion: @escaping () -> Void) {
-        addressBar.animateAutomaticNewTabTransition(to: tab, completion: completion)
+    func animateAutomaticTabTransition(to tab: Tab, returning: Bool = false, completion: @escaping () -> Void) {
+        addressBar.animateAutomaticTabTransition(to: tab, returning: returning, completion: completion)
     }
     
     var isAddressBarEditing: Bool { return addressBar.isEditingText }

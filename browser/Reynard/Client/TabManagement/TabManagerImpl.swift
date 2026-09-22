@@ -437,6 +437,7 @@ final class TabManagerImplementation: NSObject, TabManager {
                 isMuted: snapshot.isMuted,
                 isPrivate: false
             )
+            tab.state.openerTabID = snapshot.openerTabID
             prepareRestoration(
                 serializedSessionState: snapshot.tabSessionState,
                 fallbackURL: snapshot.url,
@@ -711,6 +712,7 @@ final class TabManagerImplementation: NSObject, TabManager {
     @discardableResult
     func addTransferredSession(_ session: GeckoSession, url: String, title: String?, selecting: Bool, at insertionIndex: Int?, isPrivate: Bool = false) -> Int {
         let tab = Tab(session: session, isPrivate: isPrivate)
+        tab.state.openerTabID = !isPrivate && selectedTab?.isPrivate == false ? selectedTab?.id : nil
         let sessionState = restorableSessionState(session.currentSessionState, matching: url)
         tab.state.tabSessionState = sessionState
         let mode: TabMode = isPrivate ? .private : .regular
@@ -947,6 +949,23 @@ final class TabManagerImplementation: NSObject, TabManager {
     
     func goBack() {
         guard let tab = selectedTab else {
+            return
+        }
+        
+        if !tab.state.navigationState.canGoBack, let openerTab {
+            guard tab.state.activeHistoryNavigationID == nil else {
+                return
+            }
+            delegate?.tabManager(self, animateReturnTo: openerTab) { [weak self] in
+                guard let self,
+                      self.selectedTab === tab,
+                      let openerIndex = self.regularTabs.firstIndex(where: { $0.id == openerTab.id }) else {
+                    return
+                }
+                let closingIndex = self.selectedTabIndex
+                self.selectTab(at: openerIndex, mode: .regular)
+                self.removeTab(at: closingIndex, mode: .regular)
+            }
             return
         }
         
@@ -1563,6 +1582,7 @@ extension TabManagerImplementation: NavigationDelegate {
         )
         sessionManager.universalLinkManager.didCreateNewSession(from: session, for: uri)
         let newTab = Tab(id: tabID, session: newSession, isPrivate: sourceIsPrivate)
+        newTab.state.openerTabID = sourceIsPrivate ? nil : sourceLocation.map { regularTabs[$0.index].id }
         permissionCoordinator.restorePermissions(for: newSession, at: uri)
         newTab.url = uri
         newTab.favicon = cachedFavicon(for: uri)

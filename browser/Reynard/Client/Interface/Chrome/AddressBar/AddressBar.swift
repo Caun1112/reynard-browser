@@ -586,8 +586,8 @@ final class AddressBar: UIView {
         gestures?.performAfterTransition(completion) ?? false
     }
     
-    func animateAutomaticNewTabTransition(to tab: Tab, completion: @escaping () -> Void) {
-        gestures?.animateAutomaticNewTabTransition(to: tab, completion: completion)
+    func animateAutomaticTabTransition(to tab: Tab, returning: Bool = false, completion: @escaping () -> Void) {
+        gestures?.animateAutomaticTabTransition(to: tab, returning: returning, completion: completion)
     }
     
     var isEditingText: Bool {

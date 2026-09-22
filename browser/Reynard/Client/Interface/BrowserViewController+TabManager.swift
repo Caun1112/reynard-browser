@@ -21,6 +21,7 @@ extension BrowserViewController: TabManagerDelegate {
             contentView.setTab(nil)
         }
         refreshAddressBar()
+        updateNavigationButtons()
         
         if !tabOverview.isPresented {
             tabOverview.setMode(TabOverview.Mode(tabMode: tabManager.selectedTabMode), animated: false)
@@ -239,6 +240,10 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
     
+    func tabManager(_ tabManager: TabManager, animateReturnTo tab: Tab, completion: @escaping () -> Void) {
+        browserChrome.animateAutomaticTabTransition(to: tab, returning: true, completion: completion)
+    }
+    
     func tabManager(_ tabManager: TabManager, animateNewTabSelectionAt index: Int, completion: @escaping () -> Void) {
         guard tabManager.activeTabs.indices.contains(index) else {
             completion()
@@ -255,7 +260,7 @@ extension BrowserViewController: TabManagerDelegate {
             }
             
             self.tabBar.setPendingExpansion(at: index)
-            self.browserChrome.animateAutomaticNewTabTransition(to: tabManager.activeTabs[index], completion: completion)
+            self.browserChrome.animateAutomaticTabTransition(to: tabManager.activeTabs[index], completion: completion)
         }
     }
     

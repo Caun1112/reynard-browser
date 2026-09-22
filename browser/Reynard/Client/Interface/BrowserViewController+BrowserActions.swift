@@ -156,7 +156,7 @@ extension BrowserViewController {
                 }
                 
                 self.tabBar.setPendingExpansion(at: createdIndex)
-                self.browserChrome.animateAutomaticNewTabTransition(to: tab) { [weak self] in
+                self.browserChrome.animateAutomaticTabTransition(to: tab) { [weak self] in
                     self?.tabManager.selectTab(at: createdIndex, mode: mode)
                 }
             }

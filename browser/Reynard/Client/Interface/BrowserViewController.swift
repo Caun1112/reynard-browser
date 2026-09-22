@@ -1020,7 +1020,7 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
         }
         
         browserChrome.updateNavigation(
-            canGoBack: tab.state.navigationState.canGoBack,
+            canGoBack: tabManager.canGoBack,
             canGoForward: tab.state.navigationState.canGoForward,
             canShare: tabManager.shareableURL(for: tab) != nil
         )

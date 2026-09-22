@@ -5,6 +5,7 @@
 //  Created by Minh Ton on 16/6/26.
 //
 
+import Foundation
 import GeckoView
 
 enum TabLoadingState: Equatable {
@@ -58,6 +59,7 @@ final class TabSessionState {
     var restoreState: TabRestoreState = .none
     var suppressInitialNavigation = true
     var isSuppressingInitialBlankPageLoad = false
+    var openerTabID: UUID?
     var sessionNavigationAvailability = SessionNavigationAvailability.unavailable
     var navigationState = NavigationAvailability(canGoBack: false, canGoForward: false)
     var pendingHistoryNavigations: [HistoryNavigationDirection] = []
