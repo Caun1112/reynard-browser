@@ -194,6 +194,7 @@ final class TabBarCollection: UICollectionView, UIGestureRecognizerDelegate {
         guard !isUpdatingTabs else {
             return
         }
+        updateScrollability()
         refreshVisibleTabs()
         revealSelectedTab()
     }
