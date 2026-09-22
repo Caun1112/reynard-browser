@@ -75,7 +75,7 @@ final class TabManagementStore {
     private var database: OpaquePointer?
     private let sqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
     
-    private let recentlyClosedTabLimit = 10
+    private let recentlyClosedTabLimit = 20
     
     // MARK: - Lifecycle
     
