@@ -162,10 +162,10 @@ final class ReaderModeController: AddonMessageDelegate, AddonPortDelegate {
         
         guard tab.state.readerMode.isReaderable,
               let urlString = tab.url,
-              let url = URL(string: urlString) else {
+              let host = URL(string: urlString)?.host else {
             return
         }
-        let usesReaderAutomatically = SiteSettingsStore.shared.settings(for: url)?.readerMode
+        let usesReaderAutomatically = SiteSettingsStore.shared.settings(for: host)?.readerMode
         ?? Prefs.BrowsingSettings.useReaderAutomatically
         guard usesReaderAutomatically else {
             return
