@@ -13,6 +13,7 @@ extension BrowserViewController {
         sourceView: UIView,
         sourceRect: CGRect,
         applicationActivities: [UIActivity]? = nil,
+        onActivityPerformed: ((UIActivity.ActivityType) -> Void)? = nil,
         completion: ((Bool, Error?) -> Void)? = nil
     ) {
         guard !items.isEmpty else {
@@ -27,9 +28,12 @@ extension BrowserViewController {
             popover.sourceView = sourceView
             popover.sourceRect = sourceRect
         }
-        if let completion {
-            activityController.completionWithItemsHandler = { _, completed, _, error in
-                completion(completed, error)
+        if onActivityPerformed != nil || completion != nil {
+            activityController.completionWithItemsHandler = { activityType, completed, _, error in
+                if completed, let activityType {
+                    onActivityPerformed?(activityType)
+                }
+                completion?(completed, error)
             }
         }
         present(activityController, animated: true)
