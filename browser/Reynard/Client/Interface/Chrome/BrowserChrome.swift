@@ -504,6 +504,10 @@ final class BrowserChrome: UIView, UIGestureRecognizerDelegate {
         addressBar.updateMenu(url: url, usesDesktopWebsite: usesDesktopWebsite, readerMode: readerMode)
     }
     
+    func updateAddressBarAudioButton(isVisible: Bool, isMuted: Bool) {
+        addressBar.updateAudioButton(isVisible: isVisible, isMuted: isMuted)
+    }
+    
     func setAddressBarLoadingProgress(_ progress: Float, isLoading: Bool) {
         addressBar.setLoadingProgress(progress, isLoading: isLoading)
     }

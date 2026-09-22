@@ -48,6 +48,8 @@ protocol TabManager: AnyObject {
     func navigationHistory(for tab: Tab) -> NavigationHistoryStore.Snapshot
     func navigationPreviewImages(for tab: Tab) -> NavigationPreviewImages
     func invalidateNavigationThumbnails()
+    func setMuted(_ muted: Bool, for tabID: UUID)
+    func muteOtherPlayingTabs(excluding tabID: UUID)
     @discardableResult
     func changeWebsiteModeForSelectedTab() -> Bool
 }
@@ -61,6 +63,7 @@ enum TabManagerUpdateReason {
     case thumbnail
     case pageBackgroundColor
     case readerMode
+    case audio
 }
 
 protocol TabManagerDelegate: AnyObject {

@@ -66,6 +66,7 @@ final class TabSessionState {
     var preparedNavigationThumbnailURL: String?
     var displayState: TabDisplayState = .committed
     var loadingState = TabLoadingState.idle
+    var isPlayingAudio = false
     var showsStartupHomepage = false
     var selectionOrder = 0
 }

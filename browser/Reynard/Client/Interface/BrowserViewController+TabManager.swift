@@ -155,7 +155,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
     
     func tabManager(_ tabManager: TabManager, didUpdateTabAt index: Int, reason: TabManagerUpdateReason) {
-        guard tabManager.activeTabs.indices.contains(index) else {
+        guard let tab = tabManager.activeTabs[safe: index] else {
             return
         }
         
@@ -173,7 +173,6 @@ extension BrowserViewController: TabManagerDelegate {
             if index == tabManager.selectedTabIndex {
                 contentView.resetScrollTracking()
                 toolbarController.reset(preserveManualCollapse: true)
-                let tab = tabManager.activeTabs[index]
                 contentView.noteHistoryLocationChange()
                 refreshAddressBar()
                 browserChrome.updatePageZoomLevel(tab.session.settings.pageZoom.level)
@@ -194,7 +193,6 @@ extension BrowserViewController: TabManagerDelegate {
             
         case .loading:
             if index == tabManager.selectedTabIndex {
-                let tab = tabManager.activeTabs[index]
                 browserChrome.setAddressBarLoadingProgress(
                     tab.state.loadingState.progress,
                     isLoading: tab.state.loadingState.isLoading
@@ -229,13 +227,15 @@ extension BrowserViewController: TabManagerDelegate {
             guard index == tabManager.selectedTabIndex else {
                 return
             }
-            let tab = tabManager.activeTabs[index]
             contentView.setPageBackgroundColor(sessionManager.pageBackgroundColor(for: tab.session))
             
         case .readerMode:
             if index == tabManager.selectedTabIndex {
                 refreshAddressBar()
             }
+            
+        case .audio:
+            refreshAddressBarAudioButton()
         }
     }
     

@@ -14652,6 +14652,26 @@
         }
       }
     },
+    "Mute Other Tabs" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mute Other Tabs"
+          }
+        }
+      }
+    },
+    "Mute This Tab" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mute This Tab"
+          }
+        }
+      }
+    },
     "Name" : {
       "comment" : "Sort option",
       "localizations" : {
@@ -23979,6 +23999,16 @@
         }
       }
     },
+    "Tabs with Sound" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabs with Sound"
+          }
+        }
+      }
+    },
     "Take Photo" : {
       "localizations" : {
         "cs" : {
@@ -25438,6 +25468,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "大小不明"
+          }
+        }
+      }
+    },
+    "Unmute This Tab" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unmute This Tab"
           }
         }
       }

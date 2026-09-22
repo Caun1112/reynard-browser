@@ -10,6 +10,8 @@ import UIKit
 protocol AddressBarDelegate: AnyObject {
     func addressBarDidRequestReloadOrStop(_ addressBar: AddressBar)
     func addressBarDidRequestHardReload(_ addressBar: AddressBar)
+    func addressBarAudioMenuState(_ addressBar: AddressBar) -> AddressBarMenu.AudioState?
+    func addressBar(_ addressBar: AddressBar, didSelectAudioAction action: AddressBarMenu.AudioAction)
     func addressBarAddonItems(_ addressBar: AddressBar) -> [AddressBarMenu.AddonItem]
     func addressBar(_ addressBar: AddressBar, didSelectAddon item: AddonMenuItem)
     func addressBarDidRequestFindInPage(_ addressBar: AddressBar)
@@ -81,10 +83,17 @@ final class AddressBar: UIView {
         case stop
     }
     
+    private enum SecondaryTrailingButtonState: Equatable {
+        case hidden
+        case playing
+        case muted
+    }
+    
     private struct RenderModel {
         let content: ContentState
         let leadingButton: LeadingButtonState
         let trailingButton: TrailingButtonState
+        let secondaryTrailingButton: SecondaryTrailingButtonState
     }
     
     private final class PasteAndGoMenuState {
@@ -104,6 +113,7 @@ final class AddressBar: UIView {
     private var autocompleteState: AutocompleteState = .none
     private var autocompleteDeletedText: String?
     private var trailingButtonState: TrailingButtonState = .hidden
+    private var audioButtonState: SecondaryTrailingButtonState = .hidden
     
     private var currentText: String?
     private var currentLocationText: String?
@@ -120,10 +130,13 @@ final class AddressBar: UIView {
     private var textLeadingToButtonConstraint: NSLayoutConstraint!
     private var textLeadingToBackgroundConstraint: NSLayoutConstraint!
     private var textTrailingToButtonConstraint: NSLayoutConstraint!
+    private var textTrailingToSecondaryButtonConstraint: NSLayoutConstraint!
+    private var secondaryTrailingButtonWidthConstraint: NSLayoutConstraint!
     private var textTrailingToBackgroundConstraint: NSLayoutConstraint!
     private var labelLeadingToButtonConstraint: NSLayoutConstraint!
     private var labelLeadingToBackgroundConstraint: NSLayoutConstraint!
     private var labelTrailingToButtonConstraint: NSLayoutConstraint!
+    private var labelTrailingToSecondaryButtonConstraint: NSLayoutConstraint!
     private var labelTrailingToBackgroundConstraint: NSLayoutConstraint!
     
     private let addressBarBackground: UIView = {
@@ -182,6 +195,21 @@ final class AddressBar: UIView {
         button.tintColor = .label
         button.isHidden = true
         button.isUserInteractionEnabled = false
+        return button
+    }()
+    
+    private let secondaryTrailingButton: AddressBarButton = {
+        let button = AddressBarButton(type: .system)
+        if #available(iOS 13.4, *) {
+            button.isPointerInteractionEnabled = true
+        }
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .systemBlue
+        button.isHidden = true
+        button.isUserInteractionEnabled = false
+        if #available(iOS 14.0, *) {
+            button.showsMenuAsPrimaryAction = true
+        }
         return button
     }()
     
@@ -334,6 +362,16 @@ final class AddressBar: UIView {
             }
             self.searchDelegate?.addressBarDidTapDismiss(self)
         }
+        secondaryTrailingButton.setMenuProvider { [weak self] in
+            guard let self,
+                  let state = self.delegate?.addressBarAudioMenuState(self) else {
+                return nil
+            }
+            return AddressBarMenu.makeAudioMenu(state: state) { [weak self] action in
+                guard let self else { return }
+                self.delegate?.addressBar(self, didSelectAudioAction: action)
+            }
+        }
         let gestures = AddressBarGestures(addressBar: self, delegate: gestureDelegate)
         self.gestures = gestures
         gestures.configure()
@@ -402,6 +440,11 @@ final class AddressBar: UIView {
                 self.delegate?.addressBar(self, didRequestBookmarkInFavorites: favorites)
             }
         )
+        applyState()
+    }
+    
+    func updateAudioButton(isVisible: Bool, isMuted: Bool) {
+        audioButtonState = isVisible ? (isMuted ? .muted : .playing) : .hidden
         applyState()
     }
     
@@ -569,6 +612,7 @@ final class AddressBar: UIView {
         addSubview(dismissButton)
         addressBarBackground.addSubview(addressBarContent)
         addressBarContent.addSubview(leadingButton)
+        addressBarContent.addSubview(secondaryTrailingButton)
         addressBarContent.addSubview(trailingButton)
         addressBarContent.addSubview(textField)
         addressBarContent.addSubview(autocompleteButton)
@@ -587,6 +631,7 @@ final class AddressBar: UIView {
         backgroundHeightConstraint = addressBarBackground.heightAnchor.constraint(equalToConstant: UX.addressBarHeight)
         dismissWidthConstraint = dismissButton.widthAnchor.constraint(equalToConstant: UX.addressBarHeight)
         dismissHeightConstraint = dismissButton.heightAnchor.constraint(equalToConstant: UX.addressBarHeight)
+        secondaryTrailingButtonWidthConstraint = secondaryTrailingButton.widthAnchor.constraint(equalToConstant: UX.addressBarButtonSize)
         
         NSLayoutConstraint.activate([
             addressBarBackground.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -620,6 +665,11 @@ final class AddressBar: UIView {
             trailingButton.widthAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
             trailingButton.heightAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
             
+            secondaryTrailingButton.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing),
+            secondaryTrailingButton.centerYAnchor.constraint(equalTo: addressBarContent.centerYAnchor),
+            secondaryTrailingButtonWidthConstraint,
+            secondaryTrailingButton.heightAnchor.constraint(equalTo: trailingButton.heightAnchor),
+            
             textField.topAnchor.constraint(equalTo: addressBarContent.topAnchor),
             textField.bottomAnchor.constraint(equalTo: addressBarContent.bottomAnchor),
             
@@ -645,10 +695,12 @@ final class AddressBar: UIView {
         textLeadingToButtonConstraint = textField.leadingAnchor.constraint(equalTo: leadingButton.trailingAnchor, constant: UX.addressBarButtonToTextSpacing)
         textLeadingToBackgroundConstraint = textField.leadingAnchor.constraint(equalTo: addressBarContent.leadingAnchor, constant: UX.addressBarContentHorizontalInset)
         textTrailingToButtonConstraint = textField.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing)
+        textTrailingToSecondaryButtonConstraint = textField.trailingAnchor.constraint(equalTo: secondaryTrailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing)
         textTrailingToBackgroundConstraint = textField.trailingAnchor.constraint(equalTo: addressBarContent.trailingAnchor, constant: -UX.addressBarContentHorizontalInset)
         labelLeadingToButtonConstraint = addressLabel.leadingAnchor.constraint(equalTo: leadingButton.trailingAnchor, constant: UX.addressBarButtonToTextSpacing)
         labelLeadingToBackgroundConstraint = addressLabel.leadingAnchor.constraint(equalTo: addressBarContent.leadingAnchor, constant: UX.addressBarContentHorizontalInset)
         labelTrailingToButtonConstraint = addressLabel.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing)
+        labelTrailingToSecondaryButtonConstraint = addressLabel.trailingAnchor.constraint(equalTo: secondaryTrailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing)
         labelTrailingToBackgroundConstraint = addressLabel.trailingAnchor.constraint(equalTo: addressBarContent.trailingAnchor, constant: -UX.addressBarContentHorizontalInset)
     }
     
@@ -696,10 +748,12 @@ final class AddressBar: UIView {
     
     private func resolveRenderModel() -> RenderModel {
         let content = resolveContentState()
+        let trailingButton = resolveTrailingButtonState(for: content)
         return RenderModel(
             content: content,
             leadingButton: resolveLeadingButtonState(for: content),
-            trailingButton: resolveTrailingButtonState(for: content)
+            trailingButton: trailingButton,
+            secondaryTrailingButton: resolveSecondaryTrailingButtonState(trailingButton: trailingButton)
         )
     }
     
@@ -736,30 +790,51 @@ final class AddressBar: UIView {
         return .hidden
     }
     
+    private func resolveSecondaryTrailingButtonState(trailingButton: TrailingButtonState) -> SecondaryTrailingButtonState {
+        return trailingButton == .hidden ? .hidden : audioButtonState
+    }
+    
     private func applyRenderModel(_ model: RenderModel) {
         applyContentState(model.content)
         applyLeadingButtonState(model.leadingButton)
         applyTrailingButtonState(model.trailingButton)
+        applySecondaryTrailingButtonState(model.secondaryTrailingButton)
         
         let showsLeadingButton = model.leadingButton != .hidden
         let showsTrailingButton = model.trailingButton != .hidden
+        let showsSecondaryTrailingButton = model.secondaryTrailingButton != .hidden
         
         NSLayoutConstraint.deactivate([
             textLeadingToButtonConstraint,
             textLeadingToBackgroundConstraint,
             textTrailingToButtonConstraint,
+            textTrailingToSecondaryButtonConstraint,
             textTrailingToBackgroundConstraint,
             labelLeadingToButtonConstraint,
             labelLeadingToBackgroundConstraint,
             labelTrailingToButtonConstraint,
+            labelTrailingToSecondaryButtonConstraint,
             labelTrailingToBackgroundConstraint,
         ])
         
+        let textTrailingConstraint: NSLayoutConstraint
+        let labelTrailingConstraint: NSLayoutConstraint
+        if showsSecondaryTrailingButton {
+            textTrailingConstraint = textTrailingToSecondaryButtonConstraint
+            labelTrailingConstraint = labelTrailingToSecondaryButtonConstraint
+        } else if showsTrailingButton {
+            textTrailingConstraint = textTrailingToButtonConstraint
+            labelTrailingConstraint = labelTrailingToButtonConstraint
+        } else {
+            textTrailingConstraint = textTrailingToBackgroundConstraint
+            labelTrailingConstraint = labelTrailingToBackgroundConstraint
+        }
+        
         NSLayoutConstraint.activate([
             showsLeadingButton ? textLeadingToButtonConstraint : textLeadingToBackgroundConstraint,
-            showsTrailingButton ? textTrailingToButtonConstraint : textTrailingToBackgroundConstraint,
+            textTrailingConstraint,
             showsLeadingButton ? labelLeadingToButtonConstraint : labelLeadingToBackgroundConstraint,
-            showsTrailingButton ? labelTrailingToButtonConstraint : labelTrailingToBackgroundConstraint,
+            labelTrailingConstraint,
         ])
     }
     
@@ -824,6 +899,32 @@ final class AddressBar: UIView {
             return
         }
         trailingButton.setImage(UIImage(named: state == .stop ? "reynard.xmark" : "reynard.arrow.clockwise"), for: .normal)
+    }
+    
+    private func applySecondaryTrailingButtonState(_ state: SecondaryTrailingButtonState) {
+        let visible = state != .hidden
+        secondaryTrailingButton.isHidden = !visible
+        secondaryTrailingButton.isUserInteractionEnabled = visible
+        
+        // prevent overlapping touch targets
+        secondaryTrailingButton.horizontalTouchTargetExpansion = UX.addressBarButtonToTextSpacing / 2
+        trailingButton.horizontalTouchTargetExpansion = visible ? UX.addressBarButtonToTextSpacing / 2 : nil
+        
+        guard visible else {
+            secondaryTrailingButton.setImage(nil, for: .normal)
+            return
+        }
+        let imageName = state == .muted ? "reynard.speaker.slash.fill" : "reynard.speaker.wave.2.fill"
+        let image = UIImage(named: imageName)?.applyingSymbolConfiguration(
+            secondaryTrailingButton.preferredSymbolConfigurationForImage(in: .normal) ?? UIImage.SymbolConfiguration.unspecified
+        )
+        if let image {
+            secondaryTrailingButtonWidthConstraint.constant = max(
+                UX.addressBarButtonSize,
+                UX.addressBarButtonSize * image.size.width / image.size.height
+            )
+        }
+        secondaryTrailingButton.setImage(image, for: .normal)
     }
     
     // MARK: - Display Content
@@ -1383,6 +1484,10 @@ extension AddressBar: UIGestureRecognizerDelegate {
         }
         
         if touch.view?.isDescendant(of: trailingButton) == true {
+            return false
+        }
+        
+        if touch.view?.isDescendant(of: secondaryTrailingButton) == true {
             return false
         }
         

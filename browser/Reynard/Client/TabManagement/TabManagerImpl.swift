@@ -434,6 +434,7 @@ final class TabManagerImplementation: NSObject, TabManager {
                 createdAt: snapshot.createdAt,
                 favicon: cachedFavicon(for: snapshot.url),
                 thumbnail: snapshot.thumbnail,
+                isMuted: snapshot.isMuted,
                 isPrivate: false
             )
             prepareRestoration(
@@ -460,6 +461,7 @@ final class TabManagerImplementation: NSObject, TabManager {
                 createdAt: snapshot.createdAt,
                 favicon: cachedFavicon(for: snapshot.url),
                 thumbnail: snapshot.thumbnail,
+                isMuted: snapshot.isMuted,
                 isPrivate: true
             )
             prepareRestoration(
@@ -782,6 +784,7 @@ final class TabManagerImplementation: NSObject, TabManager {
         recoverSelectedSessionIfNeeded()
         restorePendingSessionStateIfNeeded(for: selectedTab)
         sessionManager.activate(selectedTab.session)
+        selectedTab.session.mediaSession.muteAudio(selectedTab.isMuted)
         systemMediaSession.select(session: selectedTab.session)
         pictureInPictureCoordinator?.selectedSessionDidChange()
         applyNavigationState(to: selectedTab)
@@ -1080,6 +1083,7 @@ final class TabManagerImplementation: NSObject, TabManager {
         
         let oldSession = tab.session
         tab.session = session
+        tab.state.isPlayingAudio = false
         sessionManager.adopt(session, asTab: tab.id, url: url, delegates: sessionDelegates)
         let sessionState = restorableSessionState(session.currentSessionState, matching: url)
         tab.state.tabSessionState = sessionState
@@ -1089,6 +1093,7 @@ final class TabManagerImplementation: NSObject, TabManager {
         tab.state.navigationState = sessionManager.useStoredNavigationHistory(for: tab.id)
         recordNavigation(url, for: tab)
         sessionManager.activate(session)
+        session.mediaSession.muteAudio(tab.isMuted)
         systemMediaSession.select(session: session)
         pictureInPictureCoordinator?.selectedSessionDidChange()
         
@@ -1162,6 +1167,28 @@ final class TabManagerImplementation: NSObject, TabManager {
         sessionManager.invalidateNavigationThumbnails()
     }
     
+    func setMuted(_ muted: Bool, for tabID: UUID) {
+        guard let location = tabLocation(for: tabID) else {
+            return
+        }
+        let tab = tabs(for: location.mode)[location.index]
+        guard tab.isMuted != muted else {
+            return
+        }
+        tab.isMuted = muted
+        if tab.session.isOpen() {
+            tab.session.mediaSession.muteAudio(muted)
+        }
+        persistState()
+        notifyUpdate(at: location.index, mode: location.mode, reason: .audio)
+    }
+    
+    func muteOtherPlayingTabs(excluding tabID: UUID) {
+        for tab in tabs(for: selectedTabMode) where tab.id != tabID && tab.state.isPlayingAudio && !tab.isMuted {
+            setMuted(true, for: tab.id)
+        }
+    }
+    
     // MARK: - Session Factory
     
     private func createSession(
@@ -1184,10 +1211,26 @@ final class TabManagerImplementation: NSObject, TabManager {
 }
 
 extension TabManagerImplementation: SystemMediaSessionPlaybackObserver {
+    func systemMediaSessionDidActivate(for session: GeckoSession) {
+        guard let location = tabLocation(for: session) else {
+            return
+        }
+        let tab = tabs(for: location.mode)[location.index]
+        session.mediaSession.muteAudio(tab.isMuted)
+    }
+    
     func systemMediaSessionPlaybackStateDidChange(
         _ playbackState: SystemMediaSession.PlaybackState,
         for session: GeckoSession
     ) {
+        if let location = tabLocation(for: session) {
+            let tab = tabs(for: location.mode)[location.index]
+            let isPlaying = playbackState == .playing
+            if tab.state.isPlayingAudio != isPlaying {
+                tab.state.isPlayingAudio = isPlaying
+                notifyUpdate(at: location.index, mode: location.mode, reason: .audio)
+            }
+        }
         delegate?.tabManager(self, didChangeMediaPlayback: playbackState == .playing, for: session)
     }
 }
@@ -1625,12 +1668,15 @@ extension TabManagerImplementation: ProgressDelegate {
     }
     
     func onPageStart(session: GeckoSession, url: String) {
-        systemMediaSession.navigationStarted(in: session)
         pictureInPictureCoordinator?.navigationStarted(in: session)
         guard let location = tabLocation(for: session) else {
             return
         }
         let tab = tabs(for: location.mode)[location.index]
+        systemMediaSession.navigationStarted(
+            in: session,
+            preservingPlayback: tab.isMuted && tab.state.isPlayingAudio && tab.url == url
+        )
         
         if url.trimmingCharacters(in: .whitespacesAndNewlines).lowercased().hasPrefix("about:blank"),
            hasDisplayURL(for: tab) {
