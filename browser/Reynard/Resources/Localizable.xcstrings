@@ -20338,6 +20338,16 @@
         }
       }
     },
+    "Reset Reader Settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset Reader Settings"
+          }
+        }
+      }
+    },
     "Reset Settings for This Website" : {
       "localizations" : {
         "cs" : {
@@ -26465,6 +26475,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用相容性使用者代理程式"
+          }
+        }
+      }
+    },
+    "Use Reader Automatically" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Reader Automatically"
           }
         }
       }
