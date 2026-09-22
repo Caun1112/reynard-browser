@@ -40,6 +40,7 @@ final class AddressBar: UIView {
         static let addressBarAutocompleteTrailingInset: CGFloat = 30
         static let addressBarTextFontSize: CGFloat = 17
         static let addressBarDismissButtonAnimationDuration: TimeInterval = 0.2
+        static let addressBarAudioButtonAnimationDuration: TimeInterval = 0.18
         static let addressBarBackgroundDarkModeShadowAlpha: CGFloat = 0.3
         static let addressBarBackgroundShadowOpacity: Float = 0.18
         static let addressBarBackgroundShadowRadius: CGFloat = 14
@@ -132,6 +133,8 @@ final class AddressBar: UIView {
     private var textTrailingToButtonConstraint: NSLayoutConstraint!
     private var textTrailingToSecondaryButtonConstraint: NSLayoutConstraint!
     private var secondaryTrailingButtonWidthConstraint: NSLayoutConstraint!
+    private var secondaryTrailingButtonToButtonConstraint: NSLayoutConstraint!
+    private var secondaryTrailingButtonToBackgroundConstraint: NSLayoutConstraint!
     private var textTrailingToBackgroundConstraint: NSLayoutConstraint!
     private var labelLeadingToButtonConstraint: NSLayoutConstraint!
     private var labelLeadingToBackgroundConstraint: NSLayoutConstraint!
@@ -205,7 +208,7 @@ final class AddressBar: UIView {
         }
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .systemBlue
-        button.isHidden = true
+        button.alpha = 0
         button.isUserInteractionEnabled = false
         if #available(iOS 14.0, *) {
             button.showsMenuAsPrimaryAction = true
@@ -624,6 +627,8 @@ final class AddressBar: UIView {
         dismissWidthConstraint = dismissButton.widthAnchor.constraint(equalToConstant: UX.addressBarHeight)
         dismissHeightConstraint = dismissButton.heightAnchor.constraint(equalToConstant: UX.addressBarHeight)
         secondaryTrailingButtonWidthConstraint = secondaryTrailingButton.widthAnchor.constraint(equalToConstant: UX.addressBarButtonSize)
+        secondaryTrailingButtonToButtonConstraint = secondaryTrailingButton.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing)
+        secondaryTrailingButtonToBackgroundConstraint = secondaryTrailingButton.trailingAnchor.constraint(equalTo: addressBarContent.trailingAnchor, constant: -UX.addressBarContentHorizontalInset)
         
         NSLayoutConstraint.activate([
             addressBarBackground.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -657,7 +662,6 @@ final class AddressBar: UIView {
             trailingButton.widthAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
             trailingButton.heightAnchor.constraint(equalToConstant: UX.addressBarButtonSize),
             
-            secondaryTrailingButton.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor, constant: -UX.addressBarButtonToTextSpacing),
             secondaryTrailingButton.centerYAnchor.constraint(equalTo: addressBarContent.centerYAnchor),
             secondaryTrailingButtonWidthConstraint,
             secondaryTrailingButton.heightAnchor.constraint(equalTo: trailingButton.heightAnchor),
@@ -745,7 +749,7 @@ final class AddressBar: UIView {
             content: content,
             leadingButton: resolveLeadingButtonState(for: content),
             trailingButton: trailingButton,
-            secondaryTrailingButton: resolveSecondaryTrailingButtonState(trailingButton: trailingButton)
+            secondaryTrailingButton: audioButtonState
         )
     }
     
@@ -782,10 +786,6 @@ final class AddressBar: UIView {
         return .hidden
     }
     
-    private func resolveSecondaryTrailingButtonState(trailingButton: TrailingButtonState) -> SecondaryTrailingButtonState {
-        return trailingButton == .hidden ? .hidden : audioButtonState
-    }
-    
     private func applyRenderModel(_ model: RenderModel) {
         applyContentState(model.content)
         applyLeadingButtonState(model.leadingButton)
@@ -797,6 +797,8 @@ final class AddressBar: UIView {
         let showsSecondaryTrailingButton = model.secondaryTrailingButton != .hidden
         
         NSLayoutConstraint.deactivate([
+            secondaryTrailingButtonToButtonConstraint,
+            secondaryTrailingButtonToBackgroundConstraint,
             textLeadingToButtonConstraint,
             textLeadingToBackgroundConstraint,
             textTrailingToButtonConstraint,
@@ -823,6 +825,7 @@ final class AddressBar: UIView {
         }
         
         NSLayoutConstraint.activate([
+            showsTrailingButton ? secondaryTrailingButtonToButtonConstraint : secondaryTrailingButtonToBackgroundConstraint,
             showsLeadingButton ? textLeadingToButtonConstraint : textLeadingToBackgroundConstraint,
             textTrailingConstraint,
             showsLeadingButton ? labelLeadingToButtonConstraint : labelLeadingToBackgroundConstraint,
@@ -895,15 +898,24 @@ final class AddressBar: UIView {
     
     private func applySecondaryTrailingButtonState(_ state: SecondaryTrailingButtonState) {
         let visible = state != .hidden
-        secondaryTrailingButton.isHidden = !visible
         secondaryTrailingButton.isUserInteractionEnabled = visible
+        
+        let alpha: CGFloat = visible ? 1 : 0
+        if secondaryTrailingButton.alpha != alpha {
+            UIView.animate(
+                withDuration: UX.addressBarAudioButtonAnimationDuration,
+                delay: 0,
+                options: [.beginFromCurrentState, .allowUserInteraction]
+            ) {
+                self.secondaryTrailingButton.alpha = alpha
+            }
+        }
         
         // prevent overlapping touch targets
         secondaryTrailingButton.horizontalTouchTargetExpansion = UX.addressBarButtonToTextSpacing / 2
         trailingButton.horizontalTouchTargetExpansion = visible ? UX.addressBarButtonToTextSpacing / 2 : nil
         
         guard visible else {
-            secondaryTrailingButton.setImage(nil, for: .normal)
             return
         }
         let imageName = state == .muted ? "reynard.speaker.slash.fill" : "reynard.speaker.wave.2.fill"
