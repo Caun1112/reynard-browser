@@ -42,18 +42,19 @@ extension BrowserViewController: TabBarDataSource, TabOverviewDataSource, TabOve
     
     func closeTab(at index: Int, mode: TabMode) {
         toolbarController.reset()
-        if (tabOverview.isPresented || tabOverview.isTransitionRunning),
+        let isTabOverviewActive = tabOverview.isPresented || tabOverview.isTransitionRunning
+        if isTabOverviewActive,
            tabOverview.mode == .regularTabs,
            mode == .regular,
            tabManager.regularTabs.count == 1 {
             tabOverview.prepareNextTabChangesWithoutAnimation()
-            tabManager.removeTab(at: index, mode: mode)
+            tabManager.removeTab(at: index, mode: mode, activateNext: false)
             tabOverview.prepareNextTabChangesWithoutAnimation()
             createTabFromOverview(mode: .regular)
             return
         }
         
-        tabManager.removeTab(at: index, mode: mode)
+        tabManager.removeTab(at: index, mode: mode, activateNext: !isTabOverviewActive)
     }
     
     func moveTab(from sourceIndex: Int, to destinationIndex: Int, mode: TabMode) {
@@ -227,7 +228,7 @@ extension BrowserViewController: TabBarDataSource, TabOverviewDataSource, TabOve
         }
         
         oldTabIndices.reversed().forEach { index in
-            tabManager.removeTab(at: index, mode: mode)
+            tabManager.removeTab(at: index, mode: mode, activateNext: false)
         }
     }
     

@@ -30,7 +30,7 @@ protocol TabManager: AnyObject {
     func addTransferredSession(_ session: GeckoSession, url: String, title: String?, selecting: Bool, at index: Int?, isPrivate: Bool) -> Int
     func selectTab(at index: Int, mode: TabMode?)
     func moveTab(from sourceIndex: Int, to destinationIndex: Int, mode: TabMode?)
-    func removeTab(at index: Int, mode: TabMode?)
+    func removeTab(at index: Int, mode: TabMode?, activateNext: Bool)
     func removeAllTabs(mode: TabMode?)
     @discardableResult
     func restoreRecentlyClosedTab(id: UUID) -> Bool

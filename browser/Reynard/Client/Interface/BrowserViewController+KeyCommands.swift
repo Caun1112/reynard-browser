@@ -189,7 +189,7 @@ extension BrowserViewController {
         dismissAddressBarEditingAndOverlays()
         tabs.indices.reversed().forEach { index in
             if tabs[index].id != selectedTabID {
-                tabManager.removeTab(at: index, mode: mode)
+                tabManager.removeTab(at: index, mode: mode, activateNext: true)
             }
         }
     }
