@@ -821,7 +821,7 @@ final class TabManagerImplementation: NSObject, TabManager {
         persistState()
     }
     
-    func removeTab(at index: Int, mode: TabMode? = nil, activateNext: Bool) {
+    func removeTab(at index: Int, mode: TabMode? = nil, behavior: TabRemovalBehavior) {
         let mode = mode ?? selectedTabMode
         guard tabs(for: mode).indices.contains(index) else {
             return
@@ -867,10 +867,15 @@ final class TabManagerImplementation: NSObject, TabManager {
         let replacementLocation: (mode: TabMode, index: Int)?
         
         if !remainingTabs.isEmpty {
-            let mostRecentlySelectedIndex = remainingTabs.indices
-                .filter { remainingTabs[$0].state.selectionOrder > 0 }
-                .max { remainingTabs[$0].state.selectionOrder < remainingTabs[$1].state.selectionOrder }
-            replacementLocation = (mode, mostRecentlySelectedIndex ?? min(index, remainingTabs.count - 1))
+            switch behavior {
+            case .adjacent:
+                replacementLocation = (mode, min(index, remainingTabs.count - 1))
+            case .recent, .none:
+                let mostRecentlySelectedIndex = remainingTabs.indices
+                    .filter { remainingTabs[$0].state.selectionOrder > 0 }
+                    .max { remainingTabs[$0].state.selectionOrder < remainingTabs[$1].state.selectionOrder }
+                replacementLocation = (mode, mostRecentlySelectedIndex ?? min(index, remainingTabs.count - 1))
+            }
         } else if mode == .private && !regularTabs.isEmpty {
             replacementLocation = (.regular, max(selectedIndex(for: .regular), 0))
         } else {
@@ -882,14 +887,14 @@ final class TabManagerImplementation: NSObject, TabManager {
             return
         }
         
-        if activateNext {
+        switch behavior {
+        case .recent, .adjacent:
             selectTab(at: replacementLocation.index, mode: replacementLocation.mode)
-            return
+        case .none:
+            selectedTabMode = replacementLocation.mode
+            setSelectedIndex(replacementLocation.index, for: replacementLocation.mode)
+            persistState()
         }
-        
-        selectedTabMode = replacementLocation.mode
-        setSelectedIndex(replacementLocation.index, for: replacementLocation.mode)
-        persistState()
     }
     
     func removeAllTabs(mode: TabMode? = nil) {
@@ -983,7 +988,7 @@ final class TabManagerImplementation: NSObject, TabManager {
                 }
                 let closingIndex = self.selectedTabIndex
                 self.selectTab(at: openerIndex, mode: .regular)
-                self.removeTab(at: closingIndex, mode: .regular, activateNext: true)
+                self.removeTab(at: closingIndex, mode: .regular, behavior: .none)
             }
             return
         }
@@ -1335,7 +1340,7 @@ extension TabManagerImplementation: ContentDelegate {
         guard let location = tabLocation(for: session) else {
             return
         }
-        removeTab(at: location.index, mode: location.mode, activateNext: true)
+        removeTab(at: location.index, mode: location.mode, behavior: .recent)
     }
     
     func onFullScreen(session: GeckoSession, fullScreen: Bool) {
