@@ -330,7 +330,7 @@ final class BrowserChrome: UIView, UIGestureRecognizerDelegate {
             ) {
                 self.actionBar.dismissModernContent(
                     translationY: translationY,
-                    fadeDuration: UX.actionBarFadeDuration
+                    fadeDuration: shouldSlide ? nil : UX.actionBarFadeDuration
                 )
             } completion: { _ in
                 guard self.modernActionBarDismissalID == dismissalID else { return }
