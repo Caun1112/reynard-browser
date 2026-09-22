@@ -318,14 +318,6 @@ final class AddressBar: UIView {
         }
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        addressBarBackground.layer.shadowPath = UIBezierPath(
-            roundedRect: addressBarBackground.bounds,
-            cornerRadius: UX.addressBarBackgroundCornerRadius
-        ).cgPath
-    }
-    
     // MARK: - Configuration
     
     func configure(delegate: AddressBarDelegate, searchDelegate: AddressBarSearchDelegate, gestureDelegate: AddressBarGestureDelegate) {
