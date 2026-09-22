@@ -208,7 +208,7 @@ final class ToolbarController {
         guard Prefs.AppearanceSettings.scrollToHideToolbarEnabled,
               maxToolbarOffset > 0,
               !isCollapsedUntilReset,
-              lockReasons.isEmpty else {
+              lockReasons.subtracting([.pageNavigation]).isEmpty else {
             return
         }
         
