@@ -86,6 +86,13 @@ git revert -m 1 MERGE_SHA
             if #available(iOS 26.0, *) { return 12 }
             return 65
         }
+        static let backgroundAlpha: CGFloat = 0.34
+        static let disabledAlpha: CGFloat = 0.32
+        static let shadowOpacity: Float = 0.14
+        static let shadowRadius: CGFloat = 8
+        static let shadowOffset = CGSize(width: 0, height: 3)
+        static let borderWidth: CGFloat = 0.5
+    }
 ```
 
 `Chrome/ActionBar/PageZoom/PageZoomActionBar.swift`
@@ -117,6 +124,8 @@ git revert -m 1 MERGE_SHA
         static let shadowOpacity: Float = 0.14
         static let shadowRadius: CGFloat = 8
         static let shadowOffset = CGSize(width: 0, height: 3)
+        static let borderWidth: CGFloat = 0.5
+    }
 ```
 
 `Chrome/AddressBar/AddressBarButton.swift`
@@ -280,3 +289,19 @@ a8b8c08 Use full-size live action controls and right-side editing accessories
 490018c Adapt iPhone controls and navigation for right-hand reachability
 ea2c577 Allow fork builds and cache Gecko SDK for UI iteration
 ```
+
+## 本地检查结果
+
+- 合并提交：7c2d5f7148c8ee2ae03d4b2bd38d1a8891214c04，双亲为 c7561ef 和 83d4acd。
+- 双方祖先检查通过；未合并索引和源码冲突标记均为空。
+- 54 个不重叠的 fork 差异文件保持逐字一致；16 个重叠文件已复查。
+- 6 个冲突/手动融合 Swift 文件通过 swiftc -frontend -parse；此检查不代替编译和运行。
+- GitHub Actions：https://github.com/Caun1112/reynard-browser/actions/runs/35844332784 。构建结果待后续记录。
+
+## Actions UI 验证
+
+- iPhone 15 Pro Max：6 项测试，0 失败，测试执行 139.991 秒。
+- UI job 107126715366 成功；日志明确记录 **TEST SUCCEEDED**。
+- 本地报告：dist/merged-20260923/verification/ui-results/RightHandUI.xcresult。
+- 已抽查横屏工具栏及编辑键盘截图，控件靠右、操作栏位于键盘上方。
+- Gecko/TIPA 构建尚未结束，真机回归未执行。
