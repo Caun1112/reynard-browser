@@ -1027,9 +1027,9 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
         
         let previewImages = tabManager.navigationPreviewImages(for: tab)
         contentView.setHistoryNavigation(
-            canGoBack: tab.state.navigationState.canGoBack,
+            canGoBack: tabManager.canGoBack,
             canGoForward: tab.state.navigationState.canGoForward,
-            backPreviewImage: previewImages.backImage,
+            backPreviewImage: tab.state.navigationState.canGoBack ? previewImages.backImage : nil,
             forwardPreviewImage: previewImages.forwardImage,
             isSwipeEnabled: true
         )
