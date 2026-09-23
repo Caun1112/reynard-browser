@@ -116,6 +116,11 @@ extension TabOverviewCollection: UICollectionViewDataSource, UICollectionViewDel
                             left: max(0, availableWidth - cardSize.width), bottom: 0, right: 0)
     }
 
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        guard let collectionView = scrollView as? UICollectionView else { return }
+        tabOverview?.presentation.finishPresentationForScrolling(in: collectionView)
+    }
+    
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if let longPressGesture = gestureRecognizer as? UILongPressGestureRecognizer,
            let collectionView = longPressGesture.view as? UICollectionView,

@@ -25,7 +25,22 @@ extension BrowserViewController {
     }
     
     @objc func closeTabKeyCommand(_ sender: UIKeyCommand) {
-        closeTab()
+        if tabOverview.isPresented || tabOverview.isTransitionRunning {
+            closeTab()
+            return
+        }
+        
+        guard tabManager.selectedTab != nil else {
+            return
+        }
+        
+        toolbarController.reset()
+        let mode = tabManager.selectedTabMode
+        tabManager.removeTab(at: tabManager.selectedTabIndex, mode: mode, behavior: .adjacent)
+        
+        if mode == .regular && tabManager.regularTabs.isEmpty {
+            createNewTab(mode: .regular)
+        }
     }
     
     @objc func findInPageKeyCommand(_ sender: UIKeyCommand) {
@@ -92,7 +107,7 @@ extension BrowserViewController {
     }
     
     @objc func goBackKeyCommand(_ sender: UIKeyCommand) {
-        guard tabManager.selectedTab?.state.navigationState.canGoBack == true else {
+        guard tabManager.canGoBack else {
             return
         }
         exitFullscreenIfNeeded()
@@ -189,7 +204,7 @@ extension BrowserViewController {
         dismissAddressBarEditingAndOverlays()
         tabs.indices.reversed().forEach { index in
             if tabs[index].id != selectedTabID {
-                tabManager.removeTab(at: index, mode: mode)
+                tabManager.removeTab(at: index, mode: mode, behavior: .none)
             }
         }
     }

@@ -32,6 +32,13 @@ final class TabManagerImplementation: NSObject, TabManager {
         presenter: PromptPresenter(),
         onPromptFinished: requestContentKeyboardFocus
     )
+    private lazy var pagePrintCoordinator = PagePrintCoordinator { [weak self] session in
+        guard let self,
+              let location = self.tabLocation(for: session) else {
+            return nil
+        }
+        return self.tabs(for: location.mode)[location.index].title
+    }
     private lazy var selectionActionCoordinator = SelectionActionCoordinator(
         presenter: SelectionActionPresenter(onMenuDismissed: requestContentKeyboardFocus)
     )
@@ -39,6 +46,7 @@ final class TabManagerImplementation: NSObject, TabManager {
         promptPresenter: PermissionPromptPresenter(),
         onPromptFinished: requestContentKeyboardFocus
     )
+    private(set) lazy var readerMode = ReaderModeController(delegate: self)
     private lazy var systemMediaSession = SystemMediaSession(playbackObserver: self)
     private lazy var pictureInPictureCoordinator: PictureInPictureCoordinating? = {
         guard Prefs.ExperimentalSettings.isVideoPictureInPictureEnabled,
@@ -220,7 +228,9 @@ final class TabManagerImplementation: NSObject, TabManager {
             history: self,
             permission: permissionCoordinator,
             progress: self,
+            scroll: self,
             prompt: promptCoordinator,
+            print: pagePrintCoordinator,
             selectionAction: selectionActionCoordinator,
             mediaSession: systemMediaSession
         )
@@ -424,8 +434,10 @@ final class TabManagerImplementation: NSObject, TabManager {
                 createdAt: snapshot.createdAt,
                 favicon: cachedFavicon(for: snapshot.url),
                 thumbnail: snapshot.thumbnail,
+                isMuted: snapshot.isMuted,
                 isPrivate: false
             )
+            tab.state.openerTabID = snapshot.openerTabID
             prepareRestoration(
                 serializedSessionState: snapshot.tabSessionState,
                 fallbackURL: snapshot.url,
@@ -450,6 +462,7 @@ final class TabManagerImplementation: NSObject, TabManager {
                 createdAt: snapshot.createdAt,
                 favicon: cachedFavicon(for: snapshot.url),
                 thumbnail: snapshot.thumbnail,
+                isMuted: snapshot.isMuted,
                 isPrivate: true
             )
             prepareRestoration(
@@ -699,10 +712,12 @@ final class TabManagerImplementation: NSObject, TabManager {
     @discardableResult
     func addTransferredSession(_ session: GeckoSession, url: String, title: String?, selecting: Bool, at insertionIndex: Int?, isPrivate: Bool = false) -> Int {
         let tab = Tab(session: session, isPrivate: isPrivate)
+        tab.state.openerTabID = !isPrivate && selectedTab?.isPrivate == false ? selectedTab?.id : nil
         let sessionState = restorableSessionState(session.currentSessionState, matching: url)
         tab.state.tabSessionState = sessionState
         let mode: TabMode = isPrivate ? .private : .regular
         sessionManager.adopt(session, asTab: tab.id, url: url, delegates: sessionDelegates)
+        readerMode.registerMessageHandlers(for: session)
         applyTransferredState(to: tab, url: url, title: title)
         recordNavigation(url, for: tab)
         
@@ -771,6 +786,7 @@ final class TabManagerImplementation: NSObject, TabManager {
         recoverSelectedSessionIfNeeded()
         restorePendingSessionStateIfNeeded(for: selectedTab)
         sessionManager.activate(selectedTab.session)
+        selectedTab.session.mediaSession.muteAudio(selectedTab.isMuted)
         systemMediaSession.select(session: selectedTab.session)
         pictureInPictureCoordinator?.selectedSessionDidChange()
         applyNavigationState(to: selectedTab)
@@ -805,21 +821,28 @@ final class TabManagerImplementation: NSObject, TabManager {
         persistState()
     }
     
-    func removeTab(at index: Int, mode: TabMode? = nil) {
+    func removeTab(at index: Int, mode: TabMode? = nil, behavior: TabRemovalBehavior) {
         let mode = mode ?? selectedTabMode
         guard tabs(for: mode).indices.contains(index) else {
             return
         }
         
-        let wasSelected = mode == selectedTabMode && index == selectedTabIndex
+        let isRemovingSelectedTab = mode == selectedTabMode && index == selectedTabIndex
         let removedTab: Tab
         if mode == .regular {
             removedTab = regularTabs.remove(at: index)
         } else {
             removedTab = privateTabs.remove(at: index)
         }
+        
+        defer {
+            delegate?.tabManagerDidChangeTabs(self)
+            sessionManager.discard(removedTab.session, forTab: removedTab.id, keepingHistory: mode == .regular)
+        }
+        
         saveClosedTabIfNeeded(removedTab, mode: mode)
-        if wasSelected {
+        
+        if isRemovingSelectedTab {
             sessionManager.deactivate(removedTab.session)
         }
         cancelFaviconTask(for: removedTab.id)
@@ -832,29 +855,46 @@ final class TabManagerImplementation: NSObject, TabManager {
         
         if regularTabs.isEmpty && privateTabs.isEmpty {
             persistState()
-            delegate?.tabManagerDidChangeTabs(self)
-            sessionManager.discard(removedTab.session, forTab: removedTab.id, keepingHistory: mode == .regular)
             return
         }
         
-        if wasSelected {
-            let remainingTabs = tabs(for: mode)
-            if !remainingTabs.isEmpty {
-                let previousIndex = remainingTabs.indices
+        guard isRemovingSelectedTab else {
+            persistState()
+            return
+        }
+        
+        let remainingTabs = tabs(for: mode)
+        let replacementLocation: (mode: TabMode, index: Int)?
+        
+        if !remainingTabs.isEmpty {
+            switch behavior {
+            case .adjacent:
+                replacementLocation = (mode, min(index, remainingTabs.count - 1))
+            case .recent, .none:
+                let mostRecentlySelectedIndex = remainingTabs.indices
                     .filter { remainingTabs[$0].state.selectionOrder > 0 }
                     .max { remainingTabs[$0].state.selectionOrder < remainingTabs[$1].state.selectionOrder }
-                selectTab(at: previousIndex ?? min(index, remainingTabs.count - 1), mode: mode)
-            } else if mode == .private && !regularTabs.isEmpty {
-                selectTab(at: max(selectedIndex(for: .regular), 0), mode: .regular)
-            } else {
-                persistState()
+                replacementLocation = (mode, mostRecentlySelectedIndex ?? min(index, remainingTabs.count - 1))
             }
+        } else if mode == .private && !regularTabs.isEmpty {
+            replacementLocation = (.regular, max(selectedIndex(for: .regular), 0))
         } else {
+            replacementLocation = nil
+        }
+        
+        guard let replacementLocation else {
+            persistState()
+            return
+        }
+        
+        switch behavior {
+        case .recent, .adjacent:
+            selectTab(at: replacementLocation.index, mode: replacementLocation.mode)
+        case .none:
+            selectedTabMode = replacementLocation.mode
+            setSelectedIndex(replacementLocation.index, for: replacementLocation.mode)
             persistState()
         }
-        delegate?.tabManagerDidChangeTabs(self)
-        
-        sessionManager.discard(removedTab.session, forTab: removedTab.id, keepingHistory: mode == .regular)
     }
     
     func removeAllTabs(mode: TabMode? = nil) {
@@ -933,6 +973,23 @@ final class TabManagerImplementation: NSObject, TabManager {
     
     func goBack() {
         guard let tab = selectedTab else {
+            return
+        }
+        
+        if !tab.state.navigationState.canGoBack, let openerTab {
+            guard tab.state.activeHistoryNavigationID == nil else {
+                return
+            }
+            delegate?.tabManager(self, animateReturnTo: openerTab) { [weak self] in
+                guard let self,
+                      self.selectedTab === tab,
+                      let openerIndex = self.regularTabs.firstIndex(where: { $0.id == openerTab.id }) else {
+                    return
+                }
+                let closingIndex = self.selectedTabIndex
+                self.selectTab(at: openerIndex, mode: .regular)
+                self.removeTab(at: closingIndex, mode: .regular, behavior: .none)
+            }
             return
         }
         
@@ -1068,8 +1125,9 @@ final class TabManagerImplementation: NSObject, TabManager {
         }
         
         let oldSession = tab.session
-        sessionManager.adopt(session, asTab: tab.id, url: url, delegates: sessionDelegates)
         tab.session = session
+        tab.state.isPlayingAudio = false
+        sessionManager.adopt(session, asTab: tab.id, url: url, delegates: sessionDelegates)
         let sessionState = restorableSessionState(session.currentSessionState, matching: url)
         tab.state.tabSessionState = sessionState
         tab.state.restoreState = .none
@@ -1078,6 +1136,7 @@ final class TabManagerImplementation: NSObject, TabManager {
         tab.state.navigationState = sessionManager.useStoredNavigationHistory(for: tab.id)
         recordNavigation(url, for: tab)
         sessionManager.activate(session)
+        session.mediaSession.muteAudio(tab.isMuted)
         systemMediaSession.select(session: session)
         pictureInPictureCoordinator?.selectedSessionDidChange()
         
@@ -1151,6 +1210,28 @@ final class TabManagerImplementation: NSObject, TabManager {
         sessionManager.invalidateNavigationThumbnails()
     }
     
+    func setMuted(_ muted: Bool, for tabID: UUID) {
+        guard let location = tabLocation(for: tabID) else {
+            return
+        }
+        let tab = tabs(for: location.mode)[location.index]
+        guard tab.isMuted != muted else {
+            return
+        }
+        tab.isMuted = muted
+        if tab.session.isOpen() {
+            tab.session.mediaSession.muteAudio(muted)
+        }
+        persistState()
+        notifyUpdate(at: location.index, mode: location.mode, reason: .audio)
+    }
+    
+    func muteOtherPlayingTabs(excluding tabID: UUID) {
+        for tab in tabs(for: selectedTabMode) where tab.id != tabID && tab.state.isPlayingAudio && !tab.isMuted {
+            setMuted(true, for: tab.id)
+        }
+    }
+    
     // MARK: - Session Factory
     
     private func createSession(
@@ -1160,22 +1241,61 @@ final class TabManagerImplementation: NSObject, TabManager {
         isPrivate: Bool,
         opening: SessionOpening? = nil
     ) -> GeckoSession {
-        return sessionManager.createSession(
+        let session = sessionManager.createSession(
             url: url,
             tabID: tabID,
             isPrivate: isPrivate,
             opening: opening ?? .immediate(windowID: windowId),
             delegates: sessionDelegates
         )
+        readerMode.registerMessageHandlers(for: session)
+        return session
     }
 }
 
 extension TabManagerImplementation: SystemMediaSessionPlaybackObserver {
+    func systemMediaSessionDidActivate(for session: GeckoSession) {
+        guard let location = tabLocation(for: session) else {
+            return
+        }
+        let tab = tabs(for: location.mode)[location.index]
+        session.mediaSession.muteAudio(tab.isMuted)
+    }
+    
     func systemMediaSessionPlaybackStateDidChange(
         _ playbackState: SystemMediaSession.PlaybackState,
         for session: GeckoSession
     ) {
+        if let location = tabLocation(for: session) {
+            let tab = tabs(for: location.mode)[location.index]
+            let isPlaying = playbackState == .playing
+            if tab.state.isPlayingAudio != isPlaying {
+                tab.state.isPlayingAudio = isPlaying
+                notifyUpdate(at: location.index, mode: location.mode, reason: .audio)
+            }
+        }
         delegate?.tabManager(self, didChangeMediaPlayback: playbackState == .playing, for: session)
+    }
+}
+
+extension TabManagerImplementation: ReaderModeControllerDelegate {
+    func readerModeController(_ controller: ReaderModeController, tabFor session: GeckoSession) -> Tab? {
+        guard let location = tabLocation(for: session) else { return nil }
+        return tabs(for: location.mode)[location.index]
+    }
+    
+    func readerModeController(_ controller: ReaderModeController, didChangeStateFor tab: Tab) {
+        guard let location = tabLocation(for: tab.id) else { return }
+        notifyUpdate(at: location.index, mode: location.mode, reason: .readerMode)
+    }
+}
+
+extension TabManagerImplementation: ScrollDelegate {
+    func onScrollChanged(session: GeckoSession, scrollX: Int, scrollY: Int) {
+        guard let location = tabLocation(for: session) else { return }
+        let tab = tabs(for: location.mode)[location.index]
+        guard tab.state.readerMode.isActive else { return }
+        tab.state.readerMode.sourceScrollY = scrollY
     }
 }
 
@@ -1220,7 +1340,7 @@ extension TabManagerImplementation: ContentDelegate {
         guard let location = tabLocation(for: session) else {
             return
         }
-        removeTab(at: location.index, mode: location.mode)
+        removeTab(at: location.index, mode: location.mode, behavior: .recent)
     }
     
     func onFullScreen(session: GeckoSession, fullScreen: Bool) {
@@ -1377,6 +1497,7 @@ extension TabManagerImplementation: NavigationDelegate {
             return
         }
         let tab = tabs(for: location.mode)[location.index]
+        let url = url.map { readerMode.displayedURL(for: $0, in: tab) }
         
         let normalizedURL = url?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         
@@ -1485,6 +1606,7 @@ extension TabManagerImplementation: NavigationDelegate {
         )
         sessionManager.universalLinkManager.didCreateNewSession(from: session, for: uri)
         let newTab = Tab(id: tabID, session: newSession, isPrivate: sourceIsPrivate)
+        newTab.state.openerTabID = sourceIsPrivate ? nil : sourceLocation.map { regularTabs[$0.index].id }
         permissionCoordinator.restorePermissions(for: newSession, at: uri)
         newTab.url = uri
         newTab.favicon = cachedFavicon(for: uri)
@@ -1590,12 +1712,15 @@ extension TabManagerImplementation: ProgressDelegate {
     }
     
     func onPageStart(session: GeckoSession, url: String) {
-        systemMediaSession.navigationStarted(in: session)
         pictureInPictureCoordinator?.navigationStarted(in: session)
         guard let location = tabLocation(for: session) else {
             return
         }
         let tab = tabs(for: location.mode)[location.index]
+        systemMediaSession.navigationStarted(
+            in: session,
+            preservingPlayback: tab.isMuted && tab.state.isPlayingAudio && tab.url == url
+        )
         
         if url.trimmingCharacters(in: .whitespacesAndNewlines).lowercased().hasPrefix("about:blank"),
            hasDisplayURL(for: tab) {
