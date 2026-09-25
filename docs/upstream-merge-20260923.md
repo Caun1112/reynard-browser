@@ -296,7 +296,7 @@ ea2c577 Allow fork builds and cache Gecko SDK for UI iteration
 - 双方祖先检查通过；未合并索引和源码冲突标记均为空。
 - 54 个不重叠的 fork 差异文件保持逐字一致；16 个重叠文件已复查。
 - 6 个冲突/手动融合 Swift 文件通过 swiftc -frontend -parse；此检查不代替编译和运行。
-- GitHub Actions：https://github.com/Caun1112/reynard-browser/actions/runs/35844332784 。构建结果待后续记录。
+- GitHub Actions：https://github.com/Caun1112/reynard-browser/actions/runs/35844332784 。构建全部成功，最终产物校验见下。
 
 ## Actions UI 验证
 
@@ -304,4 +304,23 @@ ea2c577 Allow fork builds and cache Gecko SDK for UI iteration
 - UI job 107126715366 成功；日志明确记录 **TEST SUCCEEDED**。
 - 本地报告：dist/merged-20260923/verification/ui-results/RightHandUI.xcresult。
 - 已抽查横屏工具栏及编辑键盘截图，控件靠右、操作栏位于键盘上方。
-- Gecko/TIPA 构建尚未结束，真机回归未执行。
+- Gecko/TIPA 构建成功；真机回归未执行。
+
+## 最终构建和产物验证（2026-09-25 下载核验）
+
+- Actions 35844332784 全部成功，构建于 2026-09-23 23:27:59（北京时间）结束，总构建任务约 5 小时 47 分钟。
+- Gecko 补丁应用、引擎/idevice 编译、Release arm64 归档、TrollStore TIPA 打包均成功；日志包含 ARCHIVE SUCCEEDED。
+- 构建源码固定为 7c2d5f7；之后的提交仅补充本文档，不改变已验证应用源码。
+- 产物：dist/merged-20260923/Reynard-TrollStore.tipa。
+- 文件大小：108858199 字节。
+- TIPA SHA-256：`1729eb2b619f89299194e8f71c862e70dd07625b281152a7142a859c621d0d9f`。
+- 外层 GitHub artifact ZIP SHA-256：`c2dc408165e9f184f5f46dab5555b79969eb869ad931122c5c7ed924f79469ff`，与 GitHub API digest 完全一致。
+- ZIP CRC 校验通过；主程序、OpenIn 和 Reynard Helper 均为版本 0.14.1、构建号 7c2d5f7。
+- 主程序、Reynard Helper 和 ts_ptrace_jit 均为 arm64；使用 ldid -e 读取的权限逐项等于仓库 TrollStore entitlements。
+- macOS codesign 无法按普通证书签名解释此 ldid 产物；上述权限核验使用与打包流程对应的 ldid，不声称通过 Apple 分发签名验证。
+- 详细机器可读结果：dist/merged-20260923/verification/tipa-verification.json。
+- 真机安装、JIT、网页/阅读/打印/音频及完整应用回归尚未执行；UI harness 和归档成功不替代这些检查。
+
+原功能分支 codex/right-hand-ui 快进至合并及验证报告；保留远端 backup/right-hand-ui-before-upstream-20260923（c7561ef）。
+本次范围为 2026-09-23 获取的上游 83d4acd，未在构建后自动纳入新的上游提交。
+回滚共享分支中的本次上游合并：`git revert -m 1 7c2d5f7`。
