@@ -208,4 +208,14 @@ ea2c577 Allow fork builds and cache Gecko SDK for UI iteration
 - 67/67 fork 非重叠文件与合并前 git blob 相同；139/139 上游非重叠文件与固定上游相同。
 - 未合并索引为空，源文件无冲突标记，三个重叠 Swift 文件语法检查通过，两个 release shell 脚本 sh -n 通过。
 - 手动融合相对于自动三方合并树的 git diff --check 通过；上游空行/patch context 本身的空白未全仓清理。
-- 独立代理复审通过；完整 iOS 编译、UI 测试与产物验证待 Actions 完成后补充。
+- 独立代理复审通过；实际 app/Gecko 编译与产物验证待 Actions 完成后补充。
+
+## Actions UI 验证（2026-10-02）
+
+- 双亲合并提交：`ae7523f5b34cac926ca1b696910dcac02858d5c9`，父提交为 678b44d 和 8679378。
+- 构建与测试源码固定为 ae7523f；后续文档提交不改变已测试应用源码。
+- Actions：https://github.com/Caun1112/reynard-browser/actions/runs/36980832918 。
+- UI job 110754747097 成功，iPhone 15 Pro Max：6 项测试、0 失败，执行 164.696 秒，日志明确包含 TEST SUCCEEDED。
+- xcresult 与 11 张截图已下载至 `dist/merged-20261002/verification/ui-results/`；日志为 `dist/merged-20261002/verification/ui-checks.log`。
+- 已抽查 browser-landscape 和 editor-keyboard 截图，工具栏靠右、编辑操作栏位于键盘上方。
+- Gecko 补丁应用成功；引擎编译仍在运行，尚无本次 TIPA。真实扩展弹窗及完整真机回归未执行。
