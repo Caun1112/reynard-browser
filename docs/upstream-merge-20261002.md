@@ -156,7 +156,7 @@ gh workflow run build.yml --repo Caun1112/reynard-browser \
 
 Gecko SDK key 包含引擎版本、补丁、构建脚本和 Rust/Xcode 版本，本次更新将重新编译；idevice 缓存恢复后仍执行 Cargo 编译。上游 Swift concurrency bitcode 去除完整移至 unsigned archive 阶段，打包阶段不再重复执行。
 
-构建成功并核验后，将 TIPA 上传 fork 的独立 Release，Release 标签固定到实际构建 SHA。当前 fork 没有 Release 或 RELEASE_TOKEN，不依赖上游的 tag 自动发布流程。
+已核验并通过 gh release 发布 fork 独立 Release；标签 0.15.0-right-hand-20261002 固定到实际构建提交 ae7523f。发布不依赖 RELEASE_TOKEN 或上游 tag 自动发布流程。
 
 ## 提交记录
 
@@ -208,7 +208,7 @@ ea2c577 Allow fork builds and cache Gecko SDK for UI iteration
 - 67/67 fork 非重叠文件与合并前 git blob 相同；139/139 上游非重叠文件与固定上游相同。
 - 未合并索引为空，源文件无冲突标记，三个重叠 Swift 文件语法检查通过，两个 release shell 脚本 sh -n 通过。
 - 手动融合相对于自动三方合并树的 git diff --check 通过；上游空行/patch context 本身的空白未全仓清理。
-- 独立代理复审通过；实际 app/Gecko 编译与产物验证待 Actions 完成后补充。
+- 独立代理复审通过；实际 app/Gecko 编译与产物验证已完成，结果见下。
 
 ## Actions UI 验证（2026-10-02）
 
@@ -218,4 +218,22 @@ ea2c577 Allow fork builds and cache Gecko SDK for UI iteration
 - UI job 110754747097 成功，iPhone 15 Pro Max：6 项测试、0 失败，执行 164.696 秒，日志明确包含 TEST SUCCEEDED。
 - xcresult 与 11 张截图已下载至 `dist/merged-20261002/verification/ui-results/`；日志为 `dist/merged-20261002/verification/ui-checks.log`。
 - 已抽查 browser-landscape 和 editor-keyboard 截图，工具栏靠右、编辑操作栏位于键盘上方。
-- Gecko 补丁应用成功；引擎编译仍在运行，尚无本次 TIPA。真实扩展弹窗及完整真机回归未执行。
+- Gecko 补丁应用、引擎编译、归档和打包全部成功。真实扩展弹窗及完整真机回归未执行。
+
+## 最终构建、产物和发布（2026-10-02）
+
+- Actions 36980832918 全部成功；标准/TrollStore job 于北京时间 2026-10-02 19:55:13 完成，耗时 4 小时 2 分 59 秒。
+- 全部 Gecko 补丁应用、Firefox 157.0 引擎编译、idevice 编译、arm64 Release 归档、TrollStore 打包均成功；真实归档日志包含 ARCHIVE SUCCEEDED。
+- 构建源码固定 ae7523f5b34cac926ca1b696910dcac02858d5c9。后续提交只补充本文档，应用源码不变。
+- 本地 TIPA：`dist/merged-20261002/Reynard-TrollStore.tipa`，109300137 字节。
+- TIPA SHA-256：`ab8777b66d5c4919cdee1c276fa861ed7289c25fb59a7240fb6b685a82d8702f`。
+- GitHub artifact ID 11224304667；原始 ZIP 为 107933213 字节，SHA-256：`eac4697a580871523dd37de1f286e2e7c67c9255f5f2c36d0c9d74411693c33e`，与 GitHub API digest 完全一致。
+- 双层 ZIP CRC 和 artifact 中 TIPA 与本地文件的一致性检查通过。
+- 主程序、OpenIn、Reynard Helper 均为 0.15.0 / ae7523f；22 个 Mach-O 均为 arm64。
+- 主程序、Reynard Helper 和 ts_ptrace_jit 的三份 TrollStore entitlements 与固定构建提交逐项相同，使用 ldid 核验。
+- 本地机器可读报告：`dist/merged-20261002/verification/tipa-verification.json`；实际构建日志：`dist/merged-20261002/verification/build.log`。
+- Release：https://github.com/Caun1112/reynard-browser/releases/tag/0.15.0-right-hand-20261002 。标签固定到 ae7523f，已公开发布 TIPA、SHA256SUMS.txt 和 release-verification.json；三份上传资产的大小及 GitHub SHA-256 均再次核验通过。
+- 原功能分支 codex/right-hand-ui 已快进至包含本报告的合并分支并推送；保留远端备份 backup/right-hand-ui-before-upstream-20261002（678b44d），未强推、未修改陈旧 main。
+- 共享分支回滚本次上游合并及融合：`git revert -m 1 ae7523f`，再推送 origin。
+
+真机安装、JIT、摄像头、真实扩展弹窗以及完整网页/阅读/打印/音频回归尚未执行。上述 UI harness 和实际归档验证不能替代第 5 节的真机回归清单。
