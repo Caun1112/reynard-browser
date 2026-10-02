@@ -169,7 +169,7 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
         browserChrome.syncSidebarButton(splitViewController: splitViewController)
         applyUpdateMenuButtonBadge()
         
-        tabManager.createInitialTab(openingScreen: Prefs.HomepageSettings.openingScreen)
+        tabManager.createInitialTab()
         refreshAddressBar()
         homepageOverlayCoordinator.updatePresentation(animated: false)
         

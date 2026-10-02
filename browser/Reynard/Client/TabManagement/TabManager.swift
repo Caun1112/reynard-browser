@@ -29,7 +29,7 @@ protocol TabManager: AnyObject {
     
     func applicationWillResignActive()
     func applicationDidBecomeActive()
-    func createInitialTab(openingScreen: HomepageOpeningScreen)
+    func createInitialTab()
     @discardableResult
     func addTab(selecting: Bool, windowId: String?, at index: Int?, isPrivate: Bool) -> Int
     @discardableResult

@@ -359,7 +359,8 @@ final class TabBarCollection: UICollectionView, UIGestureRecognizerDelegate {
     }
     
     private func revealSelectedTab() {
-        guard let tabBar,
+        guard isScrollEnabled,
+              let tabBar,
               let tabs = tabBar.dataSource?.tabs,
               let selectedIndex = tabs.indices.first(where: tabBar.isTabSelected(at:)),
               selectedIndex < numberOfItems(inSection: 0),

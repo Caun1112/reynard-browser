@@ -314,19 +314,30 @@ final class BrowserChrome: UIView, UIGestureRecognizerDelegate {
         if #available(iOS 26.0, *), animated,
            actionBar.item == .pageZoom || actionBar.item == .findInPage {
             guard modernActionBarDismissalID == nil else { return }
+            
             let dismissalID = UUID()
             modernActionBarDismissalID = dismissalID
             let wasShowingFindInPage = actionBar.isShowingFindInPage
+            let shouldRestoreToolbarAtStart = wasShowingFindInPage && !actionBar.isKeyboardDocked
             let shouldSlide = (actionBar.item == .pageZoom || actionBarDockOffset == 0)
             && !UIAccessibility.isReduceMotionEnabled
+            
+            if shouldRestoreToolbarAtStart {
+                onFindInPageVisibilityChanged?(false)
+            }
+            
             let screenBottom = window.map { convert($0.bounds, from: $0).maxY } ?? bounds.maxY
             let translationY = shouldSlide
             ? max(0, screenBottom - actionBar.frame.minY)
             : 0
+            let animationOptions: UIView.AnimationOptions = shouldRestoreToolbarAtStart
+            ? [.beginFromCurrentState, .curveEaseOut]
+            : [.beginFromCurrentState, .curveEaseIn]
+            
             UIView.animate(
                 withDuration: shouldSlide ? UX.actionBarFlyOutDuration : UX.actionBarFadeDuration,
                 delay: 0,
-                options: [.beginFromCurrentState, .curveEaseIn]
+                options: animationOptions
             ) {
                 self.actionBar.dismissModernContent(
                     translationY: translationY,
@@ -338,7 +349,8 @@ final class BrowserChrome: UIView, UIGestureRecognizerDelegate {
                 self.actionBar.alpha = 0
                 self.actionBar.setItem(nil)
                 self.dockActionBar(offset: 0)
-                if wasShowingFindInPage {
+                
+                if wasShowingFindInPage && !shouldRestoreToolbarAtStart {
                     self.onFindInPageVisibilityChanged?(false)
                 }
             }

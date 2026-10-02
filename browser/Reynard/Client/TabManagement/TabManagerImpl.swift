@@ -488,34 +488,36 @@ final class TabManagerImplementation: NSObject, TabManager {
             selectedTabMode = regularTabs.isEmpty ? .private : .regular
         }
         
+        let selectedIndex = max(selectedIndex(for: selectedTabMode), 0)
+        let selectedTab = tabs(for: selectedTabMode)[selectedIndex]
+        
+        if Prefs.HomepageSettings.openingScreen == .lastTab,
+           sessionManager.isForeground {
+            restoreTabIfNeeded(selectedTab)
+            sessionManager.open(selectedTab.session)
+        }
+        
         delegate?.tabManagerDidChangeTabs(self)
         
-        selectTab(at: max(selectedIndex(for: selectedTabMode), 0), mode: selectedTabMode)
+        selectTab(at: selectedIndex, mode: selectedTabMode)
         return true
     }
     
-    private func restorePendingSessionStateIfNeeded(for tab: Tab) {
-        guard tab.state.restoreState == .pendingSession,
-              let sessionState = tab.state.tabSessionState else {
-            return
+    private func restoreTabIfNeeded(_ tab: Tab) {
+        switch tab.state.restoreState {
+        case .pendingSession:
+            guard let sessionState = tab.state.tabSessionState else {
+                return
+            }
+            tab.state.restoreState = .none
+            tab.state.loadingState = .loading(progress: 0)
+            tab.session.restoreState(sessionState)
+        case let .pendingURL(url):
+            tab.state.suppressInitialNavigation = false
+            loadURL(url, in: tab)
+        case .none:
+            break
         }
-        tab.state.restoreState = .none
-        tab.session.restoreState(sessionState)
-    }
-    
-    private func loadRestoredURLIfNeeded(for index: Int, mode: TabMode) {
-        guard tabs(for: mode).indices.contains(index) else {
-            return
-        }
-        
-        let tab = tabs(for: mode)[index]
-        guard tab.session.isOpen(),
-              case let .pendingURL(url) = tab.state.restoreState else {
-            return
-        }
-        
-        tab.state.suppressInitialNavigation = false
-        loadURL(url, in: tab)
     }
     
     @discardableResult
@@ -568,11 +570,15 @@ final class TabManagerImplementation: NSObject, TabManager {
             tabID: tab.id,
             url: tab.url,
             windowId: nil,
-            isPrivate: tab.isPrivate
+            isPrivate: tab.isPrivate,
+            opening: .manual
         )
         tab.session = replacementSession
         tab.state.sessionNavigationAvailability = .unavailable
-        restorePendingSessionStateIfNeeded(for: tab)
+        
+        restoreTabIfNeeded(tab)
+        
+        sessionManager.open(replacementSession)
         delegate?.tabManager(
             self,
             didReplaceSelectedSession: previousSession,
@@ -635,8 +641,8 @@ final class TabManagerImplementation: NSObject, TabManager {
         )
     }
     
-    func createInitialTab(openingScreen: HomepageOpeningScreen) {
-        switch openingScreen {
+    func createInitialTab() {
+        switch Prefs.HomepageSettings.openingScreen {
         case .lastTab:
             if !restoreTabsIfNeeded() {
                 addTab(selecting: true, windowId: nil, at: nil, isPrivate: false)
@@ -784,7 +790,7 @@ final class TabManagerImplementation: NSObject, TabManager {
             sessionManager.deactivate(previousSession)
         }
         recoverSelectedSessionIfNeeded()
-        restorePendingSessionStateIfNeeded(for: selectedTab)
+        restoreTabIfNeeded(selectedTab)
         sessionManager.activate(selectedTab.session)
         selectedTab.session.mediaSession.muteAudio(selectedTab.isMuted)
         systemMediaSession.select(session: selectedTab.session)
@@ -792,7 +798,6 @@ final class TabManagerImplementation: NSObject, TabManager {
         applyNavigationState(to: selectedTab)
         
         delegate?.tabManager(self, didSelectTabAt: index, previousIndex: previousIndex)
-        loadRestoredURLIfNeeded(for: index, mode: mode)
         persistState()
     }
     

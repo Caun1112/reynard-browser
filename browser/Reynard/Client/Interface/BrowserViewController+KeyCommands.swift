@@ -43,6 +43,26 @@ extension BrowserViewController {
         }
     }
     
+    @objc func printPageKeyCommand(_ sender: UIKeyCommand) {
+        guard hasSelectedWebPage,
+              let tab = tabManager.selectedTab,
+              tab.session.isOpen(),
+              UIPrintInteractionController.isPrintingAvailable else {
+            return
+        }
+        
+        Task { @MainActor in
+            do {
+                let pdfFileURL = try await PagePrintPreparationAlert.prepare {
+                    try await tab.session.printToPDF()
+                }
+                try await PagePrintPresenter.present(pdfFileURL: pdfFileURL, jobName: tab.title)
+            } catch {
+                return
+            }
+        }
+    }
+    
     @objc func findInPageKeyCommand(_ sender: UIKeyCommand) {
         guard hasSelectedWebPage else {
             return
@@ -66,15 +86,15 @@ extension BrowserViewController {
         }
     }
     
-    @objc func hardReloadPageKeyCommand(_ sender: UIKeyCommand) {
-        guard hasSelectedWebPage,
-              let session = tabManager.selectedTab?.session else {
+    @objc func toggleReaderKeyCommand(_ sender: UIKeyCommand) {
+        guard let tab = tabManager.selectedTab else {
             return
         }
-        if session.isOpen() {
-            session.reload(flags: GeckoSessionLoadFlags.bypassCache)
-        } else {
-            reloadTerminatedTab()
+        
+        if tab.state.readerMode.isActive {
+            _ = tabManager.readerMode.exit(in: tab)
+        } else if tab.state.readerMode.isReaderable {
+            _ = tabManager.readerMode.enter(in: tab)
         }
     }
     
@@ -139,6 +159,10 @@ extension BrowserViewController {
     
     @objc func showDownloadsKeyCommand(_ sender: UIKeyCommand) {
         toggleLibrary(section: .downloads)
+    }
+    
+    @objc func showSettingsKeyCommand(_ sender: UIKeyCommand) {
+        toggleLibrary(section: .settings)
     }
     
     @objc func showTabOverviewKeyCommand(_ sender: UIKeyCommand) {
