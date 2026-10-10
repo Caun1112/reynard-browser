@@ -501,7 +501,7 @@ final class BrowserViewController: UIViewController, GeckoScreenOrientationDeleg
             }
         }
         browserChrome.onKeyboardDismissal = { [weak self] in
-            self?.tabManager.selectedTab?.session.engineView?.resignFirstResponder()
+            self?.tabManager.selectedTab?.session.dismissSoftwareKeyboard()
         }
     }
     
