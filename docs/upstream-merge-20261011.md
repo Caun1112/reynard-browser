@@ -205,3 +205,20 @@ gh workflow run build.yml --repo Caun1112/reynard-browser \
 在支持的 TrollStore 设备安装 TIPA，确认启动、JIT、网页载入及重启后标签恢复。检查 iPhone 横竖屏右手工具栏、地址栏、资料库/设置/书签编辑、右下扩展弹窗关闭、标签双向滑动关闭及替补标签激活；检查查找、页面缩放、刷新指示器和崩溃提示。回归中文组合输入、光标、选择手柄、多行和缩放/变换输入框、键盘收起，以及 iPad 浮动键盘。检查扩展、下载、相机权限与视频播放。
 
 真机运行结果不得由模拟器 harness 或编译成功推断。本报告后续补充实际 Actions、TIPA 和 Release 结果。
+
+## 6. 合并落地与构建跟进
+
+- 双亲合并提交：`ac81edb3f4eababdd4aa59218b1f442dfac1c266`；父提交分别为 `a50f3840de3a504e49e96b0f0b1bbba959eea977` 与 `05224364cf0adb81d23ef6e32cc8d117ec79287e`。
+- 合并分支 `codex/merge-upstream-20261011` 已推送；远端备份 `backup/right-hand-ui-before-upstream-20261011` 已核对为 `a50f3840de3a504e49e96b0f0b1bbba959eea977`。
+- 5 个重叠文件相对新上游的逐行增删内容，与 fork 相对共同祖先的逐行增删内容完全一致；上下文变化未覆盖 fork 代码。
+- [Actions run 38108216921](https://github.com/Caun1112/reynard-browser/actions/runs/38108216921) 于北京时间 2026-10-11 11:23 派发，构建源码固定为上述合并 SHA。后续本报告的提交不改变正在构建的应用源码。
+- 当前 UI 测试与正式构建尚在运行，TIPA 尚未生成；不得将本节当作成功构建或发布证明。
+- 校验脚本位于忽略目录 `dist/merged-20261011/verification/verify_tipa.py`，固定仓库、run、源码、版本和 Gecko 来源；通过 17 项正反例自检。实际产物校验须等下载完成后运行。
+- 已配置本 chat 每 15 分钟自动继续检查，成功后执行产物验证、Release 发布、报告更新与功能分支快进，完成即停止。正常等待时保持安静。该本地后续处理需要电脑和桌面 app 持续运行。
+
+发布前原功能分支仍保持合并前状态。合并后在功能分支执行下列命令可保留历史地回滚本次上游合并：
+
+```sh
+git revert -m 1 ac81edb3f4eababdd4aa59218b1f442dfac1c266
+git push origin codex/right-hand-ui
+```
