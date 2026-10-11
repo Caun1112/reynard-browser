@@ -212,7 +212,7 @@ gh workflow run build.yml --repo Caun1112/reynard-browser \
 - 合并分支 `codex/merge-upstream-20261011` 已推送；远端备份 `backup/right-hand-ui-before-upstream-20261011` 已核对为 `a50f3840de3a504e49e96b0f0b1bbba959eea977`。
 - 5 个重叠文件相对新上游的逐行增删内容，与 fork 相对共同祖先的逐行增删内容完全一致；上下文变化未覆盖 fork 代码。
 - [Actions run 38108216921](https://github.com/Caun1112/reynard-browser/actions/runs/38108216921) 于北京时间 2026-10-11 11:23 派发，构建源码固定为上述合并 SHA。后续本报告的提交不改变正在构建的应用源码。
-- 当前 UI 测试与正式构建尚在运行，TIPA 尚未生成；不得将本节当作成功构建或发布证明。
+- UI job 已成功，正式构建尚在运行，TIPA 尚未生成；不得将 UI 成功当作正式应用构建或发布证明。
 - 校验脚本位于忽略目录 `dist/merged-20261011/verification/verify_tipa.py`，固定仓库、run、源码、版本和 Gecko 来源；通过 17 项正反例自检。实际产物校验须等下载完成后运行。
 - 已配置本 chat 每 15 分钟自动继续检查，成功后执行产物验证、Release 发布、报告更新与功能分支快进，完成即停止。正常等待时保持安静。该本地后续处理需要电脑和桌面 app 持续运行。
 
@@ -222,3 +222,11 @@ gh workflow run build.yml --repo Caun1112/reynard-browser \
 git revert -m 1 ac81edb3f4eababdd4aa59218b1f442dfac1c266
 git push origin codex/right-hand-ui
 ```
+
+### 已完成的 UI 验证
+
+- [UI job 114378133689](https://github.com/Caun1112/reynard-browser/actions/runs/38108216921/job/114378133689) 成功；日志包含 `Executed 6 tests, with 0 failures` 和 `TEST SUCCEEDED`。测试于北京时间 2026-10-11 11:29:22 完成。
+- 本地日志：`dist/merged-20261011/verification/ui-checks.log`。
+- xcresult 和 11 张截图：`dist/merged-20261011/verification/ui-results/`。
+- 已目视检查横屏工具栏靠右排列、编辑操作栏位于键盘上方、深色设置底栏贴底且不遮挡最后一行。
+- 这仍是第 5 节所述的 UI harness，真实 Gecko 输入、JIT、标签激活及设备回归尚未执行。
